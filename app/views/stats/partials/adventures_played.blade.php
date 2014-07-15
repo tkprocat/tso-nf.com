@@ -1,0 +1,96 @@
+<table style="float: left; width: 49%" class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>Adventure</th>
+        <th>Played</th>
+        <th>Played %</th>
+    </tr>
+    </thead>
+    @for($i=0; $i < (count($adventures) / 2) ; $i++)
+    <tr>
+        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
+        <td>{{ $adventures[$i]->played->count() }}</td>
+        <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
+    </tr>
+    @endfor
+</table>
+
+<table style="float: left; width: 49%" class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>Adventure</th>
+        <th>Played</th>
+        <th>Played %</th>
+    </tr>
+    </thead>
+    @for($i= (count($adventures) / 2) ; $i < count($adventures); $i++)
+    <tr>
+        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
+        <td>{{ $adventures[$i]->played->count() }}</td>
+        <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
+    </tr>
+    @endfor
+</table>
+
+<table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th style="text-align: center">Total adventures registered: {{ $total_played }}</th>
+    </tr>
+    </thead>
+</table>
+
+<?php $displayed = 0; ?>
+@foreach ($adventures as $adventure)
+<?php $displayed++; ?>
+@if ($displayed % 2 == 0)
+<div style="float: right; width: 49%">
+    @else
+    <div style="float: left; width: 49%">
+        @endif
+        <table class="table table-striped table-bordered" id="{{ str_replace(' ','',$adventure->name) }}">
+            <thead>
+            <tr>
+                <th colspan="5">
+                    <div style="text-align: center">{{$adventure->name}}</div>
+                </th>
+            </tr>
+            <tr>
+                <td>Slot</td>
+                <td>Loot</td>
+                <td>Amount</td>
+                <td>Drops</td>
+                <td>Drop chance</td>
+            </tr>
+            </thead>
+            <?php $last_slot = 0; ?>
+            @foreach ($adventure->loot as $loot)
+            @if ($loot->adventure_id == $adventure->id)
+            @if ($last_slot != $loot->slot)
+            @if ($last_slot > 0)
+            </tbody>
+            @endif
+            <tbody style="border-width: 3px">
+            <?php $last_slot = $loot->slot; ?>
+            @endif
+            <tr>
+                <td>{{$loot->slot}}</td>
+                <td>{{$loot->type}}</td>
+                <td>{{$loot->amount}}</td>
+                <td>{{ (array_key_exists($loot->id, $drop_count_list) ? $drop_count_list[$loot->id] : '0') }}</td>
+                <td>{{ (array_key_exists($loot->id, $drop_count_list) ? number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100) : '0%')}}%</td>
+            </tr>
+            @endif
+            @endforeach
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5"><a href="#">Back to top</a></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    @if ($displayed % 2 == 0)
+    <div style="clear: both"></div>
+    @endif
+    @endforeach

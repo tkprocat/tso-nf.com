@@ -1,0 +1,16 @@
+{
+  "name": "LMLoottracker",
+  "version": "0.0.1",
+  "description": "Lazy Monkeys Loot Tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Procat",
+  "devDependencies": {
+    "bower": "^0.0.0",
+    "grunt": "^0.4.2",
+    "grunt-contrib-uglify": "^0.3.2",
+    "grunt-contrib-jshint": "^0.8.0"
+  }
+}
