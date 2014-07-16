@@ -191,7 +191,9 @@ class DbLootRepository implements LootInterface
             select('adventure.*')->
             where('user_adventure.user_id', $user_id)->with(array('played' => function ($query) use ($user_id, $from, $to) {
                 $query->where('user_id', '=', $user_id)->whereBetween('created_at', array($from, $to));
-            }, 'loot'))->orderBy('name');
+            }, 'loot'))->
+			groupBy('adventure.id')->
+			orderBy('name');
         return $query;
     }
 
