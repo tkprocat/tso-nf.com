@@ -10,7 +10,7 @@ Register
 @section('content')
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
-        {{ Form::open(array('action' => 'GuildController@store', $guild->id)) }}
+        {{ Form::open(array('action' => 'GuildController@store')) }}
 
             <h2>Create new guild</h2>
 
