@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DbGuildRepository implements GuildInterface
 {
     protected $guild;
-    protected $validator;
+    public $validator;
     protected $user;
     protected $sentry;
 
