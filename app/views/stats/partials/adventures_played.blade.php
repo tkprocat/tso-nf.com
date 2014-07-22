@@ -15,7 +15,8 @@
     @endfor
 </table>
 
-<table style="float: left; width: 49%" class="table table-striped table-bordered">
+@if (count($adventures) > 1)
+<table style="float: right; width: 49%" class="table table-striped table-bordered">
     <thead>
     <tr>
         <th>Adventure</th>
@@ -23,15 +24,17 @@
         <th>Played %</th>
     </tr>
     </thead>
-    @for($i= (count($adventures) / 2) ; $i < count($adventures); $i++)
-    <tr>
-        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
-        <td>{{ $adventures[$i]->played->count() }}</td>
-        <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
-    </tr>
-    @endfor
+		@for($i= (count($adventures) / 2) ; $i < count($adventures); $i++)
+		<tr>
+			<td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
+			<td>{{ $adventures[$i]->played->count() }}</td>
+			<td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
+		</tr>
+		@endfor
 </table>
+	@endif
 
+<div class="clearfix"></div>
 <table class="table table-striped table-bordered">
     <thead>
     <tr>
