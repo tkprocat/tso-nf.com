@@ -185,18 +185,6 @@ class DbLootRepository implements LootInterface
             ->groupBy('adventure.id')->orderBy('name')->get();
     }
 
-    public function getAdventuresForUserWithPlayed($user_id, $from, $to)
-    {
-        $query = \LootTracker\Adventure\Adventure::join('user_adventure', 'user_adventure.adventure_id', '=', 'adventure.id')->
-            select('adventure.*')->
-            where('user_adventure.user_id', $user_id)->with(array('played' => function ($query) use ($user_id, $from, $to) {
-                $query->where('user_id', '=', $user_id)->whereBetween('created_at', array($from, $to));
-            }, 'loot'))->
-			groupBy('adventure.id')->
-			orderBy('name');
-        return $query;
-    }
-
     public function getAllAdventuresWithPlayedAndLoot()
     {
         return \LootTracker\Adventure\Adventure::with(array('played', 'loot'))->orderBy('name');
@@ -205,16 +193,6 @@ class DbLootRepository implements LootInterface
     public function getAllUserAdventuresWithLoot()
     {
         return $this->userAdventure->with('loot');
-    }
-
-    public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to)
-    {
-        $query = $this->userAdventure->with(array('loot'))->where('user_id', $user_id);
-
-        if (($from != '') && ($to != ''))
-            $query->whereBetween('user_adventure.created_at', array($from, $to));
-
-        return $query;
     }
 
     public function findLootCountForAllPlayedAdventures()
@@ -236,20 +214,14 @@ class DbLootRepository implements LootInterface
             ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount')->lists('dropped', 'id');
     }
 
-    public function getLootDropCountForUser($user_id, $from = '', $to = '')
+    public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to)
     {
-
-        $query = \DB::table('adventure_loot')
-            ->leftJoin('user_adventure_loot', 'user_adventure_loot.adventure_loot_id', '=', 'adventure_loot.id')
-            ->join('user_adventure', 'user_adventure_loot.user_adventure_id', '=', 'user_adventure.id')
-            ->select(array('adventure_loot.*', \DB::raw('COUNT(' . \DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')))
-            ->groupBy('adventure_loot.id')
-            ->where('user_adventure.user_id', $user_id)
-            ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount');
+        $query = $this->userAdventure->with(array('loot'))->where('user_id', $user_id);
 
         if (($from != '') && ($to != ''))
             $query->whereBetween('user_adventure.created_at', array($from, $to));
 
-        return $query->lists('dropped', 'id');
+        return $query;
     }
+
 }

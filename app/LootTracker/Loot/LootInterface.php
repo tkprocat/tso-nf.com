@@ -22,13 +22,9 @@ interface LootInterface {
 
     public function getAllAdventuresWithPlayedAndLoot();
 
-    public function getAdventuresForUserWithPlayed($user_id, $from, $to);
-
-    public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to);
-
     public function getAllUserAdventuresWithLoot();
 
     public function getLootDropCount();
 
-    public function getLootDropCountForUser($user_id, $from, $to);
+    public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to);
 }
