@@ -1,7 +1,7 @@
 bootstrap-sortable
 ==================
 adding sorting ability to bootstrap table  
-Current version: 1.8.0
+Current version: 1.9.0
 
 In fact, it can be used for any tables.
 
@@ -10,6 +10,8 @@ Date parsing provided by [moment.js](https://github.com/timrwood/moment/).
 
 Available for download with NuGet, search for `bootstrap-sortable`.  
 Working [demo](http://drvic10k.github.io/bootstrap-sortable/).
+
+For compatibility issues with older browsers and possible workarounds, please look into the [issues list](https://github.com/drvic10k/bootstrap-sortable/issues?labels=compatibility&page=1&state=closed).
 
 ####Dependencies:
 You should add the provided "moment.js" library, or get yourself a copy from http://momentjs.com.
@@ -47,6 +49,13 @@ You can preset one column to be sorted when table is loaded using `data-defaults
 <th> Column 1</th>
 <th> Column 2</th>
 <th data-defaultsort="desc"> Column 3</th>
+```
+
+To change the initial direction when sorting a column for the first time, use the `data-firstsort` attribute:
+```html
+<th> Column 1</th>
+<th> Column 2</th>
+<th data-firstsort="desc"> Column 3</th>
 ```
 
 You can change the value that is used for sorting for each `<td>` using `data-value` attribute:

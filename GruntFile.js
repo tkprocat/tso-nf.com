@@ -47,8 +47,9 @@ module.exports = function(grunt) {
          * uglify
          */
         uglify: {
-            my_target: {
+            production: {
                 files: {
+                    'public/assets/js/loottracker.min.js': ['public/assets/js/loottracker.js'],
                     'public/assets/js/bootstrap.min.js': ['public/assets/js/bootstrap.js'],
                     'public/assets/js/jquery.cookie.min.js': ['public/assets/js/jquery.cookie.js'],
                     'public/assets/js/jquery.validate.min.js': ['public/assets/js/jquery.validate.js']
@@ -65,6 +66,36 @@ module.exports = function(grunt) {
                 'public/assets/js/jquery.cookie.js',
                 'public/assets/js/jquery.validate.js'
             ]
+        },
+
+        /**
+         * less
+         */
+        less: {
+            default: {
+                options: {
+                    paths: ["public/assets/css"]
+                },
+                files: {
+                    'public/assets/css/bootstrap-amelia.css': ['public/assets/css/amelia/bootstrap.less'],
+                    'public/assets/css/bootstrap-cosmo.css': ['public/assets/css/cosmo/bootstrap.less'],
+                    'public/assets/css/bootstrap-readable.css': ['public/assets/css/readable/bootstrap.less'],
+                    'public/assets/css/bootstrap.css': ['public/assets/css/slate/bootstrap.less']
+                }
+            }
+        },
+
+        copy: {
+            bootstrapjs:{
+                files: [
+                    {
+                        cwd: 'public/assets/bower/bootstrap/dist/js/',
+                        src: 'bootstrap.js',
+                        dest: 'public/assets/js/',
+                        expand: true
+                    }
+                ]
+            }
         }
     });
 
@@ -73,6 +104,8 @@ module.exports = function(grunt) {
      */
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-less');
 
     /**
      * Default task
@@ -80,8 +113,13 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('default', [
         'uglify',
+        'less',
         'jshint'
     ]);
+
+    grunt.registerTask('uglify', function(){
+        grunt.task.run('copy:bootstrapjs');
+    });
 
     /**
      * Build task

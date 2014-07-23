@@ -47,15 +47,19 @@
 <h2 id="accumulated">Accumulated loot:</h2>
 <span>Show loot submitted between <input type="text" id="accumulatedloot-datefrom" class="date-picker"> and <input
         type="text" id="accumulatedloot-dateto" class="date-picker"></span>
-<div id="accumulatedloot" style="margin-top: 5px"></div>
+<div id="accumulatedloot" style="margin-top: 5px">
+    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
+</div>
 <br>
-
+<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
 
 <h2 id="adventuresplayed">Adventures played:</h2>
 <span>Show statistics for adventures registered between <input type="text" id="adventuresplayed-datefrom"
                                                                class="date-picker"> and
 <input type="text" id="adventuresplayed-dateto" class="date-picker"></span>
-<div id="adventuresplayedresult" style="margin-top: 5px"></div>
+<div id="adventuresplayedresult" style="margin-top: 5px">
+    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
+</div>
 
 
 <!-- Delete confirmation modal -->
@@ -205,6 +209,8 @@
     function updateAccumulatedLoot() {
         var datefrom = $("#accumulatedloot-datefrom").val();
         var dateto = $("#accumulatedloot-dateto").val();
+        //Change the old result to loading...
+        $('#accumulatedloot').html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...');
         $.ajax({
             type: 'GET',
             url: "{{ URL::to('/stats/accumulatedloot/'.$username) }}/" + datefrom + "/" + dateto,
@@ -225,6 +231,7 @@
     function updateAdventuresPlayed() {
         var datefrom = $("#adventuresplayed-datefrom").val();
         var dateto = $("#adventuresplayed-dateto").val();
+        $('#adventuresplayedresult').html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...');
         $.ajax({
             type: 'GET',
             url: "{{ URL::to('/stats/adventuresplayed/'.$username) }}/" + datefrom + "/" + dateto,

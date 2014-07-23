@@ -1,0 +1,20 @@
+{
+  "name": "LM Loot Tracker",
+  "version": "1.0.0",
+  "homepage": "https://tso-nf.com",
+  "description": "Lazy Monkeys Loot Tracker",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/assets/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sortable": "~1.9.0",
+    "bootstrap": "~3.2.0"
+  }
+}
