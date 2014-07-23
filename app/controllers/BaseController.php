@@ -12,7 +12,7 @@ class BaseController extends Controller {
     /**
      * Initializer.
      *
-     * @return void
+     * @return \BaseController
      */
     public function __construct()
     {

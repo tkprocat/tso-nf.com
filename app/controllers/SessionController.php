@@ -59,7 +59,7 @@ class SessionController extends BaseController {
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @internal param int $id
      * @return Response
      */
     public function destroy()
@@ -68,5 +68,4 @@ class SessionController extends BaseController {
         Event::fire('user.logout');
         return Redirect::to('/');
     }
-
 }

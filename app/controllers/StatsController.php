@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Http\Response as LaravelResponse;
 use LootTracker\Adventure\AdventureInterface;
 use LootTracker\Loot\LootInterface;
 use LootTracker\Stats\StatsInterface;
@@ -36,7 +35,6 @@ class StatsController extends BaseController
             $username = Sentry::getUser()->username;
         $user_id = $this->getUserId($username);
 
-        $adventures = $this->stats->getAdventuresForUserWithPlayed($user_id, '', '')->get();
         $mostPlayedAdventure = $this->stats->getMostPlayedAdventureForUser($user_id);
         $leastPlayedAdventure = $this->stats->getLeastPlayedAdventureForUser($user_id);
         $stats['most_played_adventure_name'] = $mostPlayedAdventure['name'];
@@ -46,7 +44,7 @@ class StatsController extends BaseController
         $stats['adventures_played_this_week'] = $this->stats->getAdventuresPlayedCountForUserThisWeek($user_id);
         $stats['adventures_played_last_week'] = $this->stats->getAdventuresPlayedCountForUserLastWeek($user_id);
 
-        return View::make('stats.personal', compact('adventures', 'stats', 'username'));
+        return View::make('stats.personal', compact('stats', 'username'));
     }
 
     public function getAccumulatedLootBetween($username = '', $dateFrom = '1970-01-01', $dateTo = '2030-31-12')

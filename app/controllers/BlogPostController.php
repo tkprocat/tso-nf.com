@@ -8,7 +8,7 @@ class BlogPostController extends \BaseController
     protected $blogPost;
     protected $user;
 
-    function __construct(BlogPostInterface $blogPost, \Authority\Repo\User\UserInterface $user)
+    function __construct(BlogPostInterface $blogPost, UserInterface $user)
     {
         $this->blogPost = $blogPost;
         $this->user = $user;
@@ -76,7 +76,8 @@ class BlogPostController extends \BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param $slug
+     * @internal param int $id
      * @return Response
      */
     public function show($slug)

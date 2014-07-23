@@ -10,7 +10,7 @@ class BlogCommentController extends \BaseController
     protected $blogComment;
     protected $user;
 
-    function __construct(BlogPostInterface $blogPost, BlogCommentInterface $blogComment, \Authority\Repo\User\UserInterface $user)
+    function __construct(BlogPostInterface $blogPost, BlogCommentInterface $blogComment, UserInterface $user)
     {
         $this->blogPost = $blogPost;
         $this->blogComment = $blogComment;

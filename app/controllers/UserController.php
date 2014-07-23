@@ -313,12 +313,14 @@ class UserController extends BaseController {
         }
 	}
 
-	/**
-	 * Process a password reset request link
-	 * @param  [type] $id   [description]
-	 * @param  [type] $code [description]
-	 * @return [type]       [description]
-	 */
+    /**
+     * Process a password reset request link
+     * @param $id
+     * @param $code
+     * @internal param $ [type] $id   [description]
+     * @internal param $ [type] $code [description]
+     * @return \Illuminate\Http\RedirectResponse [type]       [description]
+     */
 	public function reset($id, $code)
 	{
         if(!is_numeric($id))

@@ -1,6 +1,4 @@
 <?php
-use Illuminate\Http\Response as LaravelResponse;
-
 class LabController extends BaseController
 {
     protected $layout = 'layouts.default';

@@ -3,19 +3,38 @@
 use LootTracker\Adventure\AdventureInterface;
 use LootTracker\Loot\LootInterface;
 
+/**
+ * Class LootController
+ */
 class LootController extends BaseController
 {
+    /**
+     * @var string
+     */
     protected $layout = 'layouts.default';
 
+    /**
+     * @var LootInterface
+     */
     protected $loot;
+    /**
+     * @var AdventureInterface
+     */
     protected $adventure;
 
+    /**
+     * @param LootInterface $loot
+     * @param AdventureInterface $adventure
+     */
     function __construct(LootInterface $loot, AdventureInterface $adventure)
     {
         $this->loot = $loot;
         $this->adventure = $adventure;
     }
 
+    /**
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $page = Input::get('page', 1);
@@ -31,6 +50,10 @@ class LootController extends BaseController
         return View::make('loot.index')->with('loots', $loots);
     }
 
+    /**
+     * @param $username
+     * @return \Illuminate\View\View
+     */
     public function show($username)
     {
 
@@ -57,6 +80,10 @@ class LootController extends BaseController
         return View::make('loot.show')->with('loots', $loots);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\View\View
+     */
     public function edit($id)
     {
         $adventures = $this->adventure->findAllAdventures();
@@ -77,6 +104,10 @@ class LootController extends BaseController
         return View::make('loot.edit')->with(array('useradventureloot' => $user_adventure_loot, 'useradventure' => $user_adventure, 'adventures' => $adventures, 'adventureloot' => $adventure_loot, 'loot_slots' => $loot_slots));
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update($id)
     {
         //if for some reason the person posting isn't logged in, bail!
@@ -191,6 +222,9 @@ class LootController extends BaseController
         return Redirect::to('loot/latest'); */
     }
 
+    /**
+     * @return \Illuminate\View\View
+     */
     public function create()
     {
         $adventures = $this->adventure->getAdventuresWithLoot();
@@ -214,19 +248,18 @@ class LootController extends BaseController
         return View::make('loot.create', compact('adventures', 'adventure', 'loot_slots'));
     }
 
+    /**
+     * @return \Illuminate\View\View
+     */
     public function createpopup()
     {
-        $key = 'AdventuresOrderByName';
-        if (Cache::has($key)) {
-            $adventures = Cache::get($key);
-        } else {
-            $adventures = Adventure::orderBy('Name')->get();
-            Cache::add($key, $adventures, 1440); // Saves result for a day.
-        }
-
+        $adventures = $this->adventure->findAllAdventures();
         return View::make('loot.createpopup', compact('adventures'));
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store()
     {
         //if for some reason the person posting isn't logged in, bail!
@@ -249,6 +282,9 @@ class LootController extends BaseController
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function delete()
     {
         if (!Sentry::check()) {
@@ -258,7 +294,8 @@ class LootController extends BaseController
         $data = Input::all();
 
         if (isset($data['id'])) {
-            $useradventure = UserAdventure::find($data['id']);
+            //TODO: Make the repository handle the deletion.
+            $useradventure = $this->loot->findUserAdventureById($data['id']);
             //Check if the userid deleting matches the userid on the record.
             if ($useradventure->UserID == Sentry::getID()) {
                 foreach ($useradventure->loot as $loot) {
@@ -269,8 +306,13 @@ class LootController extends BaseController
                 App::abort(403, 'You are not authorized.');
             }
         }
+
+        return Rediect::to('guilds');
     }
 
+    /**
+     * @return mixed
+     */
     public function getLootForAdventure()
     {
         $data = Input::all();
