@@ -34,14 +34,6 @@ Route::get('loot/getJSONLoot', 'LootController@getLootForAdventure');
 //Stats
 Route::get('stats/global', 'StatsController@getGlobalStats');
 
-/* Route::post('getUserAdventure', function () {
-    $data = Input::all();
-    $useradventureloot = DB::table('user_adventure_loot')->join('adventure_loot', 'adventure_loot.ID', '=', 'user_adventure_loot.AdventureLootID')->
-    where('user_adventure_loot.UserAdventureID', '=', $data["user_adventure_id"])->orderBy('adventure_loot.Slot')->get();
-    $useradventure = DB::table('user_adventure')->where('ID', '=', $data["user_adventure_id"])->get();
-    return compact('useradventure', 'useradventureloot');
-}); */
-
 //Authenticated Routes
 Route::group(array('before' => 'auth'), function()
 {
