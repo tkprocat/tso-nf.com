@@ -223,9 +223,10 @@ class LootController extends BaseController
     }
 
     /**
+     * @param bool $popup_mode
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create($popup_mode = false)
     {
         $adventures = $this->adventure->getAdventuresWithLoot();
         //If we're recreating the view after a validation error, we need some extra info.
@@ -245,7 +246,7 @@ class LootController extends BaseController
             $loot_slots[$slot] = $loot_types;
         }
 
-        return View::make('loot.create', compact('adventures', 'adventure', 'loot_slots'));
+        return View::make('loot.create', compact('adventures', 'adventure', 'loot_slots', 'popup_mode'));
     }
 
     /**
@@ -253,8 +254,7 @@ class LootController extends BaseController
      */
     public function createpopup()
     {
-        $adventures = $this->adventure->findAllAdventures();
-        return View::make('loot.createpopup', compact('adventures'));
+        return $this->create(true);
     }
 
     /**

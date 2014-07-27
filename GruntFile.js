@@ -95,6 +95,26 @@ module.exports = function(grunt) {
                         expand: true
                     }
                 ]
+            },
+            datepickerjs:{
+                files: [
+                    {
+                        cwd: 'public/assets/bower/bootstrap-3-datepicker/js/',
+                        src: 'bootstrap-datepicker.js',
+                        dest: 'public/assets/js/',
+                        expand: true
+                    }
+                ]
+            },
+            sortablejs:{
+                files: [
+                    {
+                        cwd: 'public/assets/bower/bootstrap-sortable/Scripts/',
+                        src: 'bootstrap-sortable.js',
+                        dest: 'public/assets/js/',
+                        expand: true
+                    }
+                ]
             }
         }
     });
@@ -112,14 +132,13 @@ module.exports = function(grunt) {
      * Run `grunt` on the command line
      */
     grunt.registerTask('default', [
+        'copy:bootstrapjs',
+        'copy:datepickerjs',
+        'copy:sortablejs',
         'uglify',
         'less',
         'jshint'
     ]);
-
-    grunt.registerTask('uglify', function(){
-        grunt.task.run('copy:bootstrapjs');
-    });
 
     /**
      * Build task

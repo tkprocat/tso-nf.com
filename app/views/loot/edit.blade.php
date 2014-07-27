@@ -4,111 +4,124 @@
 @section('content')
 <h1>Update loot</h1>
 
-<div class="well">
-{{ Form::open(array(
-'action' => array('LootController@update', $useradventure->id),
-'method' => 'put',
-'class' => 'form-horizontal',
-'role' => 'form',
-'id' => 'updateLoot'
-)) }}
-{{ Form::hidden('useradventureid', $useradventure->id) }}
-<div class="row" style="margin-top: 5px">
-    <ul class="errors">@foreach($errors->get('adventure') as $message)
-        <li>{{ $message }}</li>
-        @endforeach
-    </ul>
-    <div class="col-xs-3 col-md-2">
-        {{ Form::label('adventure_id', 'Adventure:'); }}
-    </div>
-    <div style="text-align: left">
-        <div style="text-align: left">
-            {{ Form::select('adventure_id', $adventures->lists('name', 'id'), array('style' => 'width: 138px')); }}
+<div class="panel panel-default">
+    {{ Form::open(array(
+    'action' => array('LootController@update', $useradventure->id),
+    'method' => 'put',
+    'class' => 'form-horizontal',
+    'role' => 'form',
+    'id' => 'updateLoot'
+    )) }}
+    {{ Form::hidden('useradventureid', $useradventure->id) }}
+    <div class="panel-heading" style="padding-top: 5px; padding-bottom: 5px">
+        <ul class="errors">@foreach($errors->get('adventure') as $message)
+            <li>{{ $message }}</li>
+            @endforeach
+        </ul>
+        <div class="form-group">
+            {{ Form::label('adventure_id', 'Adventure:',array('class' => 'col-lg-2 control-label')); }}
+            <div style="col-lg-10">
+                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), $useradventure->adventure_id,
+                array('style' => 'width: 200px', 'class' => 'form-control')); }}
+            </div>
         </div>
     </div>
-</div>
-<div class="row" style="margin-top: 15px">
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot1container" {{ ($useradventure->loot()->slot(1)->first() != null) ? '' : 'style="display: none"' }}>
-        <label for="slot1" style="padding-right: 5px">Slot 1:</label>
-        @if ($useradventure->loot()->slot(1)->first() != null)
-        {{ Form::select('slot1', $loot_slots[1], $useradventure->loot()->slot(1)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot1', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
+    <div class="panel-body" style="margin-left: 20px">
+        <div class="row" style="margin-top: 15px">
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot1container"
+            {{ ($useradventure->loot()->slot(1)->first() != null) ? '' : 'style="display: none"' }}>
+            <label for="slot1" style="padding-right: 5px">Slot 1:</label>
+            @if ($useradventure->loot()->slot(1)->first() != null)
+            {{ Form::select('slot1', $loot_slots[1], $useradventure->loot()->slot(1)->first()->adventure_loot_id,
+            array('style'
+            => 'width: 200px', 'class' => 'form-control')); }}
+            @else
+            {{ Form::select('slot1', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            @endif
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot2container"
+            {{ ($useradventure->loot()->slot(2)->first() != null) ? '' : 'style="display: none"' }}>
+            <label for="slot2" style="padding-right: 5px">Slot 2:</label>
+            @if ($useradventure->loot()->slot(2)->first() != null)
+            {{ Form::select('slot2', $loot_slots[2], $useradventure->loot()->slot(2)->first()->adventure_loot_id,
+            array('style'
+            => 'width: 200px', 'class' => 'form-control')); }}
+            @else
+            {{ Form::select('slot2', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            @endif
+         </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot3container" {{ ($useradventure->loot()->slot(3)->first() != null) ? '' : 'style="display: none"'}}>
+            <label for="slot3" style="padding-right: 5px">Slot 3:</label>
+            @if ($useradventure->loot()->slot(3)->first() != null)
+            {{ Form::select('slot3', $loot_slots[3], $useradventure->loot()->slot(3)->first()->adventure_loot_id,
+            array('style'
+            => 'width: 200px', 'class' => 'form-control')); }}
+            @else
+            {{ Form::select('slot3', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            @endif
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot4container" {{ ($useradventure->loot()->slot(4)->first() != null) ? '' : 'style="display: none"'}}>
+            <label for="slot4" style="padding-right: 5px">Slot 4:</label>
+            @if ($useradventure->loot()->slot(4)->first() != null)
+            {{ Form::select('slot4', $loot_slots[4], $useradventure->loot()->slot(4)->first()->adventure_loot_id,
+            array('style'
+            => 'width: 200px', 'class' => 'form-control')); }}
+            @else
+            {{ Form::select('slot4', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            @endif
+        </div>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot2container" {{ ($useradventure->loot()->slot(2)->first() != null) ? '' : 'style="display: none"' }}>
-        <label for="slot2" style="padding-right: 5px">Slot 2:</label>
-        @if ($useradventure->loot()->slot(2)->first() != null)
-        {{ Form::select('slot2', $loot_slots[2], $useradventure->loot()->slot(2)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot2', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot3container" {{ ($useradventure->loot()->slot(3)->first() != null) ? '' : 'style="display: none"' }}>
-    <label for="slot3" style="padding-right: 5px">Slot 3:</label>
-        @if ($useradventure->loot()->slot(3)->first() != null)
-        {{ Form::select('slot3', $loot_slots[3], $useradventure->loot()->slot(3)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot3', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot4container" {{ ($useradventure->loot()->slot(4)->first() != null) ? '' : 'style="display: none"' }}>
-    <label for="slot4" style="padding-right: 5px">Slot 4:</label>
-        @if ($useradventure->loot()->slot(4)->first() != null)
-        {{ Form::select('slot4', $loot_slots[4], $useradventure->loot()->slot(4)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot4', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
-    </div>
-</div>
 
-<div class="row" style="margin-top: 15px">
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot3container" {{ ($useradventure->loot()->slot(5)->first() != null) ? '' : 'style="display: none"' }}>
-        <label for="slot5" style="padding-right: 5px">Slot 5:</label>
-        @if ($useradventure->loot()->slot(5)->first() != null)
-        {{ Form::select('slot5', $loot_slots[5], $useradventure->loot()->slot(5)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot5', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
+    <div class="row" style="margin-top: 15px">
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot3container"
+            {{ ($useradventure->loot()->slot(5)->first() != null) ? '' : 'style="display: none"' }}>
+            <label for="slot5" style="padding-right: 5px">Slot 5:</label>
+            @if ($useradventure->loot()->slot(5)->first() != null)
+            {{ Form::select('slot5', $loot_slots[5], $useradventure->loot()->slot(5)->first()->adventure_loot_id,
+            array('style'
+            => 'width: 200px', 'class' => 'form-control')); }}
+            @else
+            {{ Form::select('slot5', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            @endif
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot3container" {{ ($useradventure->loot()->slot(6)->first() != null) ? '' : 'style="display: none"'}}>
+            <label for="slot6" style="padding-right: 5px">Slot 6:</label>
+            @if ($useradventure->loot()->slot(6)->first() != null)
+            {{ Form::select('slot6', $loot_slots[6], $useradventure->loot()->slot(6)->first()->adventure_loot_id,
+            array('style'
+            => 'width: 200px', 'class' => 'form-control')); }}
+            @else
+            {{ Form::select('slot6', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            @endif
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot3container" {{ ($useradventure->loot()->slot(7)->first() != null) ? '' : 'style="display: none"'}}>
+            <label for="slot7" style="padding-right: 5px">Slot 7:</label>
+            @if ($useradventure->loot()->slot(7)->first() != null)
+            {{ Form::select('slot7', $loot_slots[7], $useradventure->loot()->slot(7)->first()->adventure_loot_id,
+            array('style'
+            => 'width: 200px', 'class' => 'form-control')); }}
+            @else
+            {{ Form::select('slot7', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            @endif
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot3container" {{ ($useradventure->loot()->slot(8)->first() != null) ? '' : 'style="display: none"'}}>
+                <label for="slot8" style="padding-right: 5px">Slot 8:</label>
+                @if ($useradventure->loot()->slot(8)->first() != null)
+                {{ Form::select('slot8', $loot_slots[8], $useradventure->loot()->slot(8)->first()->adventure_loot_id,
+                array('style'
+                => 'width: 200px', 'class' => 'form-control')); }}
+                @else
+                {{ Form::select('slot8', array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+                @endif
+            </div>
+        </div>
+        <div class="row">
+            <div style="text-align: center; margin-top: 15px">
+                {{ Form::submit('Update', array('class' => 'btn btn-primary')); }}
+            </div>
+            {{ Form::close() }}
+        </div>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot3container" {{ ($useradventure->loot()->slot(6)->first() != null) ? '' : 'style="display: none"' }}>
-        <label for="slot6" style="padding-right: 5px">Slot 6:</label>
-        @if ($useradventure->loot()->slot(6)->first() != null)
-        {{ Form::select('slot6', $loot_slots[6], $useradventure->loot()->slot(6)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot6', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot3container" {{ ($useradventure->loot()->slot(7)->first() != null) ? '' : 'style="display: none"' }}>
-        <label for="slot7" style="padding-right: 5px">Slot 7:</label>
-        @if ($useradventure->loot()->slot(7)->first() != null)
-        {{ Form::select('slot7', $loot_slots[7], $useradventure->loot()->slot(7)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot7', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6" id="slot3container" {{ ($useradventure->loot()->slot(8)->first() != null) ? '' : 'style="display: none"' }}>
-        <label for="slot8" style="padding-right: 5px">Slot 8:</label>
-        @if ($useradventure->loot()->slot(8)->first() != null)
-        {{ Form::select('slot8', $loot_slots[8], $useradventure->loot()->slot(8)->first()->adventure_loot_id, array('style'
-        => 'width: 200px')); }}
-        @else
-        {{ Form::select('slot8', array(), 0, array('style' => 'width: 200px')); }}
-        @endif
-    </div>
-</div>
-<div class="row">
-    <div style="text-align: center; margin-top: 15px">
-        {{ Form::submit('Update', array('class' => 'btn btn-primary')); }}
-    </div>
-    {{ Form::close() }}
 </div>
 
 
@@ -132,52 +145,52 @@ var lootamount8selected = "";
 var lootdata = null;
 
 /* $(document).ready(function () {
-    //Validate form submission.
-    jQuery.validator.addMethod("slotRequired", function (value, element) {
-        return (value != '-1') && (value != '');
-    }, "");
+ //Validate form submission.
+ jQuery.validator.addMethod("slotRequired", function (value, element) {
+ return (value != '-1') && (value != '');
+ }, "");
 
-    jQuery.validator.addMethod("slotAmountRequired", function (value, element) {
-        return (value != '-1') && (value != '');
-    }, "");
+ jQuery.validator.addMethod("slotAmountRequired", function (value, element) {
+ return (value != '-1') && (value != '');
+ }, "");
 
-    if ($('[name="adventure_id"] option:selected').text() == '') {
-        $('#slot1container').hide();
-        $('#slot2container').hide();
-        $('#slot3container').hide();
-        $('#slot4container').hide();
-        $('#slot5container').hide();
-        $('#slot6container').hide();
-        $('#slot7container').hide();
-        $('#slot8container').hide();
-    } else {
-        //if we're trying to update, get the data stored for that submission and return it.
-        if (useradventureid > 0) {
-            $.ajax({
-                type: "Post",
-                url: "{{ URL::to('/getUserAdventure') }}",
-                dataType: 'json',
-                cache: false,
-                data: {
-                    user_adventure_id: useradventureid
-                }
-            }).done(function (data) {
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "{{ URL::to('/getJSONLoot') }}",
-                    data: {
-                        adventure: data.useradventure.AdventureID
-                    }
-                }).done(function (msg) {
-                    lootdata = msg;
-                    updateLootData();
-                    loadEditData(data);
-                });
-            });
-        }
-    }
-}); */
+ if ($('[name="adventure_id"] option:selected').text() == '') {
+ $('#slot1container').hide();
+ $('#slot2container').hide();
+ $('#slot3container').hide();
+ $('#slot4container').hide();
+ $('#slot5container').hide();
+ $('#slot6container').hide();
+ $('#slot7container').hide();
+ $('#slot8container').hide();
+ } else {
+ //if we're trying to update, get the data stored for that submission and return it.
+ if (useradventureid > 0) {
+ $.ajax({
+ type: "Post",
+ url: "{{ URL::to('/getUserAdventure') }}",
+ dataType: 'json',
+ cache: false,
+ data: {
+ user_adventure_id: useradventureid
+ }
+ }).done(function (data) {
+ $.ajax({
+ type: "POST",
+ cache: false,
+ url: "{{ URL::to('/getJSONLoot') }}",
+ data: {
+ adventure: data.useradventure.AdventureID
+ }
+ }).done(function (msg) {
+ lootdata = msg;
+ updateLootData();
+ loadEditData(data);
+ });
+ });
+ }
+ }
+ }); */
 
 $('[name="adventure_id"]').change(function (element) {
     adventureid = $('[name="adventure_id"]').val();
@@ -364,17 +377,17 @@ function updateLootData() {
 }
 
 /* function updateValidationRules() {
-    //Clear any old rules.
-    $('#updateLoot').removeData('validator');
-    $("#updateLoot").validate();
+ //Clear any old rules.
+ $('#updateLoot').removeData('validator');
+ $("#updateLoot").validate();
 
-    for (i = 0; i <= 8; i++) {
-        if ($('#slot' + i + 'container').is(":visible")) {
-            $('[name="slot' + i + '"]').rules("add", {slotRequired: true});
-            $('[name="slot' + i + '_amount"]').rules("add", {slotAmountRequired: true});
-        }
-    }
-} */
+ for (i = 0; i <= 8; i++) {
+ if ($('#slot' + i + 'container').is(":visible")) {
+ $('[name="slot' + i + '"]').rules("add", {slotRequired: true});
+ $('[name="slot' + i + '_amount"]').rules("add", {slotAmountRequired: true});
+ }
+ }
+ } */
 
 function loadEditData(data) {
     if (data.useradventure[0] != null) //Advenute dropdown

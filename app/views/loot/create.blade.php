@@ -18,54 +18,54 @@
             <li>{{ $message }}</li>
             @endforeach
         </ul>
-        <div class="col-xs-3 col-md-2">
-            {{ Form::label('adventure_id', 'Adventure:'); }}
-        </div>
-        <div style="text-align: left">
-            {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('style' => 'width: 200px')) }}
+        <div class="form-group">
+            {{ Form::label('adventure_id', 'Adventure:', array('class' => 'col-lg-2 control-label')); }}
+            <div style="col-lg-10">
+                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('style' => 'width: 200px',
+                'class' => 'form-control')) }}
+            </div>
         </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" style="margin-left: 20px">
         <div class="row">
-            <div class="col-lg-3 col-md-4 col-sm-6"
-                 style="padding-top: 10px; {{ (count($loot_slots[1]) > 0 ? '' : 'display: none')}}" id="slot1container">
-                <label for="slot1options" style="padding-right: 5px">Slot 1:</label>
-                {{ Form::select('slot1', $loot_slots[1], 0, array('style' => 'width: 200px', "id" => "slot1options")) }}
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group" style="padding-top: 10px; {{ (count($loot_slots[1]) > 0 ? '' : 'display: none')}}" id="slot1container">
+                {{ Form::label('slot1options', 'Slot 1:', array('class' => 'control-label')) }}
+                {{ Form::select('slot1', $loot_slots[1], 0, array('style' => 'width: 200px', "id" => "slot1options", 'class' => 'form-control')) }}
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6"
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
                  style="padding-top: 10px; {{ (count($loot_slots[2]) > 0 ? '' : 'display: none')}}" id="slot2container">
-                <label for="slot2options" style="padding-right: 5px">Slot 2:</label>
-                {{ Form::select('slot2', $loot_slots[2], 0, array('style' => 'width: 200px', "id" => "slot2options"))}}
+                {{ Form::label('slot2options', 'Slot 2:', array('class' => 'control-label')) }}
+                {{ Form::select('slot2', $loot_slots[2], 0, array('style' => 'width: 200px', "id" => "slot2options", 'class' => 'form-control'))}}
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6"
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
                  style="padding-top: 10px; {{ (count($loot_slots[3]) > 0 ? '' : 'display: none')}}" id="slot3container">
-                <label for="slot3options" style="padding-right: 5px">Slot 3:</label>
-                {{ Form::select('slot3', $loot_slots[3], 0, array('style' => 'width: 200px', "id" => "slot3options")) }}
+                {{ Form::label('slot3options', 'Slot 3:', array('class' => 'control-label')) }}
+                {{ Form::select('slot3', $loot_slots[3], 0, array('style' => 'width: 200px', "id" => "slot3options", 'class' => 'form-control')) }}
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6"
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
                  style="padding-top: 10px; {{ (count($loot_slots[4]) > 0 ? '' : 'display: none')}}" id="slot4container">
-                <label for="slot4options" style="padding-right: 5px">Slot 4:</label>
-                {{ Form::select('slot4', $loot_slots[4], 0, array('style' => 'width: 200px', "id" => "slot4options")) }}
+                {{ Form::label('slot14options', 'Slot 4:', array('class' => 'control-label')) }}
+                {{ Form::select('slot4', $loot_slots[4], 0, array('style' => 'width: 200px', "id" => "slot4options", 'class' => 'form-control')) }}
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6"
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
                  style="padding-top: 10px; {{ (count($loot_slots[5]) > 0 ? '' : 'display: none')}}" id="slot5container">
-                <label for="slot5options" style="padding-right: 5px">Slot 5:</label>
-                {{ Form::select('slot5', $loot_slots[5], 0, array('style' => 'width: 200px', "id" => "slot5options")) }}
+                {{ Form::label('slot5options', 'Slot 5:', array('class' => 'control-label')) }}
+                {{ Form::select('slot5', $loot_slots[5], 0, array('style' => 'width: 200px', "id" => "slot5options", 'class' => 'form-control')) }}
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6"
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
                  style="padding-top: 10px; {{ (count($loot_slots[6]) > 0 ? '' : 'display: none')}}" id="slot6container">
-                <label for="slot6options" style="padding-right: 5px">Slot 6:</label>
-                {{ Form::select('slot6', $loot_slots[6], 0, array('style' => 'width: 200px', "id" => "slot6options")) }}
+                {{ Form::label('slot6options', 'Slot 6:', array('class' => 'control-label')) }}
+                {{ Form::select('slot6', $loot_slots[6], 0, array('style' => 'width: 200px', "id" => "slot6options", 'class' => 'form-control')) }}
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6"
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
                  style="padding-top: 10px; {{ (count($loot_slots[7]) > 0 ? '' : 'display: none')}}" id="slot7container">
-                <label for="slot7options" style="padding-right: 5px">Slot 7:</label>
-                {{ Form::select('slot7', $loot_slots[7], 0, array('style' => 'width: 200px', "id" => "slot7options")) }}
+                {{ Form::label('slot7options', 'Slot 7:', array('class' => 'control-label')) }}
+                {{ Form::select('slot7', $loot_slots[7], 0, array('style' => 'width: 200px', "id" => "slot7options", 'class' => 'form-control')) }}
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6"
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
                  style="padding-top: 10px; {{ (count($loot_slots[8]) > 0 ? '' : 'display: none')}}" id="slot8container">
-                <label for="slot8options" style="padding-right: 5px">Slot 8:</label>
-                {{ Form::select('slot8', $loot_slots[8], 0, array('style' => 'width: 200px', "id" => "slot8options")) }}
+                {{ Form::label('slot8options', 'Slot 8:', array('class' => 'control-label')) }}
+                {{ Form::select('slot8', $loot_slots[8], 0, array('style' => 'width: 200px', "id" => "slot8options", 'class' => 'form-control')) }}
             </div>
         </div>
         <div style="text-align: center; margin-top: 15px">

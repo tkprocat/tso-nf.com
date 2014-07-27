@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "bootstrap-sortable": "~1.9.0",
-    "bootstrap": "~3.2.0"
+    "bootstrap": "~3.2.0",
+    "bootstrap-3-datepicker": "*"
   }
 }

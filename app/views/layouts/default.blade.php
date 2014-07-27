@@ -14,13 +14,12 @@
     @endif
 
     {{ HTML::style('/assets/bower/bootstrap-sortable/Contents/bootstrap-sortable.css') }}
-    {{ HTML::style('/assets/css/ui-darkness/jquery-ui-1.10.4.custom.min.css') }}
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/jquery.validate.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/bootstrap.js"></script>
-    <script type="text/javascript" src="{{ URL::to('/') }}/assets/bower/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+    <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/bootstrap-sortable.js"></script>
 </head>
 <body>
 
@@ -29,6 +28,7 @@
 @endif
 
 <div class="container">
+    @if ((!isset($popup_mode)) || (isset($popup_mode) && !$popup_mode))
     <div class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
@@ -82,6 +82,7 @@
             </div>
         </div>
     </div>
+    @endif
     @include('layouts/notifications')
 
     @yield('content')

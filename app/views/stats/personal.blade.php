@@ -45,18 +45,39 @@
     }
 </style>
 <h2 id="accumulated">Accumulated loot:</h2>
-<span>Show loot submitted between <input type="text" id="accumulatedloot-datefrom" class="date-picker"> and <input
-        type="text" id="accumulatedloot-dateto" class="date-picker"></span>
+<div class="form-inline">
+    Show loot submitted between
+    <div id="accumulatedloot-datefrom" class="input-group date">
+        <input type="text" class="form-control" value="2014-01-01">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    </div>
+    and
+    <div id="accumulatedloot-dateto" class="input-group date">
+        <input type="text" class="form-control" value="{{ \Carbon\Carbon::today()->toDateString() }}">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    </div>
+</div>
+<div class="clearfix"></div>
+
 <div id="accumulatedloot" style="margin-top: 5px">
     <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
 </div>
 <br>
-<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
+<div class="clearfix"></div>
 
 <h2 id="adventuresplayed">Adventures played:</h2>
-<span>Show statistics for adventures registered between <input type="text" id="adventuresplayed-datefrom"
-                                                               class="date-picker"> and
-<input type="text" id="adventuresplayed-dateto" class="date-picker"></span>
+<div class="form-inline">
+    Show statistics for adventures registered between
+    <div id="adventuresplayed-datefrom" class="input-group date">
+        <input type="text" class="form-control" value="2014-01-01">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    </div>
+    and
+    <div id="adventuresplayed-dateto" class="input-group date">
+        <input type="text" class="form-control" value="{{ \Carbon\Carbon::today()->toDateString() }}">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    </div>
+</div>
 <div id="adventuresplayedresult" style="margin-top: 5px">
     <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
 </div>
@@ -144,7 +165,7 @@
                 content += 'Avg price: ' + (Math.round(item[0].avg_price * amount * 10) / 10) + ' gc<br>';
                 content += 'Max price: ' + (Math.round(item[0].max_price * amount * 10) / 10) + ' gc<br>';
                 content += 'Source: prices.mi5guild.com';
-                $(this).popover({ trigger: "hover", title: type, placement: "auto", content: content, html: true});
+                $(this).popover({trigger: "hover", title: type, placement: "auto", content: content, html: true});
                 $(this).popover('show');
             }
         }
@@ -157,58 +178,53 @@
     }
 
     $(document).ready(function () {
-        $("#accumulatedloot-datefrom").datepicker({
-            showOn: "button",
-            buttonImage: "{{ URL::to('/assets/img/') }}/calendar.png",
-            buttonImageOnly: true,
-            dateFormat: "yy-mm-dd",
-            onSelect: function () {
-                updateAccumulatedLoot();
-            }
+        $('#accumulatedloot-datefrom').datepicker({
+            format: "yyyy-mm-dd",
+            startDate: "2014-01-01",
+            endDate: "d",
+            autoclose: true,
+            weekStart: 1
+        }).on('changeDate', function (e) {
+            updateAccumulatedLoot();
         });
-        $("#accumulatedloot-datefrom").datepicker().datepicker('setDate', new Date(2013, 0, 1));
 
-        $("#accumulatedloot-dateto").datepicker({
-            showOn: "button",
-            buttonImage: "{{ URL::to('/assets/img/') }}/calendar.png",
-            buttonImageOnly: true,
-            dateFormat: "yy-mm-dd",
-            onSelect: function () {
-                updateAccumulatedLoot();
-            }
+        $('#accumulatedloot-dateto').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: "2014-01-01",
+            endDate: "d",
+            autoclose: true,
+            weekStart: 1
+        }).on('changeDate', function (e) {
+            updateAccumulatedLoot();
         });
-        $("#accumulatedloot-dateto").datepicker().datepicker('setDate', new Date());
+
+        $('#adventuresplayed-datefrom').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: "2014-01-01",
+            endDate: "d",
+            autoclose: true,
+            weekStart: 1
+        }).on('changeDate', function (e) {
+            updateAdventuresPlayed();
+        });
+
+        $('#adventuresplayed-dateto').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: "2014-01-01",
+            endDate: "d",
+            autoclose: true,
+            weekStart: 1
+        }).on('changeDate', function (e) {
+            updateAdventuresPlayed();
+        });
 
         updateAccumulatedLoot();
-
-        $("#adventuresplayed-datefrom").datepicker({
-            showOn: "button",
-            buttonImage: "{{ URL::to('/assets/img/') }}/calendar.png",
-            buttonImageOnly: true,
-            dateFormat: "yy-mm-dd",
-            onSelect: function () {
-                updateAdventuresPlayed();
-            }
-        });
-        $("#adventuresplayed-datefrom").datepicker().datepicker('setDate', new Date(2013, 0, 1));
-
-        $("#adventuresplayed-dateto").datepicker({
-            showOn: "button",
-            buttonImage: "{{ URL::to('/assets/img/') }}/calendar.png",
-            buttonImageOnly: true,
-            dateFormat: "yy-mm-dd",
-            onSelect: function () {
-                updateAdventuresPlayed();
-            }
-        });
-        $("#adventuresplayed-dateto").datepicker().datepicker('setDate', new Date());
-
         updateAdventuresPlayed();
     });
 
     function updateAccumulatedLoot() {
-        var datefrom = $("#accumulatedloot-datefrom").val();
-        var dateto = $("#accumulatedloot-dateto").val();
+        var datefrom = $("#accumulatedloot-datefrom input").val();
+        var dateto = $("#accumulatedloot-dateto input").val();
         //Change the old result to loading...
         $('#accumulatedloot').html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...');
         $.ajax({
@@ -229,8 +245,8 @@
     }
 
     function updateAdventuresPlayed() {
-        var datefrom = $("#adventuresplayed-datefrom").val();
-        var dateto = $("#adventuresplayed-dateto").val();
+        var datefrom = $("#adventuresplayed-datefrom input").val();
+        var dateto = $("#adventuresplayed-dateto input").val();
         $('#adventuresplayedresult').html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...');
         $.ajax({
             type: 'GET',
