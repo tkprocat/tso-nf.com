@@ -79,7 +79,7 @@ class StatsController extends BaseController
         $total_played = $this->loot->getAllUserAdventuresForUserWithLoot($user_id, $date_from, $date_to)->count();
         $drop_count_list = $this->stats->getLootDropCountForUser($user_id, $date_from, $date_to);
 
-        return View::make('stats.partials.adventures_played', compact('adventures', 'total_played', 'drop_count_list'));
+        return View::make('stats.partials.adventures_played', compact('adventures', 'total_played', 'drop_count_list', 'username'));
     }
 
     private function getUserId($username)

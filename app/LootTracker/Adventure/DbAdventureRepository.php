@@ -62,4 +62,9 @@ class DbAdventureRepository implements AdventureInterface
     {
         return $this->adventure->loot();
     }
+
+    public function findAdventureByName($name)
+    {
+        return $this->adventure->whereName($name)->first();
+    }
 }

@@ -157,6 +157,12 @@ class LootTest extends TestCase
         $this->assertEquals(28, $user_adventure->loot()->slot(8)->first()->adventure_loot_id);
     }
 
+    /** @test */
+    public function can_get_latest_loot_for_a_single_adventure() {
+        $this->call('GET', '/loot/admin/Bandit+Nest');
+        $this->assertResponseOk();
+    }
+
     public function tearDown()
     {
         parent::tearDown();

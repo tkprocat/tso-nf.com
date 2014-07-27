@@ -54,7 +54,7 @@ class LootController extends BaseController
      * @param $username
      * @return \Illuminate\View\View
      */
-    public function show($username)
+    public function show($username = '', $adventure_name = '')
     {
 
         //Make sure the username is filled out.
@@ -68,6 +68,8 @@ class LootController extends BaseController
         $lootPerPage = 25;
         //Show for selected user.
         $query = $this->loot->findAllAdventuresForUser($user->id)->orderBy('created_at', 'desc');
+        if ($adventure_name != '')
+            $query->where('adventure_id', $this->adventure->findAdventureByName(urldecode($adventure_name))->id);
         $loot = $query->skip($lootPerPage * ($page - 1))->take($lootPerPage)->get();
 
         //Set up the paginator!

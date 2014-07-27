@@ -9,6 +9,8 @@ interface AdventureInterface {
 
     public function findAdventureById($id);
 
+    public function findAdventureByName($name);
+
     public function getAdventuresWithLoot();
 
     public function findAllLootForAdventure($id);
