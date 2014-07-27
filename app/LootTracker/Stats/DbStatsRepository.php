@@ -2,6 +2,7 @@
 namespace LootTracker\Stats;
 
 use LootTracker\Loot\LootInterface;
+use \Carbon\Carbon;
 
 class DbStatsRepository implements StatsInterface
 {
@@ -49,7 +50,7 @@ class DbStatsRepository implements StatsInterface
         return \DB::table('user_adventure')
             ->select(\DB::raw('count(*) as registered'))
             ->where('user_adventure.user_id', $user_id)
-            ->whereBetween('user_adventure.created_at', array(date("Y-m-d", strtotime('this week')), date("Y-m-d", strtotime('tomorrow'))))
+            ->whereBetween('user_adventure.created_at', array(Carbon::today()->startOfWeek(), Carbon::today()->startOfWeek()->addDays(7)))
             ->first()->registered;
     }
 
@@ -58,7 +59,7 @@ class DbStatsRepository implements StatsInterface
         return \DB::table('user_adventure')
             ->select(\DB::raw('count(*) as registered'))
             ->where('user_adventure.user_id', $user_id)
-            ->whereBetween('user_adventure.created_at', array(date("Y-m-d", strtotime('last week')), date("Y-m-d", strtotime('last sunday') + 1)))
+            ->whereBetween('user_adventure.created_at', array(Carbon::today()->startOfWeek()->subDays(7), Carbon::today()->startOfWeek()))
             ->first()->registered;
     }
 
