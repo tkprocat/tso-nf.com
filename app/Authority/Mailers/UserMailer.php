@@ -25,7 +25,7 @@ class UserMailer extends Mailer {
 	 */
 	public function welcome($username, $email, $userId, $activationCode)
 	{
-		$subject = 'Welcome to Loottracker @ Keepers.dk';
+		$subject = 'Welcome to tso-nf.com';
 		$view = 'emails.auth.welcome';
         $data['username'] = $username;
 		$data['userId'] = $userId;
@@ -44,7 +44,7 @@ class UserMailer extends Mailer {
 	 */
 	public function forgotPassword($email, $userId, $resetCode)
 	{
-		$subject = 'Password Reset Confirmation | Loottracker @ Keepers.dk';
+		$subject = 'Password Reset Confirmation | tso-nf.com';
 		$view = 'emails.auth.reset';
 		$data['userId'] = $userId;
 		$data['resetCode'] = $resetCode;
@@ -62,7 +62,7 @@ class UserMailer extends Mailer {
 	 */
 	public function newPassword($email, $newPassword)
 	{
-		$subject = 'New Password Information | Loottracker @ Keepers.dk';
+		$subject = 'New Password Information | tso-nf.com';
 		$view = 'emails.auth.newpassword';
 		$data['newPassword'] = $newPassword;
 		$data['email'] = $email;
