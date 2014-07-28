@@ -38,12 +38,6 @@
 </table>
 <br>
 
-<style>
-    .date-picker {
-        border: none;
-        width: 100px;
-    }
-</style>
 <h2 id="accumulated">Accumulated loot:</h2>
 <div class="form-inline">
     Show loot submitted between
@@ -140,42 +134,6 @@
             }
         });
     });
-
-
-    //Code to handle price information.
-    var pricedata = null;
-    $(document).ready(function () {
-        //Get price data from prices.mi5guild.com and save them for later use.
-        $.getJSON("http://prices.mi5guild.com/prices/getjsonpprices?callback=?", function (result) {
-            //response data are now in the result variable
-            pricedata = result;
-        });
-    });
-
-    $('#accumulatedloot .show-tooltip').hover(function (e) {
-        if (pricedata != null) {
-            //$(this).css('font-weight', 'bolder');
-            var colindex = $(this).parent().parent().children().index($(this).parent()) - 1;
-            var type = $(this).closest('tr').find('td:eq(' + colindex + ')').text();
-            var item = findItem(type);
-            if (item.length > 0) {
-
-                var amount = parseInt($(this).text());
-                var content = 'Min price: ' + (Math.round(item[0].min_price * amount * 10) / 10) + ' gc<br>';
-                content += 'Avg price: ' + (Math.round(item[0].avg_price * amount * 10) / 10) + ' gc<br>';
-                content += 'Max price: ' + (Math.round(item[0].max_price * amount * 10) / 10) + ' gc<br>';
-                content += 'Source: prices.mi5guild.com';
-                $(this).popover({trigger: "hover", title: type, placement: "auto", content: content, html: true});
-                $(this).popover('show');
-            }
-        }
-    });
-
-    function findItem(itemName) {
-        return $.grep(pricedata, function (item) {
-            return item.name.toLowerCase() == itemName.toLowerCase();
-        });
-    }
 
     $(document).ready(function () {
         $('#accumulatedloot-datefrom').datepicker({
