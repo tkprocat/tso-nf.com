@@ -2,7 +2,6 @@
 namespace LootTracker\Adventure;
 
 use Illuminate\Database\Eloquent\Model;
-use LootTracker\Adventure\AdventureLoot;
 
 class DbAdventureRepository implements AdventureInterface
 {

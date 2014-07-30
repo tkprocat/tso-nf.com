@@ -3,6 +3,7 @@ namespace LootTracker\Loot;
 
 use Authority\Repo\User\UserInterface;
 use Illuminate\Database\Eloquent\Model;
+use LootTracker\Adventure\Adventure;
 
 class DbLootRepository implements LootInterface
 {
@@ -10,6 +11,11 @@ class DbLootRepository implements LootInterface
     protected $user;
     public $validator;
 
+    /**
+     * @param Model $userAdventure
+     * @param UserInterface $user
+     * @param LootFormValidator $validator
+     */
     public function __construct(Model $userAdventure, UserInterface $user, LootFormValidator $validator)
     {
         $this->userAdventure = $userAdventure;
@@ -17,11 +23,19 @@ class DbLootRepository implements LootInterface
         $this->validator = $validator;
     }
 
+    /**
+     * @return mixed
+     */
     public function all()
     {
         return $this->loot->all();
     }
 
+    /**
+     * @param $page
+     * @param $lootPerPage
+     * @return \StdClass
+     */
     public function findPage($page, $lootPerPage)
     {
         $result = new \StdClass;
@@ -36,11 +50,18 @@ class DbLootRepository implements LootInterface
         return $result;
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Collection|Model|static
+     */
     public function findUserAdventureById($id)
     {
         return $this->userAdventure->findOrFail($id);
     }
 
+    /**
+     * @param $data
+     */
     public function create($data)
     {
         $adventure_id = $data['adventure_id'];
@@ -99,6 +120,9 @@ class DbLootRepository implements LootInterface
         }
     }
 
+    /**
+     * @param $data
+     */
     public function update($data)
     {
         \DB::beginTransaction();
@@ -163,11 +187,19 @@ class DbLootRepository implements LootInterface
         \DB::commit();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function findAllAdventuresForUser($id)
     {
         return $this->userAdventure->where('user_id', $id);
     }
 
+    /**
+     * @param $id
+     * @return array|static[]
+     */
     public function findAllLootForUserAdventure($id)
     {
         return \DB::table('user_adventure_loot')
@@ -177,6 +209,9 @@ class DbLootRepository implements LootInterface
             ->get();
     }
 
+    /**
+     * @return array|static[]
+     */
     public function findAllPlayedAdventures()
     {
         return \DB::table('adventure')
@@ -185,16 +220,25 @@ class DbLootRepository implements LootInterface
             ->groupBy('adventure.id')->orderBy('name')->get();
     }
 
+    /**
+     * @return \Illuminate\Database\Query\Builder|static
+     */
     public function getAllAdventuresWithPlayedAndLoot()
     {
-        return \LootTracker\Adventure\Adventure::with(array('played', 'loot'))->orderBy('name');
+        return Adventure::with(array('played', 'loot'))->orderBy('name');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
     public function getAllUserAdventuresWithLoot()
     {
         return $this->userAdventure->with('loot');
     }
 
+    /**
+     * @return array|static[]
+     */
     public function findLootCountForAllPlayedAdventures()
     {
         return \DB::table('adventure_loot')
@@ -203,8 +247,12 @@ class DbLootRepository implements LootInterface
             ->groupBy('adventure_loot.id')
             ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount')->get();
         dd('findLootCountForAllPlayedAdventures was used!');
+        //TODO: We should remove this one day...
     }
 
+    /**
+     * @return array
+     */
     public function getLootDropCount()
     {
         return \DB::table('adventure_loot')
@@ -214,6 +262,12 @@ class DbLootRepository implements LootInterface
             ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount')->lists('dropped', 'id');
     }
 
+    /**
+     * @param $user_id
+     * @param $from
+     * @param $to
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
     public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to)
     {
         $query = $this->userAdventure->with(array('loot'))->where('user_id', $user_id);
@@ -223,5 +277,4 @@ class DbLootRepository implements LootInterface
 
         return $query;
     }
-
 }

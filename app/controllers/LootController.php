@@ -51,7 +51,8 @@ class LootController extends BaseController
     }
 
     /**
-     * @param $username
+     * @param string $username
+     * @param string $adventure_name
      * @return \Illuminate\View\View
      */
     public function show($username = '', $adventure_name = '')
@@ -309,7 +310,7 @@ class LootController extends BaseController
             }
         }
 
-        return Rediect::to('guilds');
+        return \Rediect::to('loot');
     }
 
     /**

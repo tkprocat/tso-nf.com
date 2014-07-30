@@ -11,7 +11,7 @@ class StatsController extends BaseController
     protected $adventure;
     protected $stats;
 
-    function __construct(LootInterface $loot, AdventureInterface $adventure, LootTracker\Stats\StatsInterface $stats)
+    function __construct(LootInterface $loot, AdventureInterface $adventure, StatsInterface $stats)
     {
         $this->loot = $loot;
         $this->adventure = $adventure;

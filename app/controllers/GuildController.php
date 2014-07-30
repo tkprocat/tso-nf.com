@@ -10,7 +10,8 @@ class GuildController extends BaseController
     protected $user;
     protected $sentry;
 
-    function __construct(GuildInterface $guild, \Authority\Repo\User\UserInterface $user, Cartalyst\Sentry\Sentry $sentry)
+    public function __construct(GuildInterface $guild, \Authority\Repo\User\UserInterface $user,
+                                Cartalyst\Sentry\Sentry $sentry)
     {
         $this->guild = $guild;
         $this->user = $user;

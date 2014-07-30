@@ -8,7 +8,8 @@ class LabController extends BaseController
         return View::make('labs.index');
     }
 
-    public function lab3() {
+    public function lab3()
+    {
         $lootTypes = AdventureLoot::distinct('type')->orderBy('type')->lists('type');
         return View::make('labs.lab3', compact('lootTypes'));
     }

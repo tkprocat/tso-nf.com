@@ -10,7 +10,7 @@ class BlogCommentController extends \BaseController
     protected $blogComment;
     protected $user;
 
-    function __construct(BlogPostInterface $blogPost, BlogCommentInterface $blogComment, UserInterface $user)
+    public function __construct(BlogPostInterface $blogPost, BlogCommentInterface $blogComment, UserInterface $user)
     {
         $this->blogPost = $blogPost;
         $this->blogComment = $blogComment;
@@ -29,21 +29,22 @@ class BlogCommentController extends \BaseController
 
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a blog comment.
      *
+     * @param $post_id
      * @return Response
      */
-    public function create($id)
+    public function create($post_id)
     {
-        if (!$this->blogPost->findId($id))
+        if (!$this->blogPost->findId($post_id))
             return Redirect::to('blog')->with('error', 'Blog post not found.');
 
-        return View::make('blog.comment.create')->with('post_id', $id);
+        return View::make('blog.comment.create')->with('post_id', $post_id);
     }
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created comment.
      *
      * @return Response
      */

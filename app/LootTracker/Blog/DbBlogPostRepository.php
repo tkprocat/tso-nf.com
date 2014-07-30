@@ -1,7 +1,6 @@
 <?php
 namespace LootTracker\Blog;
-
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class DbBlogPostRepository implements BlogPostInterface {
 
@@ -54,7 +53,7 @@ class DbBlogPostRepository implements BlogPostInterface {
     {
         $this->blogPost->user_id = $data['user_id'];
         $this->blogPost->title = e($data['title']);
-        $this->blogPost->slug = \Illuminate\Support\Str::slug($this->blogPost->title);
+        $this->blogPost->slug = Str::slug($this->blogPost->title);
         $this->blogPost->content = e($data['content']);
         $this->blogPost->save();
     }
@@ -63,7 +62,7 @@ class DbBlogPostRepository implements BlogPostInterface {
         $this->blogPost = $this->blogPost->find($id);
         $this->blogPost->user_id = $data['user_id'];
         $this->blogPost->title = e($data['title']);
-        $this->blogPost->slug = \Illuminate\Support\Str::slug($this->blogPost->title);
+        $this->blogPost->slug = Str::slug($this->blogPost->title);
         $this->blogPost->content = e($data['content']);
         $this->blogPost->update();
     }

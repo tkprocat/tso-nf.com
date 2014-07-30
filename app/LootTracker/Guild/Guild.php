@@ -1,6 +1,8 @@
 <?php
 namespace LootTracker\Guild;
 
+use Cartalyst\Sentry\Groups\GroupNotFoundException;
+
 class Guild extends \Eloquent {
 
 	protected $table = 'guilds';
@@ -12,14 +14,14 @@ class Guild extends \Eloquent {
         //Admins
         try {
             \Sentry::findGroupByName('Guild_' . $this['tag'] . '_Admins');
-        } catch (\Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
+        } catch (GroupNotFoundException $e) {
             \Sentry::createGroup(array('name' => 'Guild_' . $this['tag'] . '_Admins', 'permissions' => array('guild_' . $this['id'] . '_admin' => 1)));
         }
 
         //Members
         try {
             \Sentry::findGroupByName('Guild_' . $this['tag'] . '_Members');
-        } catch (\Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
+        } catch (GroupNotFoundException $e) {
             \Sentry::createGroup(array('name' => 'Guild_' . $this['tag'] . '_Members', 'permissions' => array('guild_' . $this['id'] . '_member' => 1)));
         }
 

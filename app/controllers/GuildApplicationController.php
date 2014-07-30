@@ -18,6 +18,7 @@ class GuildApplicationController extends BaseController
     /**
      * Show the form for creating a new resource.
      *
+     * @param $id
      * @return Response
      */
     public function create($id)
@@ -27,7 +28,7 @@ class GuildApplicationController extends BaseController
             return View::make('guildapplications.create')->with('guild', $guild);
         } else {
             Session::flash('error', 'No such guild.');
-            Redirect::to('guilds');
+            return Redirect::to('guilds');
         }
     }
 
@@ -102,9 +103,7 @@ class GuildApplicationController extends BaseController
         //Check if the user is admin or fail
         if (($user != null) && ($user->hasPermission('admin'))) {
             if (!is_numeric($id)) {
-                // @codeCoverageIgnoreStart
-                return \App::abort(404);
-                // @codeCoverageIgnoreEnd
+                App::abort(404);
             }
 
             $validator = GuildApplication::validate(Input::all());
@@ -142,7 +141,7 @@ class GuildApplicationController extends BaseController
         if (($user != null) && ($user->hasPermission('admin'))) {
             if (!is_numeric($id)) {
                 // @codeCoverageIgnoreStart
-                return \App::abort(404);
+                return App::abort(404);
                 // @codeCoverageIgnoreEnd
             }
 
@@ -151,9 +150,7 @@ class GuildApplicationController extends BaseController
             {
                 Session::flash('success', 'Guild deleted.');
                 return Redirect::to('/guilds');
-            }
-            else
-            {
+            } else {
                 Session::flash('error', 'Unable to delete guild.');
                 return Redirect::to('/guilds');
             }
@@ -161,5 +158,4 @@ class GuildApplicationController extends BaseController
             return Redirect::route('login');
         }
     }
-
 }

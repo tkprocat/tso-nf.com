@@ -3,7 +3,8 @@
 use Authority\Repo\Session\SessionInterface;
 use Authority\Service\Form\Login\LoginForm;
 
-class SessionController extends BaseController {
+class SessionController extends BaseController
+{
 
     /**
      * Member Vars
@@ -13,6 +14,8 @@ class SessionController extends BaseController {
 
     /**
      * Constructor
+     * @param SessionInterface $session
+     * @param LoginForm $loginForm
      */
     public function __construct(SessionInterface $session, LoginForm $loginForm)
     {

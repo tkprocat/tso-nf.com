@@ -2,6 +2,7 @@
 namespace LootTracker\Guild;
 
 use Authority\Repo\User\UserInterface;
+use Cartalyst\Sentry\Sentry;
 use Illuminate\Database\Eloquent\Model;
 
 class DbGuildRepository implements GuildInterface
@@ -11,7 +12,13 @@ class DbGuildRepository implements GuildInterface
     protected $user;
     protected $sentry;
 
-    public function __construct(Model $guild, GuildFormValidator $validator, UserInterface $user, \Cartalyst\Sentry\Sentry $sentry)
+    /**
+     * @param Model $guild
+     * @param GuildFormValidator $validator
+     * @param UserInterface $user
+     * @param Sentry $sentry
+     */
+    public function __construct(Model $guild, GuildFormValidator $validator, UserInterface $user, Sentry $sentry)
     {
         $this->guild = $guild;
         $this->validator = $validator;
@@ -19,11 +26,17 @@ class DbGuildRepository implements GuildInterface
         $this->sentry = $sentry;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function all()
     {
         return $this->guild->all();
     }
 
+    /**
+     * @param $data
+     */
     public function create($data)
     {
         $guild = new Guild;
@@ -32,6 +45,11 @@ class DbGuildRepository implements GuildInterface
         $guild->save();
     }
 
+    /**
+     * @param $page
+     * @param $guildsPerPage
+     * @return \StdClass
+     */
     public function findPage($page, $guildsPerPage)
     {
         $result = new \StdClass;
@@ -46,17 +64,30 @@ class DbGuildRepository implements GuildInterface
         return $result;
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Collection|Model|static
+     */
     public function findId($id)
     {
         return $this->guild->findOrFail($id);
     }
 
+    /**
+     * @param $guild_tag
+     * @return mixed
+     */
     public function findTag($guild_tag)
     {
         return $this->guild->where('tag', $guild_tag)->findOrFail();
     }
 
 
+    /**
+     * @param $guild_id
+     * @param $user_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function demoteMember($guild_id, $user_id)
     {
         //Get the guild or return an error.
@@ -76,8 +107,14 @@ class DbGuildRepository implements GuildInterface
             return \Redirect::back()->withErrors('Guild member not found.');
 
         $user->removeGroup($admin_group);
+        return \Redirect::to('guilds');
     }
 
+    /**
+     * @param $guild_id
+     * @param $user_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function promoteMember($guild_id, $user_id)
     {
         //Get the guild or return an error.
@@ -97,8 +134,13 @@ class DbGuildRepository implements GuildInterface
             \Redirect::back()->withErrors('Guild member not found.');
 
         $user->addGroup($admin_group);
+        return \Redirect::to('guilds');
     }
 
+    /**
+     * @param $guild_id
+     * @param $user_id
+     */
     public function addMember($guild_id, $user_id)
     {
         $user = $this->user->byId($user_id);
@@ -115,6 +157,10 @@ class DbGuildRepository implements GuildInterface
         }
     }
 
+    /**
+     * @param $guild_id
+     * @param $user_id
+     */
     public function removeMember($guild_id, $user_id)
     {
         $user = $this->user->find($user_id);
@@ -125,11 +171,18 @@ class DbGuildRepository implements GuildInterface
         $user->removeGroup($group);
     }
 
+    /**
+     * @param $id
+     */
     public function delete($id)
     {
         // TODO: Implement delete() method.
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public function getMembers($id)
     {
         $guild = $this->findId($id);
@@ -138,6 +191,10 @@ class DbGuildRepository implements GuildInterface
         return $this->sentry->findAllUsersInGroup($member_group);
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public function getAdmins($id)
     {
         $guild = $this->findId($id);

@@ -1,6 +1,8 @@
 <?php
 namespace LootTracker\Adventure;
 
+use LootTracker\Loot\UserAdventureLoot;
+
 class AdventureLoot extends \BaseModel {
     protected $table = 'adventure_loot';
     public static $rules = [
@@ -19,6 +21,6 @@ class AdventureLoot extends \BaseModel {
     }
 
     public function dropCount() {
-        return \LootTracker\Loot\UserAdventureLoot::where('adventure_loot_id', '=', $this->id)->count();
+        return UserAdventureLoot::where('adventure_loot_id', '=', $this->id)->count();
     }
 }

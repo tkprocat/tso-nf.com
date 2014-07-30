@@ -9,9 +9,10 @@ use Authority\Service\Form\ForgotPassword\ForgotPasswordForm;
 use Authority\Service\Form\ChangePassword\ChangePasswordForm;
 use Authority\Service\Form\SuspendUser\SuspendUserForm;
 
-class UserController extends BaseController {
+class UserController extends BaseController
+{
 
-	protected $user;
+    protected $user;
 	protected $group;
 	protected $registerForm;
 	protected $userForm;
@@ -20,9 +21,17 @@ class UserController extends BaseController {
 	protected $changePasswordForm;
 	protected $suspendUserForm;
 
-	/**
-	 * Instantiate a new UserController
-	 */
+    /**
+     * Instantiate a new UserController
+     * @param UserInterface $user
+     * @param GroupInterface $group
+     * @param RegisterForm $registerForm
+     * @param UserForm $userForm
+     * @param ResendActivationForm $resendActivationForm
+     * @param ForgotPasswordForm $forgotPasswordForm
+     * @param ChangePasswordForm $changePasswordForm
+     * @param SuspendUserForm $suspendUserForm
+     */
 	public function __construct(
 		UserInterface $user, 
 		GroupInterface $group, 
