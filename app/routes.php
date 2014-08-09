@@ -26,6 +26,7 @@ Route::get('forgot', array('as' => 'forgotPasswordForm', function()
 Route::post('forgot', 'UserController@forgot');
 Route::post('users/{id}/change', 'UserController@change');
 Route::get('users/{id}/reset/{code}', 'UserController@reset')->where('id', '[0-9]+');
+Route::resource('users', 'UserController');
 
 //Loot
 Route::post('loot/getJSONLoot', 'LootController@getLootForAdventure');
@@ -46,9 +47,6 @@ Route::group(array('before' => 'auth'), function()
     Route::get('blog/comment/{id}/edit', 'BlogCommentController@edit')->where('id', '[0-9]+');
     Route::post('blog/comment/store', 'BlogCommentController@store');
     Route::put('blog/comment/update', 'BlogCommentController@update');
-
-    //Users
-    Route::resource('users', 'UserController');
 
     //Loot
     Route::get('loot/create', 'LootController@create');
