@@ -100,6 +100,10 @@ require app_path().'/filters.php';
 // Require the Observables file.
 require __DIR__.'/../observables.php';
 
+// Form macros
+require app_path().'/macros.php';
+
+
 /*
 |--------------------------------------------------------------------------
 | Prep Sentry for dependency Injection
