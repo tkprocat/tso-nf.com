@@ -1,11 +1,5 @@
 @extends('layouts.default')
 
-{{-- Web site Title --}}
-@section('title')
-@parent
-Home
-@stop
-
 {{-- Content --}}
 @section('content')
 <h4>Guilds:</h4>
@@ -33,17 +27,13 @@ Home
                     <td>{{ $guild->guildleader }}</td>
                     <td>
                     <a href="{{ URL::to('/guilds/applications/create/'.$guild->id) }}" class="btn btn-primary">Join</a>
-                    @if ((Sentry::check()) && (Sentry::hasPermission('admin')))
-                    <a href="{{ URL::to('/guilds/'.$guild->id.'/edit') }}" class="btn btn-info">Edit</a>
-                    <a href="{{ URL::to('/guilds/'.$guild->id.'/delete') }}" class="btn btn-danger">Delete</a>
-                    @endif
                     </td>
                 </tr>
                 @endforeach
                 </tbody>
                 @if ((Sentry::check()) && (Sentry::hasPermission('admin')))
                 <tfoot>
-                    <tr><td colspan="5"><a href="{{ URL::to('/guilds/create') }}" class="btn btn-primary">Add new guild</a></td></tr>
+                    <tr><td colspan="5"><a href="{{ URL::to('/guilds/create') }}" class="btn btn-primary">Create guild</a></td></tr>
                 </tfoot>
                 @endif
             </table>
@@ -52,5 +42,4 @@ Home
 </div>
 <script>
 </script>
-
 @stop

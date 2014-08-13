@@ -4,7 +4,7 @@ namespace LootTracker\Guild;
 interface GuildInterface {
     public function all();
 
-    public function create($data);
+    public function create($data, $user_id);
 
     public function findPage($page, $guildsPerPage);
 

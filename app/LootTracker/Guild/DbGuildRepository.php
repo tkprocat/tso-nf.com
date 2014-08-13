@@ -36,13 +36,34 @@ class DbGuildRepository implements GuildInterface
 
     /**
      * @param $data
+     * @param $user_id
      */
-    public function create($data)
+    public function create($data, $user_id)
     {
         $guild = new Guild;
-        $guild->tag = $data['tag'];
-        $guild->name = $data['name'];
+        $guild->tag = e($data['tag']);
+        $guild->name = e($data['name']);
         $guild->save();
+
+        \Sentry::createGroup(array('name' => 'Guild_' . $guild->tag . '_Members'));
+        $group = \Sentry::createGroup(array('name' => 'Guild_' . $guild->tag . '_Admins'));
+        \Sentry::getUser()->addGroup($group);
+
+        //Add the user to the guild.
+        $this->addMember($guild->id, $user_id);
+
+        //Add response message to the user.
+        \Session::flash('success', 'Guild created.');
+    }
+
+    /**
+     * @param $data
+     */
+    public function update($data, $id) {
+        $guild = $this->guild->find($id);
+        $guild->user_id = e($data['name']);
+        $guild->title = e($data['tag']);
+        $guild->update();
     }
 
     /**
@@ -176,7 +197,16 @@ class DbGuildRepository implements GuildInterface
      */
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $guild = $this->guild->findOrFail($id);
+
+        //Remove member and admin ranks.
+        $group = \Sentry::findGroupByName('Guild_' . $guild->tag . '_Members');
+        $group->delete;
+
+        $group = \Sentry::findGroupByName('Guild_' . $guild->tag . '_Admins');
+        $group->delete;
+
+        $guild->delete();
     }
 
     /**

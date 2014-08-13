@@ -59,13 +59,14 @@ class GuildController extends BaseController
             return Redirect::to('login');
 
         $data = Input::all();
+        $user_id = Sentry::getUser()->id;
         if ($this->guild->validator->with($data)->passes()) {
-            //Passed validation, store the blog post.
-            $this->guild->create($data);
-            return Redirect::to('blog')->with('success', 'Guild created successfully');
+            //Passed validation, store the guild.
+            $this->guild->create($data, $user_id);
+            return Redirect::to('guilds')->with('success', 'Guild created successfully');
         } else {
             //Failed validation
-            return Redirect::back()->withInput()->withErrors($this->blogPost->validator->errors());
+            return Redirect::back()->withInput()->withErrors($this->guild->validator->errors());
         }
     }
 
@@ -77,6 +78,7 @@ class GuildController extends BaseController
      */
     public function show($id)
     {
+        $guild = $this->guild->findId($id);
         $admins = $this->guild->getAdmins($id);
         $members = $this->guild->getMembers($id);
         return View::make('guilds.show', compact('guild','admins', 'members', 'guild_access_admins'));
@@ -109,28 +111,22 @@ class GuildController extends BaseController
     public function update($id)
     {
         $user = Sentry::getUser();
+        $data = Input::all();
         //Check if the user is admin or fail
         if (($user != null) && ($user->hasPermission('admin'))) {
             if (!is_numeric($id)) {
                 App::abort(404);
             }
 
-            $validator = Guild::validate(Input::all());
-            if ($validator->passes()) {
-                $guild = Guild::find($id);
-                $guild->update(array(
-                    'name' => Input::get('name'),
-                    'tag' => Input::get('tag'),
-                ));
+             if ($this->guild->validator->with($data)->passes()) {
+                $this->guild->update($data);
 
                 // Success!
                 Session::flash('success', 'Guild "' . Input::get('name') . '" updated.');
                 return Redirect::to('guilds');
             } else {
                 Session::flash('error', 'Error updating the guild information.');
-                return Redirect::action('UserController@edit', array($id))
-                    ->withInput()
-                    ->withErrors($validator->getMessageBag());
+                 return Redirect::action('UserController@edit', array($id))->withInput()->withErrors($this->guild->validator->errors());
             }
         } else {
             return Redirect::route('login');
@@ -154,11 +150,6 @@ class GuildController extends BaseController
 
             $guild = $this->guild->findId($id);
             if (($guild != null) && ($guild->delete())) {
-                //Remove all ranks for the guild.
-                $group = Sentry::findGroupByName('guild_' . $guild->id . '_admin');
-                if ($group != null)
-                    $group->delete();
-
                 Session::flash('success', 'Guild deleted.');
                 return Redirect::to('/guilds');
             } else {
@@ -172,7 +163,7 @@ class GuildController extends BaseController
 
     public function addMember()
     {
-        $user = User::where('username', Input::get('username'))->first();
+        $user = $this->sentry->findUserByLogin(Input::get('username'));
         if (!isset($user)) {
             $errors = new MessageBag();
             $errors->add('username', 'User not found.');
@@ -195,7 +186,7 @@ class GuildController extends BaseController
 
     public function removeMember()
     {
-        $user = User::where('username', Input::get('username'))->first();
+        $user = $this->sentry->findUserByLogin(Input::get('username'));
         if (!isset($user)) {
             $errors = new MessageBag();
             $errors->add('username', 'User not found.');

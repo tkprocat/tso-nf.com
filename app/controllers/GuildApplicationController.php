@@ -1,7 +1,32 @@
 <?php
 
+use Authority\Repo\User\UserInterface;
+use LootTracker\Guild\GuildInterface;
+use Cartalyst\Sentry\Sentry;
+
 class GuildApplicationController extends BaseController
 {
+
+
+    protected $guild;
+    protected $user;
+    protected $sentry;
+    protected $guild_application;
+
+    /**
+     * @param GuildInterface $guild
+     * @param GuildApplication $guild_application
+     * @param UserInterface $user
+     * @param Sentry $sentry
+     */
+    public function __construct(GuildInterface $guild, GuildApplication $guild_application, UserInterface $user,
+                                Sentry $sentry)
+    {
+        $this->guild = $guild;
+        $this->user = $user;
+        $this->sentry = $sentry;
+        $this->guild = $guild_application;
+    }
 
     /**
      * Display a listing of the resource.
@@ -10,7 +35,7 @@ class GuildApplicationController extends BaseController
      */
     public function index()
     {
-        $guildapplications = GuildApplication::orderBy('name')->get();
+        $guildapplications = $this->guild_application->all();
 
         return View::make('guildapplications.index')->with('guildapplications', $guildapplications);
     }
