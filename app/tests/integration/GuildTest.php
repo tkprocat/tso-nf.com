@@ -1,10 +1,6 @@
 <?php
 
 use Mockery as m;
-use Illuminate\Database\Eloquent\Collection;
-use LootTracker\Guild\GuildInterface;
-use LootTracker\Guild\Guild;
-use LootTracker\Guild\DbGuildRepository;
 
 class GuildTest extends TestCase
 {
@@ -13,6 +9,7 @@ class GuildTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->login();
         Route::enableFilters();
         $this->guild = App::make('LootTracker\Guild\GuildInterface');
     }
@@ -31,20 +28,14 @@ class GuildTest extends TestCase
 
     public function test_specific_guild_page()
     {
-       // $user = Sentry::findUserByLogin('admin');
-       // Sentry::login($user);
-
         $data = array(
             'id' => 1,
             'name' => 'Lazy Monkeys',
             'tag' => 'LM'
         );
-        $this->guild->create($data);
+        $this->guild->create($data, \Sentry::getUser()->id);
 
         $this->call('GET', 'guilds/1');
-
-        //$this->assertResponseOk();
-       // Sentry::logout();
     }
 
     public function testGroupsExistsAfterCreatingGuild()
@@ -54,8 +45,11 @@ class GuildTest extends TestCase
             'name' => 'Lazy Monkeys',
             'tag' => 'LM'
         );
-        $this->guild->create($data);
+
+
+        $this->guild->create($data, \Sentry::getUser()->id);
         $guild = $this->guild->findId(1);
+
         //Check the guild got created.
         $this->assertNotNull($guild);
     }
@@ -67,7 +61,7 @@ class GuildTest extends TestCase
             'name' => 'Lazy Monkeys',
             'tag' => 'LM'
         );
-        $this->guild->create($data);
+        $this->guild->create($data, \Sentry::getUser()->id);
 
         $guild1 = $this->guild->findId($data['id']);
         $this->assertNotNull($guild1);
@@ -87,7 +81,7 @@ class GuildTest extends TestCase
             'name' => 'Lazy Monkeys',
             'tag' => 'LM'
         );
-        $this->guild->create($data);
+        $this->guild->create($data, \Sentry::getUser()->id);
         $this->guild->addMember(1, $user->id);
 
         //Required since addMember changed the user information.
@@ -99,7 +93,7 @@ class GuildTest extends TestCase
             'name' => 'Guild 2',
             'tag' => 'G2'
         );
-        $this->guild->create($data);
+        $this->guild->create($data, \Sentry::getUser()->id);
         $this->guild->addMember(2, $user->id);
 
         //Required since addMember changed the user information.

@@ -187,13 +187,6 @@ class BlogTest extends TestCase
         return $blog;
     }
 
-    protected function login()
-    {
-        //Log in
-        $user = Sentry::findUserByLogin('admin');
-        Sentry::login($user);
-    }
-
     public function tearDown()
     {
         parent::tearDown();

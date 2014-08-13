@@ -28,4 +28,11 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
     {
         Artisan::call('migrate:reset');
     }
+
+    protected function login()
+    {
+        //Log in
+        $user = Sentry::findUserByLogin('admin');
+        Sentry::login($user);
+    }
 }
