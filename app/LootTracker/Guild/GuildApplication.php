@@ -1,4 +1,5 @@
 <?php
+namespace LootTracker\Guild;
 
 class GuildApplication extends Eloquent {
 
