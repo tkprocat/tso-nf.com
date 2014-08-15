@@ -55,7 +55,7 @@
                                 <a href="{{ URL::to('stats/global') }}">Global</a>
                             </li>
                             <li>
-                                <a href="{{ URL::to('stats/peronal') }}">Personal</a>
+                                <a href="{{ URL::to('stats/personal') }}">Personal</a>
                             </li>
                             <li>
                                 <a href="{{ URL::to('stats/top10bydrop') }}">Top 10 (Drop)</a>
