@@ -2,7 +2,6 @@
 
 use Authority\Repo\User\UserInterface;
 use LootTracker\Guild\GuildInterface;
-use Cartalyst\Sentry\Sentry;
 
 class GuildApplicationController extends BaseController
 {
@@ -11,7 +10,6 @@ class GuildApplicationController extends BaseController
     protected $guild;
     protected $user;
     protected $sentry;
-    protected $guild_application;
 
     /**
      * @param GuildInterface $guild
@@ -19,13 +17,10 @@ class GuildApplicationController extends BaseController
      * @param UserInterface $user
      * @param Sentry $sentry
      */
-    public function __construct(GuildInterface $guild, GuildApplication $guild_application, UserInterface $user,
-                                Sentry $sentry)
+    public function __construct(GuildInterface $guild, UserInterface $user)
     {
         $this->guild = $guild;
         $this->user = $user;
-        $this->sentry = $sentry;
-        $this->guild = $guild_application;
     }
 
     /**
@@ -33,9 +28,9 @@ class GuildApplicationController extends BaseController
      *
      * @return Response
      */
-    public function index()
+    public function index($id)
     {
-        $guildapplications = $this->guild_application->all();
+        $guildapplications = $this->guild->getAllApplications($id);
 
         return View::make('guildapplications.index')->with('guildapplications', $guildapplications);
     }
@@ -48,7 +43,7 @@ class GuildApplicationController extends BaseController
      */
     public function create($id)
     {
-        $guild = Guild::find($id);
+        $guild = $this->guild->findId($id);
         if ($guild != null) {
             return View::make('guildapplications.create')->with('guild', $guild);
         } else {
@@ -69,11 +64,9 @@ class GuildApplicationController extends BaseController
         if (($user != null) && ($user->hasPermission('admin'))) {
             // Form Processing
             if ((Input::get('guild_id') > 0) && (is_numeric(Input::get('guild_id')))) {
-                $guild = Guild::find(Input::get('guild_id'));
-                GuildApplication::create(array(
-                    'guild_id' => Input::get('guild_id'),
-                    'user_id' => Sentry::getUser()->id,
-                ));
+                $guild = $this->guild->findId(Input::get('guild_id'));
+                //TODO move to repository
+                $this->guild->addGuildApplication($guild->id, $user->id);
 
                 // Success!
                 Session::flash('success', 'Your application to join "' . $guild->name . '" has been sent.');

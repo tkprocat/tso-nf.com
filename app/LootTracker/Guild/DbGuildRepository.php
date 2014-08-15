@@ -232,4 +232,12 @@ class DbGuildRepository implements GuildInterface
         $admin_group = $this->sentry->findGroupByName($guild_access_admins);
         return $this->sentry->findAllUsersInGroup($admin_group);
     }
+
+    public function addGuildApplication($guild_id, $user_id)
+    {
+        GuildApplication::create(array(
+            'guild_id' => $guild_id,
+            'user_id' => $user_id,
+        ));
+    }
 }

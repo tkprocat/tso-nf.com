@@ -1,7 +1,7 @@
 <?php
 namespace LootTracker\Guild;
 
-class GuildApplication extends Eloquent {
+class GuildApplication extends \Eloquent {
 
     protected $table = 'guild_applications';
 
