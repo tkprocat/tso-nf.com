@@ -14,7 +14,7 @@
     @endif
 
     {{ HTML::style('/assets/bower/bootstrap-sortable/Contents/bootstrap-sortable.css') }}
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/jquery.validate.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/bootstrap.js"></script>
