@@ -43,7 +43,7 @@ class DbAdventureRepository implements AdventureInterface
         $adventure->save();
 
         for ($slot = 1; $slot < 9; $slot++) {
-            if (!is_null($data['slot'. $slot])) {
+            if (!is_null($data['slot' . $slot])) {
                 foreach ($data['slot' . $slot] as $item) {
                     $newItem = new AdventureLoot;
                     $newItem->slot = $slot;
@@ -65,5 +65,10 @@ class DbAdventureRepository implements AdventureInterface
     public function findAdventureByName($name)
     {
         return $this->adventure->whereName($name)->first();
+    }
+
+    public function findAllDifferentLootTypes()
+    {
+        return AdventureLoot::distinct('type')->orderBy('type')->lists('type');
     }
 }

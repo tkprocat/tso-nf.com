@@ -14,4 +14,6 @@ interface AdventureInterface {
     public function getAdventuresWithLoot();
 
     public function findAllLootForAdventure($id);
+
+    public function findAllDifferentLootTypes();
 }

@@ -7104,3 +7104,6 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
     transform: scale(1) rotate(360deg);
   }
 }
+ul.nav li.dropdown:hover > ul.dropdown-menu {
+  display: block;
+}

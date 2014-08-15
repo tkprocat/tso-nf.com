@@ -78,6 +78,10 @@ Route::group(array('before' => 'auth'), function()
     Route::get('/stats/', array('as' => 'stats', 'uses' => 'StatsController@getPersonalStats'));
     Route::get('stats/accumulatedloot/{username}/{datefrom}/{dateto}', array('uses' => 'StatsController@getAccumulatedLootBetween'))->where('datefrom', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$')->where('dateto', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$');
     Route::get('stats/adventuresplayed/{username}/{datefrom}/{dateto}', array('uses' => 'StatsController@getAdventuresPlayedBetween'))->where('datefrom', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$')->where('dateto', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$');
+    Route::get('stats/top10bydrop', array('as' => 'stats', 'uses' => 'StatsController@showTop10BestAdventuresForLootTypeByAvgDrop'));
+    Route::get('stats/top10bydropchance', array('as' => 'stats', 'uses' => 'StatsController@showTop10BestAdventuresForLootTypeByDropChance'));
+    Route::get('stats/getTop10BestAdventuresForLootTypeByAvgDrop', array('as' => 'stats', 'uses' => 'StatsController@getTop10BestAdventuresForLootTypeByAvgDrop'));
+    Route::get('stats/getTop10BestAdventuresForLootTypeByDropChance', array('as' => 'stats', 'uses' => 'StatsController@getTop10BestAdventuresForLootTypeByDropChance'));
 });
 
 Route::get('blog', array('as' => 'blog', 'uses' => 'BlogPostController@index'));

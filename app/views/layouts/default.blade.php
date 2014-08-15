@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<head lang="en">
+    <meta charset="UTF-8">
     <title>Lazy Monkeys Loot Tracker</title>
     @if((isset($_COOKIE['theme'])) && ($_COOKIE['theme'] == 'amelia'))
     {{ HTML::style('assets/css/bootstrap-amelia.css') }}
@@ -24,7 +24,9 @@
 <body>
 
 @if (App::environment() == 'staging')
-<div class="alert alert-warning" role="alert">This is a testing site, pleas don't register your actually loot here and expect it to stick!</div>
+<div class="alert alert-warning" role="alert">This is a testing site, pleas don't register your actually loot here and
+    expect it to stick!
+</div>
 @endif
 
 <div class="container">
@@ -44,22 +46,35 @@
                     <li>
                         <a href="{{ URL::to('blog') }}">Blog</a>
                     </li>
-                    <li>
-                        <a href="{{ URL::to('stats/global') }}">Global stats</a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('loot') }}">Latest</a>
-                    </li>
                     @if (Sentry::check())
                     <?php $currentUser = Sentry::getUser(); ?>
-                    <li>
-                        <a href="{{ URL::to('loot/create') }}">Add loot</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="{{ URL::to('stats/global') }}">Global</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('stats/peronal') }}">Personal</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('stats/top10bydrop') }}">Top 10 (Drop)</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('stats/top10bydropchance') }}">Top 10 (Drop chance)</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li>
-                        <a href="{{ URL::to('stats/personal') }}">Personal stats</a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('labs') }}">Labs</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Loot<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="{{ URL::to('loot/create') }}">Add loot</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('loot') }}">Latest</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <a href="{{ URL::to('users') }}">Users</a>
@@ -68,14 +83,14 @@
                         <a href="{{ URL::to('guilds') }}">Guilds</a>
                     </li>
                     <li {{ (Request::is('users/' . $currentUser->id) ? 'class="active"' : '') }}>
-                        <a href="{{ URL::to('users') .'/'. $currentUser->id }}">{{ $currentUser->username }}</a>
+                    <a href="{{ URL::to('users') .'/'. $currentUser->id }}">{{ $currentUser->username }}</a>
                     </li>
                     <li>
                         <a href="{{ URL::to('logout') }}">Logout</a>
                     </li>
                     @else
                     <li {{ (Request::is('login') ? 'class="active"' : '') }}>
-                        <a href="{{ URL::to('login') }}">Login</a>
+                    <a href="{{ URL::to('login') }}">Login</a>
                     </li>
                     @endif
                 </ul>

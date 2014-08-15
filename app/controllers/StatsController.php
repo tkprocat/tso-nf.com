@@ -97,4 +97,43 @@ class StatsController extends BaseController
             ->select('Type')->distinct()->orderBy('Type')->get();
         return Response::json($lootTypes);
     }
+
+
+    public function showTop10BestAdventuresForLootTypeByAvgDrop()
+    {
+        $loot_types = $this->adventure->findAllDifferentLootTypes();
+        return View::make('stats.top10byavgdrop', compact('loot_types'));
+    }
+
+    public function showTop10BestAdventuresForLootTypeByDropChance()
+    {
+        $loot_types = $this->adventure->findAllDifferentLootTypes();
+        return View::make('stats.top10byavgdropchance', compact('loot_types'));
+    }
+
+    public function getTop10BestAdventuresForLootTypeByAvgDrop(){
+        $data = Input::all();
+        $type = $data['type'];
+        $result = DB::table('adventure_loot')
+            ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
+            ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')
+            ->select(array('adventure.name', 'adventure_loot.type', DB::raw('((COUNT(\'' . \DB::getTablePrefix() . 'user_adventure_loot.*\' ) * ' . \DB::getTablePrefix() . 'adventure_loot.Amount) DIV (SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE adventure_id = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id )) AS avg_drop')))
+            ->where('type', $type)
+            ->groupBy('adventure_loot.adventure_id')
+            ->orderBy('avg_drop', 'desc')->take(10)->get();
+        return Response::json($result);
+    }
+
+    public function getTop10BestAdventuresForLootTypeByDropChance(){
+        $data = Input::all();
+        $type = $data['type'];
+        $result = DB::table('adventure_loot')
+            ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
+            ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')
+            ->select(array('adventure.name', 'adventure_loot.type', DB::raw('(COUNT(\'' . \DB::getTablePrefix() . 'user_adventure_loot.*\' ) / (SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE Adventure_ID = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id ) * 100) AS drop_chance'), DB::raw('(SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE adventure_id = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id) AS played')))
+            ->where('type', $type)
+            ->groupBy('adventure_loot.adventure_id')
+            ->orderBy('drop_chance', 'Desc')->take(10)->get();
+        return Response::json($result);
+    }
 }
