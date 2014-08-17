@@ -47,7 +47,7 @@
     </div>
     and
     <div id="accumulatedloot-dateto" class="input-group date">
-        <input type="text" class="form-control" value="{{ \Carbon\Carbon::today()->toDateString() }}">
+        <input type="text" class="form-control" value="{{ \Carbon\Carbon::tomorrow()->toDateString() }}">
         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
     </div>
 </div>
@@ -68,7 +68,7 @@
     </div>
     and
     <div id="adventuresplayed-dateto" class="input-group date">
-        <input type="text" class="form-control" value="{{ \Carbon\Carbon::today()->toDateString() }}">
+        <input type="text" class="form-control" value="{{ \Carbon\Carbon::tomorrow()->toDateString() }}">
         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
     </div>
 </div>
@@ -149,7 +149,7 @@
         $('#accumulatedloot-dateto').datepicker({
             format: 'yyyy-mm-dd',
             startDate: "2014-01-01",
-            endDate: "d",
+            endDate: "+1d",
             autoclose: true,
             weekStart: 1
         }).on('changeDate', function (e) {
@@ -169,7 +169,7 @@
         $('#adventuresplayed-dateto').datepicker({
             format: 'yyyy-mm-dd',
             startDate: "2014-01-01",
-            endDate: "d",
+            endDate: "+1d",
             autoclose: true,
             weekStart: 1
         }).on('changeDate', function (e) {

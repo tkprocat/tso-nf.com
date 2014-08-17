@@ -24,7 +24,7 @@
         <th>Played %</th>
     </tr>
     </thead>
-		@for($i= (count($adventures) / 2) ; $i < count($adventures); $i++)
+		@for($i= (count($adventures) / 2)+1 ; $i < count($adventures); $i++)
 		<tr>
 			<td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
 			<td>{{ $adventures[$i]->played->count() }}</td>
