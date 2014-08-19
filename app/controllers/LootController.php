@@ -277,7 +277,7 @@ class LootController extends BaseController
         if ($this->loot->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
             $this->loot->create($data);
-            return Redirect::to('loot/create')->with('success', 'Loot added successfully');
+            return Redirect::to('loot/create')->with('success', 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>');
         } else {
             //Failed validation
             $adventure = $this->adventure->findAdventureById($data['adventure_id']);
