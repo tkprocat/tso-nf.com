@@ -89,7 +89,7 @@ class LootTest extends TestCase
             'slot8' => '27'
         );
         $this->call('POST', '/loot', $data);
-        $this->assertRedirectedTo('/loot/create', array('success' => 'Loot added successfully'));
+        $this->assertRedirectedTo('/loot/create', array('success' => 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>'));
 
         $user_adventure = $this->loot->findUserAdventureById(1);
         $this->assertNotNull($user_adventure);
