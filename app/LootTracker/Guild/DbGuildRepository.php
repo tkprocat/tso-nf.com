@@ -175,6 +175,8 @@ class DbGuildRepository implements GuildInterface
             $user->addGroup($group);
             $user->guild_id = $guild_id;
             $user->save();
+        } else {
+            \Session::put('error', 'User is already in a guild.');
         }
     }
 

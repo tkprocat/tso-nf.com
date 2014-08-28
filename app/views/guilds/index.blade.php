@@ -13,7 +13,7 @@
                     <th>Tag</th>
                     <th>Members</th>
                     <th>Leader</th>
-                    @if ((Sentry::check()) && (Sentry::hasPermission('admin')))
+                    @if (Sentry::check() && (Sentry::getUser()->guild_id == 0))
                     <th></th>
                     @endif
                 </tr>
@@ -25,13 +25,15 @@
                     <td>{{ $guild->tag }}</td>
                     <td>{{ $guild->members()->count() }}</td>
                     <td>{{ $guild->guildleader }}</td>
+                    @if (Sentry::check() && (Sentry::getUser()->guild_id == 0))
                     <td>
                     <a href="{{ URL::to('/guilds/applications/create/'.$guild->id) }}" class="btn btn-primary">Join</a>
                     </td>
+                    @endif
                 </tr>
                 @endforeach
                 </tbody>
-                @if ((Sentry::check()) && (Sentry::hasPermission('admin')))
+                @if ((Sentry::check()) && (Sentry::getUser()->guild_id == 0))
                 <tfoot>
                     <tr><td colspan="5"><a href="{{ URL::to('/guilds/create') }}" class="btn btn-primary">Create guild</a></td></tr>
                 </tfoot>

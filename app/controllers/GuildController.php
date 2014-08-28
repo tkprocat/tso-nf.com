@@ -81,7 +81,7 @@ class GuildController extends BaseController
         $guild = $this->guild->findId($id);
         $admins = $this->guild->getAdmins($id);
         $members = $this->guild->getMembers($id);
-        return View::make('guilds.show', compact('guild','admins', 'members', 'guild_access_admins'));
+        return View::make('guilds.show', compact('guild', 'admins', 'members', 'guild_access_admins'));
     }
 
     /**
@@ -118,7 +118,7 @@ class GuildController extends BaseController
                 App::abort(404);
             }
 
-             if ($this->guild->validator->with($data)->passes()) {
+            if ($this->guild->validator->with($data)->passes()) {
                 $this->guild->update($data);
 
                 // Success!
@@ -126,7 +126,7 @@ class GuildController extends BaseController
                 return Redirect::to('guilds');
             } else {
                 Session::flash('error', 'Error updating the guild information.');
-                 return Redirect::action('UserController@edit', array($id))->withInput()->withErrors($this->guild->validator->errors());
+                return Redirect::action('UserController@edit', array($id))->withInput()->withErrors($this->guild->validator->errors());
             }
         } else {
             return Redirect::route('login');
@@ -163,11 +163,12 @@ class GuildController extends BaseController
 
     public function addMember()
     {
-        $user = $this->sentry->findUserByLogin(Input::get('username'));
-        if (!isset($user)) {
-            $errors = new MessageBag();
-            $errors->add('username', 'User not found.');
-            return Redirect::back()->withErrors($errors);
+        $user = null;
+        try {
+            $user = $this->sentry->findUserByLogin(Input::get('username'));
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            Session::put('error', 'User does not exists.');
+            return Redirect::back();
         }
 
         //Get the guild or return an error.
@@ -177,7 +178,7 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_'.$guild->tag.'_Admins')))
+        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_' . $guild->tag . '_Admins')))
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
 
         $this->guild->addMember($guild_id, $user->id);
@@ -200,22 +201,10 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_'.$guild->tag.'_Admins')))
+        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_' . $guild->tag . '_Admins')))
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
 
         $this->guild->removeMember($guild_id, $user->id);
-        return Redirect::back();
-    }
-
-    public function promoteMember($guild_id, $user_id)
-    {
-        $this->guild->promoteMember($guild_id, $user_id);
-        return Redirect::back();
-    }
-
-    public function demoteMember($guild_id, $user_id)
-    {
-        $this->guild->demoteMember($guild_id, $user_id);
         return Redirect::back();
     }
 
@@ -225,9 +214,21 @@ class GuildController extends BaseController
         $this->promoteMember($guild->id, $user_id);
     }
 
+    public function promoteMember($guild_id, $user_id)
+    {
+        $this->guild->promoteMember($guild_id, $user_id);
+        return Redirect::back();
+    }
+
     public function demoteMemberByTag($guild_tag, $user_id)
     {
         $guild = $this->guild->findTag($guild_tag);
         $this->demoteMember($guild->id, $user_id);
+    }
+
+    public function demoteMember($guild_id, $user_id)
+    {
+        $this->guild->demoteMember($guild_id, $user_id);
+        return Redirect::back();
     }
 }
