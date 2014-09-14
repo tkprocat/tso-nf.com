@@ -80,7 +80,7 @@ class LootController extends BaseController
             $lootPerPage
         );
 
-        return View::make('loot.show')->with('loots', $loots);
+        return View::make('loot.index')->with('loots', $loots);
     }
 
     /**
