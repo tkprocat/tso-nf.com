@@ -60,6 +60,7 @@ Route::group(array('before' => 'auth'), function()
     Route::resource('guildapplications', 'GuildApplicationController');
     Route::get('guilds/{guild_id}/promote/{user_id}', 'GuildController@promoteMember')->where('guild_id', '[0-9]+');
     Route::get('guilds/{guild_id}/demote/{user_id}', 'GuildController@demoteMember')->where('guild_id', '[0-9]+');
+    Route::get('guilds/{guild_id}/kick/{user_id}', 'GuildController@removeMemberById')->where('guild_id', '[0-9]+');
     Route::get('guilds/{guild_tag}/promote/{user_id}', 'GuildController@promoteMemberByTag')->where('guild_tag', '[0-9A-Za-z]+');
     Route::get('guilds/{guild_tag}/demote/{user_id}', 'GuildController@demoteMemberByTag')->where('guild_tag', '[0-9A-Za-z]+');
     Route::post('guilds/addMember', array('as' => 'guildAddMember', 'uses' => 'GuildController@addMember'));

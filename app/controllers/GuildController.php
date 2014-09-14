@@ -208,6 +208,28 @@ class GuildController extends BaseController
         return Redirect::back();
     }
 
+
+    public function removeMemberById($guild_id, $user_id)
+    {
+        $user = $this->sentry->findUserById($user_id);
+        if (!isset($user)) {
+            $errors = new MessageBag();
+            $errors->add('username', 'User not found.');
+            return Redirect::back()->withErrors($errors);
+        }
+
+        //Get the guild or return an error.
+        $guild = $this->guild->findId($guild_id);
+        if ($guild == null)
+            return Redirect::back()->withErrors('Guild not found.');
+
+        //Check if the user has permission to do this action.
+        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_' . $guild->tag . '_Admins')))
+            return Redirect::back()->withErrors('You do not have sufficient permissions.');
+
+        $this->guild->removeMember($guild_id, $user->id);
+        return Redirect::back();
+    }
     public function promoteMemberByTag($guild_tag, $user_id)
     {
         $guild = $this->guild->findTag($guild_tag);

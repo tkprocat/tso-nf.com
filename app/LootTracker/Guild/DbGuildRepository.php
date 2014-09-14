@@ -186,7 +186,7 @@ class DbGuildRepository implements GuildInterface
      */
     public function removeMember($guild_id, $user_id)
     {
-        $user = $this->user->find($user_id);
+        $user = $this->user->byId($user_id);
         $guild = $this->findId($guild_id);
 
         //Check if we have a rank for the guild otherwise create it.
