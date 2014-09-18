@@ -1,6 +1,7 @@
 <?php
 //Make blog the start page.
 Route::get('/', array('as' => 'home', 'uses' => 'BlogPostController@index'));
+Route::get('/home', array('uses' => 'BlogPostController@index'));
 
 // Session Routes
 Route::get('login', array('as' => 'login', 'uses' => 'SessionController@create'));
