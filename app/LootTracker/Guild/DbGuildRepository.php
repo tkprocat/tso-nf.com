@@ -192,6 +192,8 @@ class DbGuildRepository implements GuildInterface
         //Check if we have a rank for the guild otherwise create it.
         $group = \Sentry::findGroupByName('Guild_' . $guild->tag . '_Members');
         $user->removeGroup($group);
+        $user->guild_id = 0;
+        $user->save();
     }
 
     /**
@@ -208,7 +210,7 @@ class DbGuildRepository implements GuildInterface
         $group = \Sentry::findGroupByName('Guild_' . $guild->tag . '_Admins');
         $group->delete;
 
-        $guild->delete();
+        $guild->delete($id);
     }
 
     /**
