@@ -81,7 +81,7 @@
                 <td>{{$loot->type}}</td>
                 <td>{{$loot->amount}}</td>
                 <td>{{ (array_key_exists($loot->id, $drop_count_list) ? $drop_count_list[$loot->id] : '0') }}</td>
-                <td>{{ (array_key_exists($loot->id, $drop_count_list) ? number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100) : '0%')}}%</td>
+                <td>{{ (array_key_exists($loot->id, $drop_count_list) ? number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100) : '0')}}%</td>
             </tr>
             @endif
             @endforeach
