@@ -9,3 +9,7 @@ composer.lock
 Thumbs.db
 phpunit.phar
 /node_modules/
+aliases
+Homestead.yaml
+Vagrantfile
+/.vagrant/
