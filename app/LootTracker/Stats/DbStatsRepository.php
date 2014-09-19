@@ -65,11 +65,14 @@ class DbStatsRepository implements StatsInterface
 
     public function getAdventuresForUserWithPlayed($user_id, $from = '', $to = '')
     {
+
         $query = Adventure::join('user_adventure', 'user_adventure.adventure_id', '=', 'adventure.id')->select('adventure.*')->where('user_adventure.user_id', $user_id)->with(array('played' => function ($query) use ($user_id, $from, $to) {
             $query->where('user_id', '=', $user_id);
-            if (($from != '') || ($to != ''))
+            if (($from != '') && ($to != ''))
                 $query->whereBetween('created_at', array($from, $to));
         }, 'loot'))->groupBy('adventure.id')->orderBy('name');
+        if (($from != '') && ($to != ''))
+            $query->whereBetween('user_adventure.created_at', array($from, $to));
         return $query;
     }
 
