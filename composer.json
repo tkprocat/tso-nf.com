@@ -10,8 +10,8 @@
         "mockery/mockery": "dev-master",
         "barryvdh/laravel-debugbar": "dev-master",
         "barryvdh/laravel-ide-helper": "dev-master",
-        "way/generators": "dev-master",
-		"phpunit/phpunit": "4.1.4",
+        "way/generators": "~2.0",
+		"phpunit/phpunit": "4.4.0",
         "fzaninotto/Faker": "1.4.*",
         "doctrine/dbal":"dev-master"
     },
