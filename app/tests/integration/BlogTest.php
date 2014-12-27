@@ -20,33 +20,6 @@ class BlogTest extends TestCase
     }
 
     /** @test */
-    public function can_load_frontpage()
-    {
-        //Check we can load the front page.
-        $this->call('GET', '/');
-
-        //Check we get redirected to the blog page.
-        $this->assertRedirectedTo('blog');
-
-        //Check we can load the blog page.
-        $this->call('GET', '/blog');
-        $this->assertResponseOk();
-    }
-
-    /** @test */
-    public function can_load_frontpage_while_logged_in()
-    {
-        //Log in
-        $this->login();
-
-        //Check we can load the front page.
-        $this->call('GET', '/');
-
-        //Check we get redirected to the blog page.
-        $this->assertRedirectedTo('blog');
-    }
-
-    /** @test */
     public function can_load_create_new_blog_post()
     {
         //Log in
