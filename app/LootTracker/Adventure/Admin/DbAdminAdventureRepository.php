@@ -65,9 +65,9 @@ class DbAdminAdventureRepository implements AdminAdventureInterface
         $adventure->name = $data['name'];
         $adventure->save();
 
-
         foreach($data['items'] as $item) {
-            if ($item['id'] > 0 ) { //Update
+
+            if (isset($item['id'])) { //Update
                 $updateItem = AdventureLoot::find($item['id']);
                 $updateItem->slot = $item['slot'];
                 $updateItem->type = $item['type'];

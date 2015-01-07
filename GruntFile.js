@@ -51,7 +51,6 @@ module.exports = function(grunt) {
                 files: {
                     'public/assets/js/loottracker.min.js': ['public/assets/js/loottracker.js'],
                     'public/assets/js/bootstrap.min.js': ['public/assets/js/bootstrap.js'],
-                    'public/assets/js/jquery.cookie.min.js': ['public/assets/js/jquery.cookie.js'],
                     'public/assets/js/jquery.validate.min.js': ['public/assets/js/jquery.validate.js']
                 }
             }
@@ -62,9 +61,6 @@ module.exports = function(grunt) {
          */
         jshint: {
             all: [
-                'public/assets/js/loottracker.js',
-                'public/assets/js/jquery.cookie.js',
-                'public/assets/js/jquery.validate.js'
             ]
         },
 
@@ -77,9 +73,6 @@ module.exports = function(grunt) {
                     paths: ["public/assets/css"]
                 },
                 files: {
-                    'public/assets/css/bootstrap-amelia.css': ['public/assets/css/amelia/bootstrap.less'],
-                    'public/assets/css/bootstrap-cosmo.css': ['public/assets/css/cosmo/bootstrap.less'],
-                    'public/assets/css/bootstrap-readable.css': ['public/assets/css/readable/bootstrap.less'],
                     'public/assets/css/bootstrap.css': ['public/assets/css/slate/bootstrap.less']
                 }
             }

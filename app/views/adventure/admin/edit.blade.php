@@ -29,28 +29,32 @@ Update adventure
         </div>
 
         <div class="form-group ">
-        @foreach($adventure->loot as $loot)
-            <div class="col-sm-2">{{ Form::hidden("items[$loot->slot][id]", $loot->id) }}</div>
-            <div class="col-sm-1  {{ ($errors->has("slot[$loot->slot]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$loot->slot][slot]", $loot->slot, array('class' => 'form-control', 'placeholder' => 'Slot')) }}
+            @for ($i = 1; $i <= count($adventure->loot); $i++)
+            <div class="form-group ">
+                <div class="col-sm-2">{{ Form::hidden("items[$i][id]", $adventure->loot[$i-1]->id) }}</div>
+                <div class="col-sm-1  {{ ($errors->has("slot[$i]")) ? 'has-error' : '' }}">
+                    {{ Form::text("items[$i][slot]", $adventure->loot[$i-1]->slot, array('class' => 'form-control', 'placeholder' => 'Slot')) }}
+                </div>
+                <div class="col-sm-4  {{ ($errors->has("type[$i]")) ? 'has-error' : '' }}">
+                    {{ Form::text("items[$i][type]", $adventure->loot[$i-1]->type, array('class' => 'form-control items', 'placeholder' => 'Item')) }}
+                </div>
+                <div class="col-sm-2  {{ ($errors->has("amount[$i]")) ? 'has-error' : '' }}">
+                    {{ Form::text("items[$i][amount]", $adventure->loot[$i-1]->amount, array('class' => 'form-control', 'placeholder' => 'Amount')) }}
+                </div>
             </div>
-            <div class="col-sm-4  {{ ($errors->has("type[$loot->slot]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$loot->slot][type]", $loot->type, array('class' => 'form-control items', 'placeholder' => 'Item')) }}
-            </div>
-            <div class="col-sm-2  {{ ($errors->has("amount[$loot->slot]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$loot->slot][amount]", $loot->amount, array('class' => 'form-control', 'placeholder' => 'Amount')) }}
-            </div>
-        @endforeach
-        @for ($i = 1; $i < 5; $i++)
-            <div div class="col-sm-2"></div>
-            <div div class="col-sm-1  {{ ($errors->has("slot[$i]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$i][slot]", null, array('class' => 'form-control', 'placeholder' => 'Slot')) }}
-            </div>
-            <div div class="col-sm-4  {{ ($errors->has("type[$i]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$i][type]", null, array('class' => 'form-control items', 'placeholder' => 'Item')) }}
-            </div>
-            <div div class="col-sm-2  {{ ($errors->has("amount[$i]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$i][amount]", null, array('class' => 'form-control', 'placeholder' => 'Amount')) }}
+        @endfor
+        @for ($i = count($adventure->loot)+1; $i < count($adventure->loot)+6; $i++)
+            <div class="form-group ">
+                <div div class="col-sm-2"></div>
+                <div div class="col-sm-1  {{ ($errors->has("slot[$i]")) ? 'has-error' : '' }}">
+                    {{ Form::text("items[$i][slot]", null, array('class' => 'form-control', 'placeholder' => 'Slot')) }}
+                </div>
+                <div div class="col-sm-4  {{ ($errors->has("type[$i]")) ? 'has-error' : '' }}">
+                    {{ Form::text("items[$i][type]", null, array('class' => 'form-control items', 'placeholder' => 'Item')) }}
+                </div>
+                <div div class="col-sm-2  {{ ($errors->has("amount[$i]")) ? 'has-error' : '' }}">
+                    {{ Form::text("items[$i][amount]", null, array('class' => 'form-control', 'placeholder' => 'Amount')) }}
+                </div>
             </div>
         @endfor
         </div>

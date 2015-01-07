@@ -118,6 +118,16 @@ class AdminAdventureController extends \BaseController
         $adventure = Input::all();
         $adventure['user_id'] = Sentry::getUser()->id; //This feels wrong....
 
+        //Removes any "empty" items.
+        $itemCount = count($adventure["items"]);
+        if ($itemCount > 0) {
+            for($a = 1;$a <= $itemCount; $a++) {
+                if (($adventure["items"][$a]["slot"] == "") && ($adventure["items"][$a]["type"] =="") && ($adventure["items"][$a]["amount"] =="")) {
+                    unset($adventure["items"][$a]);
+                }
+            }
+        }
+
         if ($this->adminAdventure->validator->with($adventure)->passes()) {
             //Passed validation, make the update.
             $this->adminAdventure->update($adventure['adventure_id'], $adventure);
