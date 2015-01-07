@@ -67,6 +67,68 @@
                 {{ Form::label('slot8options', 'Slot 8:', array('class' => 'control-label')) }}
                 {{ Form::select('slot8', $loot_slots[8], 0, array('style' => 'width: 200px', "id" => "slot8options", 'class' => 'form-control')) }}
             </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[9]) > 0 ? '' : 'display: none')}}" id="slot9container">
+                {{ Form::label('slot9options', 'Slot 9:', array('class' => 'control-label')) }}
+                {{ Form::select('slot9', $loot_slots[9], 0, array('style' => 'width: 200px', "id" => "slot9options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[10]) > 0 ? '' : 'display: none')}}" id="slot10container">
+                {{ Form::label('slot10options', 'Slot 10:', array('class' => 'control-label')) }}
+                {{ Form::select('slot10', $loot_slots[10], 0, array('style' => 'width: 200px', "id" => "slot10options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[11]) > 0 ? '' : 'display: none')}}" id="slot11container">
+                {{ Form::label('slot11options', 'Slot 11:', array('class' => 'control-label')) }}
+                {{ Form::select('slot11', $loot_slots[11], 0, array('style' => 'width: 200px', "id" => "slot11options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[12]) > 0 ? '' : 'display: none')}}" id="slot12container">
+                {{ Form::label('slot12options', 'Slot 12:', array('class' => 'control-label')) }}
+                {{ Form::select('slot12', $loot_slots[12], 0, array('style' => 'width: 200px', "id" => "slot12options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[13]) > 0 ? '' : 'display: none')}}" id="slot13container">
+                {{ Form::label('slot13options', 'Slot 13:', array('class' => 'control-label')) }}
+                {{ Form::select('slot13', $loot_slots[13], 0, array('style' => 'width: 200px', "id" => "slot13options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[14]) > 0 ? '' : 'display: none')}}" id="slot14container">
+                {{ Form::label('slot14options', 'Slot 14:', array('class' => 'control-label')) }}
+                {{ Form::select('slot14', $loot_slots[14], 0, array('style' => 'width: 200px', "id" => "slot14options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[15]) > 0 ? '' : 'display: none')}}" id="slot15container">
+                {{ Form::label('slot15options', 'Slot 15:', array('class' => 'control-label')) }}
+                {{ Form::select('slot15', $loot_slots[15], 0, array('style' => 'width: 200px', "id" => "slot15options", 'class' => 'form-control')) }}
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[16]) > 0 ? '' : 'display: none')}}" id="slot16container">
+                {{ Form::label('slot16options', 'Slot 16:', array('class' => 'control-label')) }}
+                {{ Form::select('slot16', $loot_slots[16], 0, array('style' => 'width: 200px', "id" => "slot16options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[17]) > 0 ? '' : 'display: none')}}" id="slot17container">
+                {{ Form::label('slot17options', 'Slot 17:', array('class' => 'control-label')) }}
+                {{ Form::select('slot17', $loot_slots[17], 0, array('style' => 'width: 200px', "id" => "slot17options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[18]) > 0 ? '' : 'display: none')}}" id="slot18container">
+                {{ Form::label('slot18options', 'Slot 18:', array('class' => 'control-label')) }}
+                {{ Form::select('slot18', $loot_slots[18], 0, array('style' => 'width: 200px', "id" => "slot18options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[19]) > 0 ? '' : 'display: none')}}" id="slot19container">
+                {{ Form::label('slot19options', 'Slot 19:', array('class' => 'control-label')) }}
+                {{ Form::select('slot19', $loot_slots[19], 0, array('style' => 'width: 200px', "id" => "slot19options", 'class' => 'form-control')) }}
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group"
+                 style="padding-top: 10px; {{ (count($loot_slots[20]) > 0 ? '' : 'display: none')}}" id="slot20container">
+                {{ Form::label('slot20options', 'Slot 20:', array('class' => 'control-label')) }}
+                {{ Form::select('slot20', $loot_slots[20], 0, array('style' => 'width: 200px', "id" => "slot20options", 'class' => 'form-control')) }}
+            </div>
         </div>
         <div style="text-align: center; margin-top: 15px">
             {{ Form::submit('Add', array('class' => 'btn btn-primary')) }}
@@ -110,7 +172,7 @@
             $('#slot' + this.slot + 'options').append('<option value="' + this.id + '">' + this.type + ' - ' + this.amount + '</option>');
         });
 
-        for (var i = 1; i < 9; i++) {
+        for (var i = 1; i < 20; i++) {
             if ($('#slot' + i + 'options').html() === "")
                 $('#slot' + i + 'container').hide();
             else {

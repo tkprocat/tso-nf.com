@@ -239,7 +239,7 @@ class LootController extends BaseController
             $adventure = $adventures->first();
 
         $loot_slots = array();
-        for ($slot = 1; $slot <= 8; $slot++) {
+        for ($slot = 1; $slot <= 20; $slot++) {
             $loot_types = array();
             if ($adventure->loot()->slot($slot)->count() > 0)
                 $loot_types[0] = "Please select loot.";
