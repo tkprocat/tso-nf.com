@@ -152,6 +152,7 @@ class AdminAdventureController extends \BaseController
 
     public function getItemTypes()
     {
-        return \LootTracker\Adventure\AdventureLoot::all()->lists('type');
+        //TODO: Move to repo.
+        return DB::table('adventure_loot')->groupBy('type')->orderBy('type')->lists('type');
     }
 }
