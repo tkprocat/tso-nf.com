@@ -11,6 +11,7 @@ use LootTracker\Loot\UserAdventure;
 use LootTracker\Loot\DbLootRepository;
 use LootTracker\Adventure\Adventure;
 use LootTracker\Adventure\DbAdventureRepository;
+use LootTracker\Adventure\Admin\DbAdminAdventureRepository;
 use LootTracker\Stats\DbStatsRepository;
 
 class RepoServiceProvider extends ServiceProvider
@@ -62,6 +63,15 @@ class RepoServiceProvider extends ServiceProvider
             );
         });
 
+
+        //--------------- Admin Adventure ----------------
+
+        $this->app->bind('LootTracker\Adventure\Admin\AdminAdventureInterface', function () {
+            return new DbAdminAdventureRepository(
+                new Adventure,
+                $this->app->make('LootTracker\Adventure\Admin\AdminAdventureFormValidator')
+            );
+        });
 
         //--------------- Adventure ----------------
 

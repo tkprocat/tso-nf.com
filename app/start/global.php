@@ -110,3 +110,8 @@ require app_path().'/macros.php';
 |--------------------------------------------------------------------------
 */
 $app['Cartalyst\Sentry\Sentry'] = $app['sentry'];
+
+Validator::extend('alpha_spaces', function($translator, $data, $rules, $messages)
+{
+	return preg_match('/^[\pL\s]+$/u', $data);
+});
