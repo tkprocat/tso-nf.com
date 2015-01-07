@@ -28,30 +28,49 @@ Update adventure
             <div class="col-sm-2">Amount</div>
         </div>
 
-        @foreach($adventure->loot as $loot)
         <div class="form-group ">
+        @foreach($adventure->loot as $loot)
             <div class="col-sm-2">{{ Form::hidden("items[$loot->slot][id]", $loot->id) }}</div>
             <div class="col-sm-1  {{ ($errors->has("slot[$loot->slot]")) ? 'has-error' : '' }}">
                 {{ Form::text("items[$loot->slot][slot]", $loot->slot, array('class' => 'form-control', 'placeholder' => 'Slot')) }}
             </div>
             <div class="col-sm-4  {{ ($errors->has("type[$loot->slot]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$loot->slot][type]", $loot->type, array('class' => 'form-control', 'placeholder' => 'Item', 'id' => "items31")) }}
+                {{ Form::text("items[$loot->slot][type]", $loot->type, array('class' => 'form-control items', 'placeholder' => 'Item')) }}
             </div>
             <div class="col-sm-2  {{ ($errors->has("amount[$loot->slot]")) ? 'has-error' : '' }}">
                 {{ Form::text("items[$loot->slot][amount]", $loot->amount, array('class' => 'form-control', 'placeholder' => 'Amount')) }}
             </div>
-        </div>
         @endforeach
+        @for ($i = 1; $i < 5; $i++)
+            <div div class="col-sm-2"></div>
+            <div div class="col-sm-1  {{ ($errors->has("slot[$i]")) ? 'has-error' : '' }}">
+                {{ Form::text("items[$i][slot]", null, array('class' => 'form-control', 'placeholder' => 'Slot')) }}
+            </div>
+            <div div class="col-sm-4  {{ ($errors->has("type[$i]")) ? 'has-error' : '' }}">
+                {{ Form::text("items[$i][type]", null, array('class' => 'form-control items', 'placeholder' => 'Item')) }}
+            </div>
+            <div div class="col-sm-2  {{ ($errors->has("amount[$i]")) ? 'has-error' : '' }}">
+                {{ Form::text("items[$i][amount]", null, array('class' => 'form-control', 'placeholder' => 'Amount')) }}
+            </div>
+        @endfor
+        </div>
         {{ Form::submit('Update', array('class' => 'btn btn-primary')) }}
 
     {{ Form::close() }}
 </div>
 <script>
-    var tags = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ];
-    $("#items31").autocomplete({
+    var items = [ ];
+    $(document).ready(function() {
+        $.get( "/admin/adventure/getItemTypes", function( data ) {
+            items = data;
+        });
+    });
+
+
+    $(".items").autocomplete({
         source: function( request, response ) {
             var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-            response( $.grep( tags, function( item ){
+            response( $.grep( items, function( item ){
                 return matcher.test( item );
             }) );
         }

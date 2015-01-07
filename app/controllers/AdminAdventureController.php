@@ -139,4 +139,9 @@ class AdminAdventureController extends \BaseController
     {
         //
     }
+
+    public function getItemTypes()
+    {
+        return \LootTracker\Adventure\AdventureLoot::all()->lists('type');
+    }
 }

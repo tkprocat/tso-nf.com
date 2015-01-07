@@ -34,7 +34,7 @@ Add new adventure
                 {{ Form::text("items[$i][slot]", null, array('class' => 'form-control', 'placeholder' => 'Slot')) }}
             </div>
             <div div class="col-sm-4  {{ ($errors->has("type[$i]")) ? 'has-error' : '' }}">
-                {{ Form::text("items[$i][type]", null, array('class' => 'form-control', 'placeholder' => 'Item')) }}
+                {{ Form::text("items[$i][type]", null, array('class' => 'form-control items', 'placeholder' => 'Item')) }}
             </div>
             <div div class="col-sm-2  {{ ($errors->has("amount[$i]")) ? 'has-error' : '' }}">
                 {{ Form::text("items[$i][amount]", null, array('class' => 'form-control', 'placeholder' => 'Amount')) }}
@@ -45,4 +45,22 @@ Add new adventure
 
     {{ Form::close() }}
 </div>
+<script>
+    var items = [ ];
+    $(document).ready(function() {
+        $.get( "/admin/adventure/getItemTypes", function( data ) {
+            items = data;
+        });
+    });
+
+
+    $(".items").autocomplete({
+        source: function( request, response ) {
+            var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+            response( $.grep( items, function( item ){
+                return matcher.test( item );
+            }) );
+        }
+    });
+</script>
 @stop
