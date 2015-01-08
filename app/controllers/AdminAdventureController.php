@@ -67,7 +67,7 @@ class AdminAdventureController extends \BaseController
         if ($this->adminAdventure->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
             $this->adminAdventure->create($data);
-            return Redirect::to('admin/adventure/index')->with('success', 'Adventure added successfully');
+            return Redirect::to('admin/adventure')->with('success', 'Adventure added successfully');
         } else {
             //Failed validation
             return Redirect::to('admin/adventure/create')->withInput()->withErrors($this->adminAdventure->validator->errors());
