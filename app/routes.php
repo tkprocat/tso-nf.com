@@ -50,9 +50,9 @@ Route::group(array('before' => 'auth'), function()
     //Loot
     Route::get('loot/create', 'LootController@create');
     Route::get('loot/createpopup', 'LootController@createpopup');
-    Route::post('loot/delete', 'LootController@delete');
     Route::resource('loot', 'LootController');
     Route::get('loot/{username}/{adventure}', 'LootController@show');
+    Route::delete('loot', 'LootController@delete');
 
 
     //Guilds

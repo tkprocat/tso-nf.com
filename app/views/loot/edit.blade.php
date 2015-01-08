@@ -49,7 +49,6 @@
     </div>
 </div>
 
-
 <script>
 var loot_selected = {};
 var lootamount_selected = {};
