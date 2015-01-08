@@ -28,18 +28,19 @@
     </div>
 
     <div class="panel-body" style="margin-left: 20px">
-        @for($i = 1; $i <= 20;$i++)
         <div class="row" style="margin-top: 15px">
-            <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot{{ $i }}container"{{ ($useradventure->loot()->slot($i)->first() != null) ? '' : 'style="display: none"' }}>
+        @for($i = 1; $i <= 20;$i++)
+
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group" id="slot{{ $i }}container"{{ ($useradventure->adventure()->first()->loot()->slot($i)->first() != null) ? '' : 'style="display: none"' }}>
             <label for="slot1" style="padding-right: 5px">Slot {{ $i }}:</label>
             @if ($useradventure->loot()->slot($i)->first() != null)
             {{ Form::select('slot'.$i, $loot_slots[$i], $useradventure->loot()->slot($i)->first()->adventure_loot_id, array('style'=> 'width: 200px', 'class' => 'form-control')); }}
             @else
-            {{ Form::select('slot'.$i, array(), 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
+            {{ Form::select('slot'.$i, $loot_slots[$i], 0, array('style' => 'width: 200px' , 'class' => 'form-control')); }}
             @endif
             </div>
-        </div>
         @endfor
+        </div>
         <div class="row">
             <div style="text-align: center; margin-top: 15px">
                 {{ Form::submit('Update', array('class' => 'btn btn-primary')); }}
