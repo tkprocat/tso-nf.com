@@ -70,53 +70,13 @@ class DbLootRepository implements LootInterface
         $useradventure->adventure_id = $adventure_id;
         $useradventure->save();
 
-        if (isset($data['slot1']) && $data['slot1'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot1'];
-            $useradventureloot->save();
-        }
-        if (isset($data['slot2']) && $data['slot2'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot2'];
-            $useradventureloot->save();
-        }
-        if (isset($data['slot3']) && $data['slot3'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot3'];
-            $useradventureloot->save();
-        }
-        if (isset($data['slot4']) && $data['slot4'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot4'];
-            $useradventureloot->save();
-        }
-        if (isset($data['slot5']) && $data['slot5'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot5'];
-            $useradventureloot->save();
-        }
-        if (isset($data['slot6']) && $data['slot6'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot6'];
-            $useradventureloot->save();
-        }
-        if (isset($data['slot7']) && $data['slot7'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot7'];
-            $useradventureloot->save();
-        }
-        if (isset($data['slot8']) && $data['slot8'] != 0) {
-            $useradventureloot = new UserAdventureLoot();
-            $useradventureloot->user_adventure_id = $useradventure->id;
-            $useradventureloot->adventure_loot_id = $data['slot8'];
-            $useradventureloot->save();
+        for ($i = 1; $i <= 20; $i++) {
+            if (isset($data['slot'.$i]) && $data['slot'.$i] != 0) {
+                $useradventureloot = new UserAdventureLoot();
+                $useradventureloot->user_adventure_id = $useradventure->id;
+                $useradventureloot->adventure_loot_id = $data['slot'.$i];
+                $useradventureloot->save();
+            }
         }
     }
 
@@ -135,53 +95,13 @@ class DbLootRepository implements LootInterface
         //This is ugly, but a lot easier since the amount of slots could have changed too.
         UserAdventureLoot::where('user_adventure_id', $user_adventure->id)->delete();
 
-        if (isset($data['slot1']) && $data['slot1'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot1'];
-            $user_adventure_loot->save();
-        }
-        if (isset($data['slot2']) && $data['slot2'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot2'];
-            $user_adventure_loot->save();
-        }
-        if (isset($data['slot3']) && $data['slot3'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot3'];
-            $user_adventure_loot->save();
-        }
-        if (isset($data['slot4']) && $data['slot4'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot4'];
-            $user_adventure_loot->save();
-        }
-        if (isset($data['slot5']) && $data['slot5'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot5'];
-            $user_adventure_loot->save();
-        }
-        if (isset($data['slot6']) && $data['slot6'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot6'];
-            $user_adventure_loot->save();
-        }
-        if (isset($data['slot7']) && $data['slot7'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot7'];
-            $user_adventure_loot->save();
-        }
-        if (isset($data['slot8']) && $data['slot8'] != 0) {
-            $user_adventure_loot = new UserAdventureLoot();
-            $user_adventure_loot->user_adventure_id = $user_adventure->id;
-            $user_adventure_loot->adventure_loot_id = $data['slot8'];
-            $user_adventure_loot->save();
+        for ($i = 1; $i <= 20; $i++) {
+            if (isset($data['slot'.$i]) && $data['slot'.$i] != 0) {
+                $user_adventure_loot = new UserAdventureLoot();
+                $user_adventure_loot->user_adventure_id = $user_adventure->id;
+                $user_adventure_loot->adventure_loot_id = $data['slot'.$i];
+                $user_adventure_loot->save();
+            }
         }
 
         \DB::commit();

@@ -51,7 +51,7 @@ Add new adventure
         $.get( "/admin/adventure/getItemTypes", function( data ) {
             items = data;
         });
-    });
+
 
 
     $(".items").autocomplete({
@@ -61,6 +61,7 @@ Add new adventure
                 return matcher.test( item );
             }) );
         }
+    });
     });
 </script>
 @stop

@@ -96,7 +96,7 @@ class LootController extends BaseController
         $adventure = $user_adventure->adventure;
 
         $loot_slots = array();
-        for ($slot = 1; $slot <= 8; $slot++) {
+        for ($slot = 1; $slot <= 20; $slot++) {
             $loot_types = array();
             foreach ($adventure->loot()->slot($slot)->get() as $loot) {
                 $loot_types[$loot->id] = $loot->type . ' - '.$loot->amount;

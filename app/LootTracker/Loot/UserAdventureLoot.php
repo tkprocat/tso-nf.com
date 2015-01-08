@@ -34,7 +34,7 @@ class UserAdventureLoot extends \BaseModel
     public function scopeSlot($query, $slot)
     {
         return $query->join('adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
-                     ->join('user_adventure', 'user_adventure.id', '=', 'adventure_loot.adventure_id')
+                     ->join('user_adventure', 'user_adventure.adventure_id', '=', 'adventure_loot.adventure_id')
                      ->where('adventure_loot.slot', $slot);
     }
 }
