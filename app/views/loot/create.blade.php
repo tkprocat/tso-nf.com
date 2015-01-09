@@ -21,7 +21,7 @@
         <div class="form-group">
             {{ Form::label('adventure_id', 'Adventure:', array('class' => 'col-lg-2 control-label')); }}
             <div style="col-lg-10">
-                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('style' => 'width: 200px',
+                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('style' => 'width: 250px',
                 'class' => 'form-control')) }}
             </div>
         </div>
@@ -143,6 +143,11 @@
 
 
 <script>
+    $(document).ready(function() {
+        //Silly way of doing this.
+        $('#adventure_id').prepend("<option value='' selected='selected'>Please select an adventure</option>");
+    });
+
     $('#adventure_id').change(function (element) {
         adventureid = $('#adventure_id').val();
         $.ajax({
