@@ -1,6 +1,6 @@
 @extends('layouts.default')
 @section('content')
-<table style="float: left; width: 49%" class="table table-striped table-bordered">
+<table style="float: left; width: 48%" class="table table-striped table-bordered">
     <thead>
     <tr>
         <th>Adventure</th>
@@ -8,16 +8,17 @@
         <th>Played %</th>
     </tr>
     </thead>
-    @for($i=0; $i < (count($adventures) / 2) ; $i++)
-    <tr>
-        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
-        <td>{{ $adventures[$i]->played->count() }}</td>
-        <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
-    </tr>
+    @for($i=0; $i <= (count($adventures) / 2) ; $i++)
+        <tr>
+            <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
+            <td>{{ $adventures[$i]->played->count() }}</td>
+            <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
+        </tr>
+        {{--*/ $no = $i /*--}}
     @endfor
 </table>
 
-<table style="float: left; width: 49%" class="table table-striped table-bordered">
+<table style="float: right; width: 48%" class="table table-striped table-bordered">
     <thead>
     <tr>
         <th>Adventure</th>
@@ -25,13 +26,21 @@
         <th>Played %</th>
     </tr>
     </thead>
-    @for($i= (count($adventures) / 2) ; $i < count($adventures); $i++)
-    <tr>
-        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
-        <td>{{ $adventures[$i]->played->count() }}</td>
-        <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
-    </tr>
+    @for($i = $no ; $i < count($adventures); $i++)
+        <tr>
+            <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
+            <td>{{ $adventures[$i]->played->count() }}</td>
+            <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
+        </tr>
+        {{--*/ $no = $i /*--}}
     @endfor
+    @if ($no % 2 != 0)
+        <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+        </tr>
+    @endif
 </table>
 
 <table class="table table-striped table-bordered">
