@@ -8,7 +8,7 @@
         <th>Played %</th>
     </tr>
     </thead>
-    @for($i=0; $i <= (count($adventures) / 2) ; $i++)
+    @for($i=0; $i < (count($adventures) / 2) ; $i++)
         <tr>
             <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
             <td>{{ $adventures[$i]->played->count() }}</td>
@@ -26,7 +26,7 @@
         <th>Played %</th>
     </tr>
     </thead>
-    @for($i = $no ; $i < count($adventures); $i++)
+    @for($i = $no+1 ; $i < count($adventures); $i++)
         <tr>
             <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
             <td>{{ $adventures[$i]->played->count() }}</td>
@@ -34,7 +34,7 @@
         </tr>
         {{--*/ $no = $i /*--}}
     @endfor
-    @if ($no % 2 != 0)
+    @if ($no % 2 == 0)
         <tr>
             <td>&nbsp;</td>
             <td></td>
@@ -69,7 +69,7 @@
             <tr>
                 <td>Slot</td>
                 <td>Loot</td>
-                <td>Amount</td>
+                <td>Amount</td
                 <td>Drops</td>
                 <td>Drop chance</td>
             </tr>
