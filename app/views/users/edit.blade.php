@@ -37,15 +37,6 @@ Edit Profile
     </div>
     @endif
 
-    <div class="form-group {{ ($errors->has('guildname')) ? 'has-error' : '' }}" for="guildname">
-        {{ Form::label('edit_guildname', 'Guildname', array('class' => 'col-sm-2 control-label')) }}
-        <div class="col-sm-10">
-            {{ Form::text('guildname', $user->guildname, array('class' => 'form-control', 'placeholder' => 'Guildname',
-            'id' => 'edit_guildname'))}}
-        </div>
-        {{ ($errors->has('guildname') ? $errors->first('guildname') : '') }}
-    </div>
-
     @if (Sentry::getUser()->hasAccess('admin'))
     <div class="form-group">
         {{ Form::label('edit_memberships', 'Group Memberships', array('class' => 'col-sm-2 control-label'))}}
