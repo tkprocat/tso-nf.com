@@ -41,15 +41,9 @@
 <h2 id="accumulated">Accumulated loot:</h2>
 <div class="form-inline">
     Show loot submitted between
-    <div id="accumulatedloot-datefrom" class="input-group date">
-        <input type="text" class="form-control" value="2014-01-01">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-    </div>
+    <input type="text" class="form-control" value="2015-01-01" id="accumulatedloot-datefrom" >
     and
-    <div id="accumulatedloot-dateto" class="input-group date">
-        <input type="text" class="form-control" value="{{ \Carbon\Carbon::tomorrow()->toDateString() }}">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-    </div>
+    <input type="text" class="form-control" value="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" id="accumulatedloot-dateto">
 </div>
 <div class="clearfix"></div>
 
@@ -62,15 +56,9 @@
 <h2 id="adventuresplayed">Adventures played:</h2>
 <div class="form-inline">
     Show statistics for adventures registered between
-    <div id="adventuresplayed-datefrom" class="input-group date">
-        <input type="text" class="form-control" value="2014-01-01">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-    </div>
+    <input type="text" class="form-control" value="2015-01-01" id="adventuresplayed-datefrom">
     and
-    <div id="adventuresplayed-dateto" class="input-group date">
-        <input type="text" class="form-control" value="{{ \Carbon\Carbon::tomorrow()->toDateString() }}">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-    </div>
+    <input type="text" class="form-control" value="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" id="adventuresplayed-dateto">
 </div>
 <div id="adventuresplayedresult" style="margin-top: 5px">
     <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
@@ -137,41 +125,37 @@
 
     $(document).ready(function () {
         $('#accumulatedloot-datefrom').datepicker({
-            format: "yyyy-mm-dd",
-            startDate: "2014-01-01",
-            endDate: "d",
-            autoclose: true,
-            weekStart: 1
+            firstDay: 1,
+            dateFormat: "yyyy-mm-dd",
+            minDate: "2015-01-01",
+            maxDate: "D",
         }).on('changeDate', function (e) {
             updateAccumulatedLoot();
         });
 
         $('#accumulatedloot-dateto').datepicker({
-            format: 'yyyy-mm-dd',
-            startDate: "2014-01-01",
-            endDate: "+1d",
-            autoclose: true,
-            weekStart: 1
+            firstDay: 1,
+            dateFormat: 'yyyy-mm-dd',
+            minDate: "2015-01-01",
+            maxDate: "+1D",
         }).on('changeDate', function (e) {
             updateAccumulatedLoot();
         });
 
         $('#adventuresplayed-datefrom').datepicker({
-            format: 'yyyy-mm-dd',
-            startDate: "2014-01-01",
-            endDate: "d",
-            autoclose: true,
-            weekStart: 1
+            firstDay: 1,
+            dateFormat: 'yyyy-mm-dd',
+            startDate: "2015-01-01",
+            endDate: "D",
         }).on('changeDate', function (e) {
             updateAdventuresPlayed();
         });
 
         $('#adventuresplayed-dateto').datepicker({
-            format: 'yyyy-mm-dd',
-            startDate: "2014-01-01",
-            endDate: "+1d",
-            autoclose: true,
-            weekStart: 1
+            firstDay: 1,
+            dateFormat: 'yyyy-mm-dd',
+            startDate: "2015-01-01",
+            endDate: "+1D",
         }).on('changeDate', function (e) {
             updateAdventuresPlayed();
         });
@@ -181,8 +165,8 @@
     });
 
     function updateAccumulatedLoot() {
-        var datefrom = $("#accumulatedloot-datefrom input").val();
-        var dateto = $("#accumulatedloot-dateto input").val();
+        var datefrom = $("#accumulatedloot-datefrom").val();
+        var dateto = $("#accumulatedloot-dateto").val();
         //Change the old result to loading...
         $('#accumulatedloot').html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...');
         $.ajax({
@@ -203,8 +187,8 @@
     }
 
     function updateAdventuresPlayed() {
-        var datefrom = $("#adventuresplayed-datefrom input").val();
-        var dateto = $("#adventuresplayed-dateto input").val();
+        var datefrom = $("#adventuresplayed-datefrom").val();
+        var dateto = $("#adventuresplayed-dateto").val();
         $('#adventuresplayedresult').html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...');
         $.ajax({
             type: 'GET',
