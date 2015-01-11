@@ -298,10 +298,11 @@ class LootController extends BaseController
 
         if (isset($data['id'])) {
             //TODO: Make the repository handle the deletion.
-            $useradventure = $this->loot->findUserAdventureById($data['id'])->first();
+            $adventure_id = intval($data['id']);
+            $useradventure = $this->loot->findUserAdventureById($adventure_id)->first();
             //Check if the userid deleting matches the userid on the record.
 
-            if ($useradventure->user_id == Sentry::getID()) {
+            if (($useradventure->user_id == Sentry::getID()) || (Sentry::hasAccess('admin'))) {
                 foreach ($useradventure->loot as $loot) {
                     $loot->delete();
                 }

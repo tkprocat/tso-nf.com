@@ -56,7 +56,7 @@ class DbLootRepository implements LootInterface
      */
     public function findUserAdventureById($id)
     {
-        return $this->userAdventure->findOrFail($id);
+        return $this->userAdventure->where('id', $id);
     }
 
     /**
