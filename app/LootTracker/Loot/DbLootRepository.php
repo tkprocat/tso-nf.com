@@ -43,7 +43,7 @@ class DbLootRepository implements LootInterface
         $result->limit = $lootPerPage;
         $result->totalItems = 0;
         $result->items = array();
-        $query = $this->userAdventure->orderBy('created_at', 'desc');
+        $query = $this->userAdventure->with('User', 'loot', 'loot.loot', 'Adventure')->orderBy('created_at', 'desc');
         $loot = $query->skip($lootPerPage * ($page - 1))->take($lootPerPage)->get();
         $result->items = $loot->all();
         $result->totalItems = $loot->count();
