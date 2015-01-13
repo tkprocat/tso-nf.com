@@ -50,6 +50,10 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 
 App::error(function(Exception $exception, $code)
 {
+	//Lets grab the url for 404 so we can see it in the log later.
+	if ($code == 404)
+		Log::error( Request::url());
+
 	Log::error($exception);
 
 	if ( ! Config::get('app.debug'))
