@@ -91,7 +91,7 @@ class LootTest extends TestCase
         $this->call('POST', '/loot', $data);
         $this->assertRedirectedTo('/loot/create', array('success' => 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>'));
 
-        $user_adventure = $this->loot->findUserAdventureById(1);
+        $user_adventure = $this->loot->findUserAdventureById(1)->first();
         $this->assertNotNull($user_adventure);
         $this->assertEquals(1, $user_adventure->loot()->slot(1)->first()->adventure_loot_id);
         $this->assertEquals(7, $user_adventure->loot()->slot(2)->first()->adventure_loot_id);
@@ -146,7 +146,7 @@ class LootTest extends TestCase
         $this->call('PUT', '/loot/1', $data);
         $this->assertRedirectedTo('/loot/1/edit', array('success' => 'Loot updated successfully'));
 
-        $user_adventure = $this->loot->findUserAdventureById(1);
+        $user_adventure = $this->loot->findUserAdventureById(1)->first();
         $this->assertNotNull($user_adventure);
         $this->assertEquals(2, $user_adventure->loot()->slot(1)->first()->adventure_loot_id);
         $this->assertEquals(8, $user_adventure->loot()->slot(2)->first()->adventure_loot_id);

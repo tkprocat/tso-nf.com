@@ -92,7 +92,7 @@ class LootController extends BaseController
         $adventures = $this->adventure->findAllAdventures();
         $adventure_loot = $this->adventure->findAllLootForAdventure($id);
         $user_adventure_loot = $this->loot->findAllLootForUserAdventure($id);
-        $user_adventure = $this->loot->findUserAdventureById($id);
+        $user_adventure = $this->loot->findUserAdventureById($id)->first();
         $adventure = $user_adventure->adventure;
 
         $loot_slots = array();
@@ -118,7 +118,7 @@ class LootController extends BaseController
             return Redirect::to('/login');
         }
 
-        $user_adventure = $this->loot->findUserAdventureById($id);
+        $user_adventure = $this->loot->findUserAdventureById($id)->first();
 
         if (!Sentry::hasAccess('admin') && $user_adventure->User->id != Sentry::getID())
             return Redirect::to('/')->with('error', 'Sorry you do not have permission to do this!');

@@ -88,7 +88,7 @@ class DbLootRepository implements LootInterface
         \DB::beginTransaction();
 
         $adventure_id = $data['adventure_id'];
-        $user_adventure = $this->findUserAdventureById($data['user_adventure_id']);
+        $user_adventure = $this->findUserAdventureById($data['user_adventure_id'])->first();
         $user_adventure->adventure_id = $adventure_id;
         $user_adventure->update();
 
