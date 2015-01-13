@@ -288,7 +288,7 @@ class LootController extends BaseController
     /**
      * @return mixed
      */
-    public function delete()
+    public function destroy($id)
     {
         if (!Sentry::check()) {
             App::abort(403, 'You are not authorized.');
@@ -296,10 +296,9 @@ class LootController extends BaseController
 
         $data = Input::all();
 
-        if (isset($data['id'])) {
+        if (is_numeric($id)) {
             //TODO: Make the repository handle the deletion.
-            $adventure_id = intval($data['id']);
-            $useradventure = $this->loot->findUserAdventureById($adventure_id)->first();
+            $useradventure = $this->loot->findUserAdventureById($id)->first();
             //Check if the userid deleting matches the userid on the record.
 
             if (($useradventure->user_id == Sentry::getID()) || (Sentry::hasAccess('admin'))) {
@@ -310,7 +309,11 @@ class LootController extends BaseController
             } else {
                 App::abort(403, 'You are not authorized.');
             }
+        } else {
+            return \Response::json(array('status' => 'error', 'message' => 'Missing ID!'));
         }
+
+        return \Response::json(array('status' => 'ok'));
     }
 
     /**

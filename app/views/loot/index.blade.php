@@ -76,10 +76,9 @@
         $('#deleteItem').click(function(event) {
             ajaxManager.addReq({
                 type : 'POST',
-                url : '/loot/',
+                url : '/loot/'+deleteID,
                 data : {
                     _method: 'DELETE',
-                    id : deleteID,
                 },
                 statusCode : {
                     401 : function() {
