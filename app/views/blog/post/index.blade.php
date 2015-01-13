@@ -14,7 +14,7 @@ Home
 <div class="panel panel-default">
     <div class="panel-heading"><a href="{{ URL::to('blog/'.$blog->slug) }}">{{ $blog->title }}</a></div>
     <div class="panel-body">
-        <p>{{ nl2br($blog->content) }}</p>
+        <p>{{ BBCode::parse(nl2br($blog->content)) }}</p>
     </div>
     <div class="panel-footer" style="height: 55px">
         <div class="col-md-6" style="height: 80%; vertical-align: middle">
