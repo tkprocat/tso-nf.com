@@ -69,7 +69,7 @@
             <tr>
                 <td>Slot</td>
                 <td>Loot</td>
-                <td>Amount</td
+                <td>Amount</td>
                 <td>Drops</td>
                 <td>Drop chance</td>
             </tr>
