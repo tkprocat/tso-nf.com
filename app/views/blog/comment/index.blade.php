@@ -3,7 +3,7 @@
 @foreach($comments as $comment)
 <div class="panel panel-default">
     <div class="panel-body">
-        {{ $comment->content }}
+        {{ BBCode::parse(nl2br($comment->content)) }}
     </div>
     <div class="panel-footer" style="height: 55px">
         <div class="col-md-6" style="height: 80%; vertical-align: middle">
