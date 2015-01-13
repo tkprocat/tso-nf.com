@@ -10,7 +10,7 @@ class ForgotPasswordFormLaravelValidator extends AbstractLaravelValidator {
 	 * @var Array 
 	 */
 	protected $rules = array(
-		'email' => 'required|min:4|max:32|email',
+		'email' => 'required|min:4|max:32|email|exists:users',
 	);
 
 	/**
@@ -19,6 +19,6 @@ class ForgotPasswordFormLaravelValidator extends AbstractLaravelValidator {
 	 * @var Array 
 	 */
 	protected $messages = array(
-		//'email.required' => 'An email address is required.'
+		'email.exists' => 'Sorry, we don\'t have an account registered with that email.'
 	);
 }
