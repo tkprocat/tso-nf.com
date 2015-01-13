@@ -6,6 +6,6 @@ class BlogComment extends \Eloquent {
 	protected $table = 'comments';
 
     public function post() {
-        return $this->belongsTo('post', 'post_id');
+        return $this->belongsTo('LootTracker\Blog\BlogPost', 'post_id');
     }
 }

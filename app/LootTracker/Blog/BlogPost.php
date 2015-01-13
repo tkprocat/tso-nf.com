@@ -8,4 +8,8 @@ class BlogPost extends \Eloquent {
     public function comments() {
         return $this->hasMany('Post', 'post_id');
     }
+
+    public function user() {
+        return $this->belongsTo('User');
+    }
 }

@@ -34,14 +34,14 @@ class AddIndexes extends Migration {
 	{
 		Schema::table('user_adventure_loot', function($table)
 		{
-			$table->dropIndex('user_adventure_id');
-			$table->dropIndex('adventure_loot_id');
+	      $table->dropIndex('user_adventure_loot_user_adventure_id_index');
+		  $table->dropIndex('user_adventure_loot_adventure_loot_id_index');
 		});
 
 		Schema::table('user_adventure', function($table)
 		{
-			$table->dropIndex('adventure_id');
-			$table->dropIndex('user_id');
+			$table->dropIndex('user_adventure_adventure_id_index');
+			$table->dropIndex('user_adventure_user_id_index');
 		});
 	}
 

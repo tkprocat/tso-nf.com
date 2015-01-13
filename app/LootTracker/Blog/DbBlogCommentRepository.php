@@ -30,10 +30,10 @@ class DbBlogCommentRepository implements BlogCommentInterface
     public function updateBlogComment($id, $data)
     {
         $this->comment = $this->comment->find($id);
-        $this->comment->post_id = $data['post_id'];
         $this->comment->user_id = $data['user_id'];
         $this->comment->content = $data['content'];
         $this->comment->update();
+        return $this->comment;
     }
 
     public function find($id)

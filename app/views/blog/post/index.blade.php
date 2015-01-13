@@ -18,7 +18,7 @@ Home
     </div>
     <div class="panel-footer" style="height: 55px">
         <div class="col-md-6" style="height: 80%; vertical-align: middle">
-            Posted by {{ $blog->username }} at {{ $blog->created_at }}
+            Posted by {{ $blog->user->username }} at {{ $blog->created_at }}
             @if ($blog->updated_at > $blog->created_at)
             - Last updated at {{ $blog->updated_at }}
             @endif

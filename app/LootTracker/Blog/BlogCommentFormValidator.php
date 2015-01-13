@@ -7,7 +7,6 @@ class BlogCommentFormValidator extends AbstractValidator
 {
     // Declare the rules for the form validation
     protected $rules = array(
-        'post_id' => 'required|exists:posts,id',
         'content' => 'required',
         'user_id' => 'required|exists:users,id'
     );

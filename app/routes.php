@@ -45,7 +45,7 @@ Route::group(array('before' => 'auth'), function()
     Route::get('blog/{id}/comment/create', 'BlogCommentController@create')->where('id', '[0-9]+');
     Route::get('blog/comment/{id}/edit', 'BlogCommentController@edit')->where('id', '[0-9]+');
     Route::post('blog/comment/store', 'BlogCommentController@store');
-    Route::put('blog/comment/update', 'BlogCommentController@update');
+    Route::put('blog/comment/{id}', 'BlogCommentController@update');
 
     //Loot
     Route::get('loot/create', 'LootController@create');

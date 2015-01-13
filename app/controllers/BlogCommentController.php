@@ -88,7 +88,7 @@ class BlogCommentController extends \BaseController
      */
     public function edit($id)
     {
-        $comment = $this->blogComment->findId($id);
+        $comment = $this->blogComment->find($id);
         return View::make('blog.comment.edit')->with('comment', $comment);
     }
 
@@ -98,10 +98,11 @@ class BlogCommentController extends \BaseController
      *
      * @return Response
      */
-    public function update()
+    public function update($id)
     {
         //Check if the user has permission to post news.
-        $comment = $this->blogComment->find(Input::get('id'));
+        $comment = $this->blogComment->find($id);
+
 
         $user =  Sentry::getUser();
         //Bail if it's not the user nor an admin editing.
@@ -113,8 +114,8 @@ class BlogCommentController extends \BaseController
 
         if ($this->blogComment->validator->with($comment)->passes()) {
             //Passed validation, store the blog post.
-            $this->blogComment->updateBlogComment($comment['id'], $comment);
-            return Redirect::to('blog')->with('success', 'Comment updated successfully');
+            $comment = $this->blogComment->updateBlogComment($comment['id'], $comment);
+            return Redirect::to('blog/'.$comment->post->slug)->with('success', 'Comment updated successfully');
         } else {
             //Failed validation
             return Redirect::back()->withErrors($this->blogComment->validator->errors())->withInput($comment);
