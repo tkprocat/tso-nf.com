@@ -9,7 +9,7 @@
     <tr>
         <th>Username</th>
         <th>Rank</th>
-        @if (Sentry::hasPermission('admin') || Sentry::hasAccess('Guild_'.$guild->tag.'_Admins'))
+        @if (Sentry::hasPermission('admin') || Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins')))
         <th></th>
         @endif
     </tr>
@@ -19,7 +19,7 @@
     <tr>
         <td>{{ $admin->username }}</td>
         <td>Admin</td>
-        @if (Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_'.$guild->tag.'_Admins'))
+        @if (Sentry::hasAccess('admin') || Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins')))
         <td><a href="{{ URL::to('/guilds/'.$guild->id.'/demote/'.$admin->id) }}">Demote</a></td>
         @endif
     </tr>
@@ -30,7 +30,7 @@
             <tr>
                 <td>{{ $member->username }}</td>
                 <td>Member</td>
-                @if (Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_'.$guild->tag.'_Admins'))
+                @if (Sentry::hasAccess('admin') || Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins')))
                 <td>
                     <a href="{{ URL::to('/guilds/'.$guild->id.'/promote/'.$member->id) }}">Promote</a>
                     <a href="{{ URL::to('/guilds/'.$guild->id.'/kick/'.$member->id) }}">Kick</a>
@@ -42,7 +42,7 @@
     </tbody>
 </table>
 
-@if (Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_'.$guild->tag.'_Admins'))
+@if (Sentry::hasAccess('admin') || Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins')))
 <div class="panel panel-default">
     <div class="panel-heading">Add member</div>
     <div class="panel-body">

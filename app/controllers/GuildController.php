@@ -94,7 +94,7 @@ class GuildController extends BaseController
     {
         $guild = $this->guild->findId($id);
 
-        if (Sentry::hasAccess('admin') === true) {
+        if ((Sentry::hasAccess('admin')) || (Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins')))) {
             return View::make('guilds.edit')->with('guild', $guild);
         } else {
             Session::flash('error', 'Sorry, you do not have the necessary permissions to edit this guild.');
@@ -112,8 +112,10 @@ class GuildController extends BaseController
     {
         $user = Sentry::getUser();
         $data = Input::all();
+        $guild = $this->guild->findId($id);
+
         //Check if the user is admin or fail
-        if (($user != null) && ($user->hasPermission('admin'))) {
+        if (($user != null) && ((Sentry::hasAccess('admin')) || (Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))) {
             if (!is_numeric($id)) {
                 App::abort(404);
             }
@@ -142,8 +144,10 @@ class GuildController extends BaseController
     public function destroy($id)
     {
         $user = Sentry::getUser();
+        $guild = $this->guild->findId($id);
+
         //Check if the user is admin or fail
-        if (($user != null) && ($user->hasPermission('admin'))) {
+        if (($user != null) && ((Sentry::hasAccess('admin')) || (Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))) {
             if (!is_numeric($id)) {
                 App::abort(404);
             }
@@ -178,7 +182,7 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_' . $guild->tag . '_Admins')))
+        if (!(Sentry::hasAccess('admin') && !Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
 
         $this->guild->addMember($guild_id, $user->id);
@@ -201,7 +205,7 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_' . $guild->tag . '_Admins')))
+        if (!(Sentry::hasAccess('admin') && !Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
 
         $this->guild->removeMember($guild_id, $user->id);
@@ -224,7 +228,7 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::hasAccess('Guild_' . $guild->tag . '_Admins')))
+        if (!(Sentry::hasAccess('admin') && !Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
 
         $this->guild->removeMember($guild_id, $user->id);
