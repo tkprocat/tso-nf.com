@@ -83,7 +83,6 @@ class SentryUser extends RepoAbstract implements UserInterface {
 		    // Update the user details
             if ($this->sentry->getUser()->hasAccess('admin'))
 		        $user->username = e($data['username']);
-		    $user->guildname = e($data['guildname']);
 
 		    // Only Admins should be able to change group memberships. 
 		    $operator = $this->sentry->getUser();
