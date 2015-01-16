@@ -22,7 +22,7 @@ class AdminAdventureController extends \BaseController
     public function index()
     {
         $adventures = $this->adminAdventure->findAllAdventures();
-        return View::make('adventure.admin.index')->with('adventures', $adventures);
+        return View::make('admin.adventure.index')->with('adventures', $adventures);
     }
 
 
@@ -33,7 +33,7 @@ class AdminAdventureController extends \BaseController
      */
     public function create()
     {
-        return View::make('adventure.admin.create');
+        return View::make('admin.adventure.create');
     }
 
 
@@ -67,10 +67,10 @@ class AdminAdventureController extends \BaseController
         if ($this->adminAdventure->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
             $this->adminAdventure->create($data);
-            return Redirect::to('admin/adventure')->with('success', 'Adventure added successfully');
+            return Redirect::to('admin/adventures')->with('success', 'Adventure added successfully');
         } else {
             //Failed validation
-            return Redirect::to('admin/adventure/create')->withInput()->withErrors($this->adminAdventure->validator->errors());
+            return Redirect::to('admin/adventures/create')->withInput()->withErrors($this->adminAdventure->validator->errors());
         }
     }
 
@@ -84,7 +84,7 @@ class AdminAdventureController extends \BaseController
     public function show($id)
     {
         $adventure = $this->adminAdventure->findAdventureById($id);
-        return View::make('adventure.admin.show')->with(array('adventure' => $adventure));
+        return View::make('admin.adventure.show')->with(array('adventure' => $adventure));
     }
 
 
@@ -98,8 +98,8 @@ class AdminAdventureController extends \BaseController
     {
         $adventure = $this->adminAdventure->findAdventureById($id);
         if (is_null($adventure))
-            return Redirect::to('admin/adventure')->with('error', 'Adventure not found!');
-        return View::make('adventure.admin.edit')->with('adventure', $adventure);
+            return Redirect::to('admin/adventures')->with('error', 'Adventure not found!');
+        return View::make('admin.adventure.edit')->with('adventure', $adventure);
     }
 
 
@@ -131,7 +131,7 @@ class AdminAdventureController extends \BaseController
         if ($this->adminAdventure->validator->with($adventure)->passes()) {
             //Passed validation, make the update.
             $this->adminAdventure->update($adventure['adventure_id'], $adventure);
-            return Redirect::to('admin/adventure')->with('success', 'Adventure updated successfully');
+            return Redirect::to('admin/adventures')->with('success', 'Adventure updated successfully');
         } else {
             //Failed validation
             return Redirect::back()->withErrors($this->adminAdventure->validator->errors())->withInput($adventure);

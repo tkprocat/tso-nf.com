@@ -84,9 +84,15 @@ Route::group(array('before' => 'auth'), function()
     Route::get('stats/getTop10BestAdventuresForLootTypeByDropChance', array('as' => 'stats', 'uses' => 'StatsController@getTop10BestAdventuresForLootTypeByDropChance'));
 
     //Admin/Adventure
-    Route::get('admin/adventure/create', 'AdminAdventureController@create');
-    Route::get('admin/adventure/getItemTypes', 'AdminAdventureController@getItemTypes');
-    Route::resource('admin/adventure', 'AdminAdventureController');
+    Route::get('admin/adventures/create', 'AdminAdventureController@create');
+    Route::get('admin/adventures/getItemTypes', 'AdminAdventureController@getItemTypes');
+    Route::resource('admin/adventures', 'AdminAdventureController');
+
+    //Admin
+    Route::get('admin', 'AdminController@index');
+
+    //Admin users
+    Route::resource('admin/users', 'AdminUserController');
 });
 
 Route::get('blog', array('as' => 'blog', 'uses' => 'BlogPostController@index'));

@@ -87,16 +87,8 @@
                     <a href="{{ URL::to('users') .'/'. $currentUser->id }}">{{ $currentUser->username }}</a>
                     </li>
                     @if (Sentry::hasAccess('admin'))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a href="{{ URL::to('admin/adventure') }}">Adventures</a>
-                            </li>
-                            <li>
-                                <a href="{{ URL::to('admin/adventure/create') }}">Add new adventure</a>
-                            </li>
-                        </ul>
+                    <li>
+                        <a href="{{ URL::to('admin/') }}">Admin</a>
                     </li>
                     @endif
                     <li>
