@@ -13,3 +13,4 @@ aliases
 Homestead.yaml
 Vagrantfile
 /.vagrant/
+/scripts/

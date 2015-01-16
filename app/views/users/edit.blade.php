@@ -104,7 +104,7 @@ Edit Profile
         {{ Form::label('theme', 'Theme', array('class' => 'col-sm-2 control-label')) }}
         <div class="col-sm-10">
             {{ Form::select('theme', array('amelia' => 'Amelia', 'cosmo' => 'Cosmo', 'readable' => 'Readable', 'slate'
-            => 'Slate'), null, array('class' => 'form-control', 'id' => 'theme')) }}
+            => 'Slate'), (isset($_COOKIE['theme']) ? $_COOKIE['theme'] : 'slate'), array('class' => 'form-control', 'id' => 'theme')) }}
         </div>
     </div>
 
