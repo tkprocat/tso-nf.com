@@ -117,7 +117,7 @@ $app['Cartalyst\Sentry\Sentry'] = $app['sentry'];
 
 Validator::extend('alpha_spaces', function($translator, $data, $rules, $messages)
 {
-	return preg_match('/^([-a-z0-9_-\s])+$/i', $data);
+	return preg_match('/^[A-Za-z0-9\-_ ]+$/i', $data);
 });
 
 //Set up caching
