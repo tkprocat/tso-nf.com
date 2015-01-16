@@ -16,7 +16,7 @@
             <tr>
                 <td>{{ $loot->created_at }}</td>
                 <td><strong>{{ $loot->User->username }}</strong><br><i>
-                        <small>{{ $loot->User->guildname }}</small>
+                        <small>{{ $loot->User->guild()->name }}</small>
                     </i></td>
                 <td>{{ $loot->Adventure->name }}</td>
                 <td>{{ $loot->lootText() }}</td>
