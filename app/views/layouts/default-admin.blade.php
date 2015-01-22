@@ -34,8 +34,6 @@
                 </div>
             </div>
         </nav>
-        @include('layouts/notifications')
-
         @yield('content')
     </body>
 </html>
