@@ -1,3 +1,4 @@
+<?php $displayed = 0; ?>
 <table style="float: left; width: 49%" class="table table-striped table-bordered">
     <thead>
     <tr>
@@ -12,6 +13,7 @@
         <td>{{ $adventures[$i]->played->count() }}</td>
         <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
     </tr>
+        <?php $displayed++; ?>
     @endfor
 </table>
 
@@ -24,7 +26,7 @@
         <th>Played %</th>
     </tr>
     </thead>
-		@for($i= (count($adventures) / 2)+1 ; $i < count($adventures); $i++)
+		@for($i= $displayed ; $i < count($adventures); $i++)
 		<tr>
 			<td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
 			<td>{{ $adventures[$i]->played->count() }}</td>
