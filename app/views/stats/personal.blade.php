@@ -41,7 +41,7 @@
 <h2 id="accumulated">Accumulated loot:</h2>
 <div class="form-inline">
     Show loot submitted between
-    <input type="text" class="form-control" value="2015-01-01" id="accumulatedloot-datefrom" >
+    <input type="text" class="form-control" value="2015-01-01" id="accumulatedloot-datefrom">
     and
     <input type="text" class="form-control" value="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" id="accumulatedloot-dateto">
 </div>
@@ -126,36 +126,36 @@
     $(document).ready(function () {
         $('#accumulatedloot-datefrom').datepicker({
             firstDay: 1,
-            dateFormat: "yyyy-mm-dd",
-            minDate: "2015-01-01",
-            maxDate: "D",
+            dateFormat: 'yy-mm-dd',
+            minDate: new Date(2015,0,1),
+            maxDate: "D"
         }).on('changeDate', function (e) {
             updateAccumulatedLoot();
         });
 
         $('#accumulatedloot-dateto').datepicker({
             firstDay: 1,
-            dateFormat: 'yyyy-mm-dd',
-            minDate: "2015-01-01",
-            maxDate: "+1D",
+            dateFormat: 'yy-mm-dd',
+            minDate: new Date(2015,0,1),
+            maxDate: "+1D"
         }).on('changeDate', function (e) {
             updateAccumulatedLoot();
         });
 
         $('#adventuresplayed-datefrom').datepicker({
             firstDay: 1,
-            dateFormat: 'yyyy-mm-dd',
-            startDate: "2015-01-01",
-            endDate: "D",
+            dateFormat: 'yy-mm-dd',
+            minDate: new Date(2015,0,1),
+            maxDate: "D"
         }).on('changeDate', function (e) {
             updateAdventuresPlayed();
         });
 
         $('#adventuresplayed-dateto').datepicker({
             firstDay: 1,
-            dateFormat: 'yyyy-mm-dd',
-            startDate: "2015-01-01",
-            endDate: "+1D",
+            dateFormat: 'yy-mm-dd',
+            minDate: new Date(2015,0,1),
+            maxDate: "+1D"
         }).on('changeDate', function (e) {
             updateAdventuresPlayed();
         });
