@@ -129,7 +129,7 @@
             dateFormat: 'yy-mm-dd',
             minDate: new Date(2015,0,1),
             maxDate: "D"
-        }).on('changeDate', function (e) {
+        }).change(function (e) {
             updateAccumulatedLoot();
         });
 
@@ -138,7 +138,7 @@
             dateFormat: 'yy-mm-dd',
             minDate: new Date(2015,0,1),
             maxDate: "+1D"
-        }).on('changeDate', function (e) {
+        }).change(function (e) {
             updateAccumulatedLoot();
         });
 
@@ -147,7 +147,7 @@
             dateFormat: 'yy-mm-dd',
             minDate: new Date(2015,0,1),
             maxDate: "D"
-        }).on('changeDate', function (e) {
+        }).change(function (e) {
             updateAdventuresPlayed();
         });
 
@@ -156,7 +156,7 @@
             dateFormat: 'yy-mm-dd',
             minDate: new Date(2015,0,1),
             maxDate: "+1D"
-        }).on('changeDate', function (e) {
+        }).change(function (e) {
             updateAdventuresPlayed();
         });
 
