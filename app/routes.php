@@ -93,9 +93,13 @@ Route::group(array('before' => 'auth'), function()
 
     //Admin users
     Route::resource('admin/users', 'AdminUserController');
+
+    //Admin prices
+    Route::resource('admin/prices', 'AdminPriceListController');
 });
 
 Route::get('blog', array('as' => 'blog', 'uses' => 'BlogPostController@index'));
 Route::get('blog/{slug}', 'BlogPostController@show');
 
 Route::get('guilds', 'GuildController@index');
+Route::get('prices', 'PriceController@index');

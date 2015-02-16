@@ -1,6 +1,7 @@
 <?php namespace LootTracker\Repo;
 
 use Illuminate\Support\ServiceProvider;
+use LootTracker\PriceList\PriceItem;
 use LootTracker\Blog\BlogPost;
 use LootTracker\Blog\BlogComment;
 use LootTracker\Blog\DbBlogPostRepository;
@@ -12,6 +13,8 @@ use LootTracker\Loot\DbLootRepository;
 use LootTracker\Adventure\Adventure;
 use LootTracker\Adventure\DbAdventureRepository;
 use LootTracker\Adventure\Admin\DbAdminAdventureRepository;
+use LootTracker\PriceList\DbPriceListRepository;
+use LootTracker\PriceList\Admin\DbAdminPriceListRepository;
 use LootTracker\Stats\DbStatsRepository;
 
 class RepoServiceProvider extends ServiceProvider
@@ -73,11 +76,28 @@ class RepoServiceProvider extends ServiceProvider
             );
         });
 
+        //--------------- Admin Prices ----------------
+
+        $this->app->bind('LootTracker\PriceList\Admin\AdminPriceListInterface', function () {
+            return new DbAdminPriceListRepository(
+                new PriceItem,
+                $this->app->make('LootTracker\PriceList\Admin\AdminPriceListFormValidator')
+            );
+        });
+
         //--------------- Adventure ----------------
 
         $this->app->bind('LootTracker\Adventure\AdventureInterface', function () {
             return new DbAdventureRepository(
                 new Adventure
+            );
+        });
+
+        //--------------- Admin Prices ----------------
+
+        $this->app->bind('LootTracker\PriceList\PriceListInterface', function () {
+            return new DbPriceListRepository(
+                new PriceItem
             );
         });
 
