@@ -1,7 +1,7 @@
 <?php namespace LootTracker\Repo;
 
 use Illuminate\Support\ServiceProvider;
-use LootTracker\PriceList\PriceItem;
+use LootTracker\PriceList\PriceListItem;
 use LootTracker\Blog\BlogPost;
 use LootTracker\Blog\BlogComment;
 use LootTracker\Blog\DbBlogPostRepository;
@@ -80,7 +80,7 @@ class RepoServiceProvider extends ServiceProvider
 
         $this->app->bind('LootTracker\PriceList\Admin\AdminPriceListInterface', function () {
             return new DbAdminPriceListRepository(
-                new PriceItem,
+                new PriceListItem,
                 $this->app->make('LootTracker\PriceList\Admin\AdminPriceListFormValidator')
             );
         });
@@ -97,7 +97,7 @@ class RepoServiceProvider extends ServiceProvider
 
         $this->app->bind('LootTracker\PriceList\PriceListInterface', function () {
             return new DbPriceListRepository(
-                new PriceItem
+                new PriceListItem
             );
         });
 

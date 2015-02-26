@@ -17,7 +17,6 @@ class LootTrackerPriceListSeeder extends Seeder {
             'max_price' => '0.00003'
         );
 
-        $priceList->create($data);
+        $priceList->addItem($data);
 	}
-
 }

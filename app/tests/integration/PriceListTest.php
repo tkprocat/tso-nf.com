@@ -40,6 +40,24 @@ class PriceListTest extends TestCase
         $this->assertEquals(0.00003, $item->price()->first()->max_price, 'Failure in comparing max_price!');
     }
 
+    /** @test */
+    public function can_change_price_for_item()
+    {
+        //update the prices for item 1
+        $this->priceListAdmin->updatePriceForItem(1, 0.00004, 0.00005, 0.00006);
+
+        //Get the item again and see if the price has been updated.
+        $item = $this->priceList->findItemById(1);
+        $item_price = $item->current_price();
+        $this->assertCount(2, $this->priceListAdmin->getAllPriceChangesForItemById(1));
+        //var_dump($this->priceListAdmin->getAllPriceChangesForItemById(1));
+        //var_dump($item_price);
+        $this->assertNotNull($item_price);
+        $this->assertEquals(0.00004, $item_price->min_price, 'Failure in comparing min_price after price update!');
+        $this->assertEquals(0.00005, $item_price->avg_price, 'Failure in comparing avg_price after price update!');
+        $this->assertEquals(0.00006, $item_price->max_price, 'Failure in comparing max_price after price update!');
+    }
+
     public function tearDown()
     {
         m::close();
