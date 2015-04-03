@@ -35,9 +35,9 @@ class LootController extends BaseController
     /**
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index($adventure_name = '')
     {
-        $loots = $this->loot->paginate(25);
+        $loots = $this->loot->paginate(25, $adventure_name);
         return View::make('loot.index')->with('loots', $loots);
     }
 

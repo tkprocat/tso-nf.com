@@ -8,7 +8,7 @@ interface LootInterface {
 
     public function update($data);
 
-    public function paginate($itemsPerPage);
+    public function paginate($itemsPerPage, $adventure_name);
 
     public function findUserAdventureById($id);
 

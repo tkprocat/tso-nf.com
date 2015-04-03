@@ -51,6 +51,7 @@ Route::group(array('before' => 'auth'), function()
     Route::get('loot/create', 'LootController@create');
     Route::get('loot/createpopup', 'LootController@createpopup');
     Route::resource('loot', 'LootController');
+    Route::get('loot/adventure/{adventure}', 'LootController@index');
     Route::get('loot/{username}/{adventure}', 'LootController@show');
 
 
