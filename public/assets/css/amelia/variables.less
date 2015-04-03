@@ -33,7 +33,8 @@
 @link-color:            lighten(@brand-warning, 15%);
 //** Link hover color set via `darken()` function.
 @link-hover-color:      @link-color;
-
+//** Link hover decoration.
+@link-hover-decoration: underline;
 
 //== Typography
 //
@@ -183,6 +184,10 @@
 @input-border:                   #ccc;
 //** `<input>` border radius
 @input-border-radius:            @border-radius-base;
+//** Small `.form-control` border radius
+@input-border-radius-small:      @border-radius-small;
+//** Large `.form-control` border radius
+@input-border-radius-large:      @border-radius-large;
 //** Border color for inputs on focus
 @input-border-focus:             #66afe9;
 
@@ -196,6 +201,9 @@
 //** Small `.form-control` height
 @input-height-small:             (floor(@font-size-small * @line-height-small) + (@padding-small-vertical * 2) + 2);
 
+//** `.form-group` margin
+@form-group-margin-bottom:       15px;
+
 @legend-color:                   @text-color;
 @legend-border-color:            darken(@body-bg, 5%);
 
@@ -203,6 +211,9 @@
 @input-group-addon-bg:           @gray-lighter;
 //** Border color for textual input addons
 @input-group-addon-border-color: @input-border;
+
+//** Disabled cursor for form controls and buttons.
+@cursor-disabled:                not-allowed;
 
 
 //== Dropdowns
@@ -475,20 +486,20 @@
 //
 //## Define colors for form feedback states and, by default, alerts.
 
-@state-success-text:             #fff;
-@state-success-bg:               @brand-success;
+@state-success-bg:             #fff;
+@state-success-text:               @brand-success;
 @state-success-border:           darken(spin(@state-success-bg, -10), 5%);
 
-@state-info-text:                #fff;
-@state-info-bg:                  @brand-info;
+@state-info-bg:                #fff;
+@state-info-text:                  @brand-info;
 @state-info-border:              darken(spin(@state-info-bg, -10), 7%);
 
-@state-warning-text:             #fff;
-@state-warning-bg:               @brand-warning;
+@state-warning-bg:             #fff;
+@state-warning-text:               @brand-warning;
 @state-warning-border:           darken(spin(@state-warning-bg, -10), 3%);
 
-@state-danger-text:              #fff;
-@state-danger-bg:                @brand-danger;
+@state-danger-bg:              #fff;
+@state-danger-text:                @brand-danger;
 @state-danger-border:            darken(spin(@state-danger-bg, -10), 3%);
 
 
@@ -628,6 +639,8 @@
 @progress-bg:                 darken(@body-bg, 5%);
 //** Progress bar text color
 @progress-bar-color:          #fff;
+//** Variable for setting rounded corners on progress bar.
+@progress-border-radius:      @border-radius-base;
 
 //** Default progress bar color
 @progress-bar-bg:             @brand-primary;

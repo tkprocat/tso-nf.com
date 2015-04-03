@@ -88,34 +88,17 @@ table,
 
 // Forms ======================================================================
 
-input,
-textarea {
-  color: @input-color;
-}
-
-legend {
-  font-family: 'Lobster', cursive;
-  color: #fff;
-}
-
-.input-group-addon {
-  color: @btn-default-color;
-}
-
 .has-warning {
   .help-block,
   .control-label,
   .form-control-feedback {
-    color: lighten(@brand-warning, 20%);
+    color: @brand-warning;
   }
 
   .form-control,
-  .form-control:focus {
-    border-color: lighten(@brand-warning, 20%);
-  }
-
+  .form-control:focus,
   .input-group-addon {
-    border: none;
+    border-color: @brand-warning;
   }
 }
 
@@ -123,16 +106,13 @@ legend {
   .help-block,
   .control-label,
   .form-control-feedback {
-    color: lighten(@brand-primary, 40%);
+    color: @brand-danger;
   }
 
   .form-control,
-  .form-control:focus {
-    border-color: lighten(@brand-primary, 40%);
-  }
-
+  .form-control:focus,
   .input-group-addon {
-    border: none;
+    border-color: @brand-danger;
   }
 }
 
@@ -140,17 +120,22 @@ legend {
   .help-block,
   .control-label,
   .form-control-feedback {
-    color: lighten(@brand-success, 20%);
+    color: @brand-success;
   }
 
   .form-control,
-  .form-control:focus {
-    border-color: lighten(@brand-success, 20%);
-  }
-
+  .form-control:focus,
   .input-group-addon {
-    border: none;
+    border-color: @brand-success;
   }
+}
+
+legend {
+  color: #fff;
+}
+
+.input-group-addon {
+  background-color: @btn-default-bg;
 }
 
 // Navs =======================================================================
