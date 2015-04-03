@@ -176,6 +176,7 @@
         $(lootdata).each(function () {
             if (lastSlot != this.slot) {
                 $('#slot' + this.slot + 'options').append('<option value="0">Please select loot.</option>');
+                $('#slot' + this.slot + 'options').parent().addClass('has-warning');
                 lastSlot = this.slot;
             }
             $('#slot' + this.slot + 'options').append('<option value="' + this.id + '">' + this.type + ' - ' + this.amount + '</option>');
@@ -190,13 +191,20 @@
                 //If a dropdown has the option for Nothing, select it by default since it's the likely option to be selected.
                 /* jshint ignore:start */
                 $('#slot' + i + 'options option').filter(function () {
-                    return ($(this).text().indexOf('Nothing') >= 0);
+                    if ($(this).text().indexOf('Nothing') >= 0)
+                    {
+                        $('#slot' + i + 'options').parent().removeClass('has-warning');
+                        return true;
+                    }
+                    return false;
                 }).prop('selected', true);
-                /* jshint ignore:end */
+                 /* jshint ignore:end */
 
                 //If a dropdown only has one option, select it.
-                if ($('#slot' + i + 'options option').length == 2)
+                if ($('#slot' + i + 'options option').length == 2) {
                     $('#slot' + i + 'options').val($('#slot' + i + 'options option:last').val());
+                    $('#slot' + i + 'options').parent().removeClass('has-warning');
+                }
             }
         }
     }

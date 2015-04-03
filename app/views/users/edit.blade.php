@@ -103,7 +103,7 @@ Edit Profile
     <div class="form-group" for="theme">
         {{ Form::label('theme', 'Theme', array('class' => 'col-sm-2 control-label')) }}
         <div class="col-sm-10">
-            {{ Form::select('theme', array('amelia' => 'Amelia', 'cosmo' => 'Cosmo', 'readable' => 'Readable', 'slate'
+            {{ Form::select('theme', array('amelia' => 'Amelia', 'cosmo' => 'Cosmo', 'readable' => 'Readable', 'superhero' => 'Superhero', 'slate'
             => 'Slate'), (isset($_COOKIE['theme']) ? $_COOKIE['theme'] : 'slate'), array('class' => 'form-control', 'id' => 'theme')) }}
         </div>
     </div>
@@ -132,6 +132,12 @@ Edit Profile
                 rel: "stylesheet",
                 type: "text/css",
                 href: "{{ URL::to('/') }}/assets/css/bootstrap-readable.css"
+            }).appendTo("head");
+        } else if ($('#theme').val() == 'superhero') {
+            $("<link/>", {
+                rel: "stylesheet",
+                type: "text/css",
+                href: "{{ URL::to('/') }}/assets/css/bootstrap-superhero.css"
             }).appendTo("head");
         } else {
             $("<link/>", {
