@@ -33,7 +33,13 @@ class UserAdventure extends \BaseModel
     public function lootText()
     {
         $text = '';
-        foreach ($this->loot as $userLoot) {
+        //Make sure loots are sorted correctly by slot.
+        $loot = $this->loot->sortBy(function($userLoot)
+        {
+            return $userLoot->loot->slot;
+        });
+
+        foreach ($loot as $userLoot) {
             if ($text != '')
                 $text .= ' / ';
             if ($userLoot->loot->type == 'Nothing')
