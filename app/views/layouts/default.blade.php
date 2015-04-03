@@ -9,6 +9,8 @@
     {{ HTML::style('assets/css/bootstrap-cosmo.css') }}
     @elseif((isset($_COOKIE['theme'])) && ($_COOKIE['theme'] == 'readable'))
     {{ HTML::style('assets/css/bootstrap-readable.css') }}
+    @elseif((isset($_COOKIE['theme'])) && ($_COOKIE['theme'] == 'superhero'))
+    {{ HTML::style('assets/css/bootstrap-superhero.css') }}
     @else
     {{ HTML::style('assets/css/bootstrap.css') }}
     @endif
