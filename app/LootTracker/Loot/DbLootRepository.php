@@ -28,7 +28,7 @@ class DbLootRepository implements LootInterface
      */
     public function all()
     {
-        return $this->loot->all();
+        return $this->userAdventure->all();
     }
 
     /**
@@ -36,18 +36,9 @@ class DbLootRepository implements LootInterface
      * @param $lootPerPage
      * @return \StdClass
      */
-    public function findPage($page, $lootPerPage)
+    public function paginate($itemsPerPage)
     {
-        $result = new \StdClass;
-        $result->page = $page;
-        $result->limit = $lootPerPage;
-        $result->totalItems = 0;
-        $result->items = array();
-        $query = $this->userAdventure->with('User', 'loot', 'loot.loot', 'Adventure')->orderBy('created_at', 'desc');
-        $loot = $query->skip($lootPerPage * ($page - 1))->take($lootPerPage)->get();
-        $result->items = $loot->all();
-        $result->totalItems = $loot->count();
-        return $result;
+        return $this->userAdventure->paginate($itemsPerPage);
     }
 
     /**

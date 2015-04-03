@@ -37,16 +37,7 @@ class LootController extends BaseController
      */
     public function index()
     {
-        $page = Input::get('page', 1);
-        $lootsPerPage = 25;
-        $pagiData = $this->loot->findPage($page, $lootsPerPage);
-
-        $loots = Paginator::make(
-            $pagiData->items,
-            $pagiData->totalItems,
-            $lootsPerPage
-        );
-
+        $loots = $this->loot->paginate(25);
         return View::make('loot.index')->with('loots', $loots);
     }
 
