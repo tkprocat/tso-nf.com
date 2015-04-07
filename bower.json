@@ -16,6 +16,7 @@
   "dependencies": {
     "bootstrap-sortable": "~1.9.0",
     "bootstrap": "~3.3.0",
-    "bootstrap-3-datepicker": "*"
+    "bootstrap-3-datepicker": "*",
+    "tinymce": "~4.1.9"
   }
 }
