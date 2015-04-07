@@ -20,7 +20,9 @@
 </div><!-- /.modal -->
 
 <script>
+    var blogPost;
     $('.deleteBlogPostBtn').click(function (e) {
+        blogPost = $(e.currentTarget).closest('.panel')
         var title = $(e.currentTarget).closest('.panel-default').find('.panel-heading').text();
         $('#confirmDeleteBlogModal h4.modal-title').text("Please confirm deletion");
         $('#confirmDeleteBlogModal .modal-body p').html("Are you sure you want to delete the blog post titled <strong>" + title + "</strong> ?");
@@ -30,6 +32,21 @@
     });
 
     $('#deleteBlogConfirmed').click(function(e) {
-       alert($('#deleteID').val());
+       var id = $('#deleteID').val();
+       $.ajax({
+           url: '/blog/'+id,
+           type: 'POST',
+           data: {
+               _method: 'DELETE',
+               _token: '{{ csrf_token() }}'
+           },
+           success: function(data) {
+             $('#confirmDeleteBlogModal').modal('toggle');
+             if (blogPost != null) {
+                 blogPost.remove();
+                 blogPost = null;
+             }
+           }
+       });
     });
 </script>

@@ -137,6 +137,11 @@ class BlogPostController extends \BaseController
      */
     public function destroy($id)
     {
-        //
+        //Check if the user has permission to post news.
+        $user =  Sentry::getUser();
+        if (!$user->hasAccess('admin'))
+            return Redirect::to('login');
+
+        $this->blogPost->delete($id);
     }
 }

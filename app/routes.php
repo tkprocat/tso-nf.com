@@ -42,6 +42,7 @@ Route::group(array('before' => 'auth'), function()
     Route::get('blog/{id}/edit', 'BlogPostController@edit');
     Route::post('blog/store', 'BlogPostController@store');
     Route::put('blog/update', 'BlogPostController@update');
+    Route::delete('blog/{id}', 'BlogPostController@destroy');
     Route::get('blog/{id}/comment/create', 'BlogCommentController@create')->where('id', '[0-9]+');
     Route::get('blog/comment/{id}/edit', 'BlogCommentController@edit')->where('id', '[0-9]+');
     Route::post('blog/comment/store', 'BlogCommentController@store');
