@@ -73,6 +73,7 @@ module.exports = function(grunt) {
                     paths: ["public/assets/css"]
                 },
                 files: {
+                    'public/assets/css/bootstrap-amelia.css': ['public/assets/css/amelia/bootstrap.less'],
                     'public/assets/css/bootstrap.css': ['public/assets/css/slate/bootstrap.less']
                 }
             }
@@ -108,6 +109,16 @@ module.exports = function(grunt) {
                         expand: true
                     }
                 ]
+            },
+            tinymce:{
+                files: [
+                    {
+                        cwd: 'public/assets/bower/tinymce/',
+                        src: ['tinymce.min.js', 'themes/modern/*', 'skins/lightgray/*', 'skins/lightgray/fonts/*', 'skins/lightgray/img/*', 'plugins/bbcode/*', 'plugins/link/*', 'plugins/colorpicker/*','plugins/textcolor/*', 'plugins/image/*'],
+                        dest: 'public/assets/js/',
+                        expand: true
+                    }
+                ]
             }
         }
     });
@@ -128,6 +139,7 @@ module.exports = function(grunt) {
         'copy:bootstrapjs',
         'copy:datepickerjs',
         'copy:sortablejs',
+        'copy:tinymce',
         'uglify',
         'less',
         'jshint'
