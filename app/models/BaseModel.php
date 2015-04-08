@@ -4,6 +4,10 @@ class BaseModel extends Eloquent
 {
     public $errors;
 
+    public static function boot() {
+        static::observe(new ModelObserver);
+    }
+
     public static function table()
     {
         $instance = new static;

@@ -119,7 +119,3 @@ Validator::extend('alpha_spaces', function($translator, $data, $rules, $messages
 {
 	return preg_match('/^[A-Za-z0-9\-_ ]+$/i', $data);
 });
-
-//Set up caching
-$modelObserver = new ModelObserver;
-User::observe($modelObserver);
