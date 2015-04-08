@@ -35,7 +35,8 @@ Create new post
         selector: "textarea",
         plugins : "bbcode link image textcolor colorpicker",
         toolbar1: "bold italic underline | link unlink image | blockquote | removeformat | forecolor emoticons",
-        menubar: false
+        menubar: false,
+        statusbar : false
     });
 </script>
 @stop
