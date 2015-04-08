@@ -101,6 +101,19 @@ class GuildTest extends TestCase
         $this->assertEquals(1, $user->guild_id);
     }
 
+    public function testCanGetAdmins()
+    {
+        $data = array(
+            'id' => 1,
+            'name' => 'Lazy Monkeys',
+            'tag' => 'LM'
+        );
+        $this->guild->create($data, \Sentry::getUser()->id);
+
+        $guild1 = $this->guild->findId($data['id']);
+        $this->assertEquals('admin', $guild1->admins()[0]->username);
+    }
+
     public function tearDown()
     {
         m::close();

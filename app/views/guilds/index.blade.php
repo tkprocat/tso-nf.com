@@ -12,7 +12,7 @@
                     <th>Name</th>
                     <th>Tag</th>
                     <th>Members</th>
-                    <th>Leader</th>
+                    <th>Admins</th>
                     @if (Sentry::check() && (Sentry::getUser()->guild_id == 0))
                     <th></th>
                     @endif
@@ -24,7 +24,16 @@
                     <td><a href="{{ URL::to('/guilds/'.$guild->id) }}">{{ $guild->name }}</a></td>
                     <td>{{ $guild->tag }}</td>
                     <td>{{ $guild->members()->count() }}</td>
-                    <td>{{ $guild->guildleader }}</td>
+                    <td>
+                    @for($i = 0; $i < count($guild->admins()); $i++)
+                        @if (count($guild->admins()) > $i+1)
+                                {{ $guild->admins()[$i]->username }},
+                        @else
+                                {{ $guild->admins()[$i]->username }}
+                        @endif
+
+                    @endfor
+                    </td>
                     @if (Sentry::check() && (Sentry::getUser()->guild_id == 0))
                     <td>
                     <a href="{{ URL::to('/guilds/applications/create/'.$guild->id) }}" class="btn btn-primary">Join</a>
