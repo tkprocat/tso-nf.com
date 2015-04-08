@@ -100,7 +100,7 @@
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="4"><a href="#">Back to top</a> - <a href="/loot/adventure/{{ urlencode($adventure->name) }}">See latest loot</a></td>
+                <td colspan="5"><a href="#">Back to top</a> - <a href="/loot/adventure/{{ urlencode($adventure->name) }}">See latest loot</a></td>
             </tr>
             </tfoot>
         </table>
