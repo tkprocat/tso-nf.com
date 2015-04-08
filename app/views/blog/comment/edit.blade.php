@@ -35,4 +35,14 @@ Edit Profile
     </div>
     {{ Form::close()}}
 </div>
+<script type="text/javascript" src="{{ URL::to('/') }}/assets/js/tinymce.min.js"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins : "bbcode link image textcolor colorpicker",
+        toolbar1: "bold italic underline | link unlink image | blockquote | removeformat | forecolor emoticons",
+        menubar: false,
+        statusbar : false
+    });
+</script>
 @stop
