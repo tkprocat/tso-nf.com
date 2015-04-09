@@ -21,8 +21,8 @@ class AdminPriceListController extends \BaseController
      */
     public function index()
     {
-        $prices = $this->adminPriceList->findAllPrices();
-        return View::make('admin.prices.index')->with('prices', $prices);
+        $items = $this->adminPriceList->getAllItems();
+        return View::make('admin.prices.index')->with('items', $items);
     }
 
 
@@ -51,13 +51,12 @@ class AdminPriceListController extends \BaseController
 
         $data = Input::all();
 
-        $this->adminPriceList->validator->updateRules($data);
         $data['user_id'] = Sentry::getUser()->id; //This feels wrong....
 
         if ($this->adminPriceList->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
-            $this->adminPriceList->create($data);
-            return Redirect::to('admin/prices')->with('success', 'Price added successfully');
+            $this->adminPriceList->addItem($data);
+            return Redirect::to('admin/prices')->with('success', 'Item added successfully');
         } else {
             //Failed validation
             return Redirect::to('admin/prices/create')->withInput()->withErrors($this->adminPriceList->validator->errors());
@@ -74,7 +73,8 @@ class AdminPriceListController extends \BaseController
     public function show($id)
     {
         $priceItem = $this->adminPriceList->findPriceById($id);
-        return View::make('admin.prices.show')->with(array('price' => $priceItem));
+        $priceHistory = $this->adminPriceList->getAllPriceChangesForItemById($id);
+        return View::make('admin.prices.show')->with(array('item' => $priceItem, 'price_history' => $priceHistory));
     }
 
 
@@ -86,10 +86,10 @@ class AdminPriceListController extends \BaseController
      */
     public function edit($id)
     {
-        $priceItem = $this->adminPriceList->findPriceItemById($id);
+        $priceItem = $this->adminPriceList->findPriceById($id);
         if (is_null($priceItem))
-            return Redirect::to('admin/prices')->with('error', 'Price not found!');
-        return View::make('admin.prices.edit')->with('priceItem', $priceItem);
+            return Redirect::to('admin/prices')->with('error', 'Item not found!');
+        return View::make('admin.prices.edit')->with('item', $priceItem);
     }
 
 
@@ -108,9 +108,9 @@ class AdminPriceListController extends \BaseController
         $price = Input::all();
         $price['user_id'] = Sentry::getUser()->id; //This feels wrong....
 
-        if ($this->adminPriceList->validator->with($Price)->passes()) {
+        if ($this->adminPriceList->validator->with($price)->passes()) {
             //Passed validation, make the update.
-            $this->adminPriceList->update($price['priceItem_id'], $Price);
+            $this->adminPriceList->updateItem($price['item_id'], $price);
             return Redirect::to('admin/prices')->with('success', 'Item updated successfully');
         } else {
             //Failed validation
@@ -127,6 +127,47 @@ class AdminPriceListController extends \BaseController
      */
     public function destroy($id)
     {
-        //
+        $this->adminPriceList->deleteItem($id);
+    }
+
+
+    //Item price management below
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function createNewPrice($id)
+    {
+        $item = $this->adminPriceList->findPriceById($id);
+        return View::make('admin.prices.createNewPrice')->with(array('item' => $item));
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function storeNewPrice()
+    {
+        //Check if the user has permission to post news.
+        $user =  Sentry::getUser();
+        if (!$user->hasAccess('admin'))
+            return Redirect::to('login');
+
+        $data = Input::all();
+
+        $data['user_id'] = Sentry::getUser()->id; //This feels wrong....
+
+        if ($this->adminPriceList->validatorNewPrice->with($data)->passes()) {
+            //Passed validation, store the blog post.
+            $this->adminPriceList->updatePriceForItem($data['item_id'], $data['min_price'], $data['avg_price'], $data['max_price']);
+            return Redirect::to('admin/prices')->with('success', 'New price registered');
+        } else {
+            //Failed validation
+            return Redirect::to('admin/prices/create')->withInput()->withErrors($this->adminPriceList->validatorNewPrice->errors());
+        }
     }
 }

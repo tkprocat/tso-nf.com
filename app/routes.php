@@ -98,6 +98,8 @@ Route::group(array('before' => 'auth'), function()
 
     //Admin prices
     Route::resource('admin/prices', 'AdminPriceListController');
+    Route::get('admin/prices/{id}/newprice', 'AdminPriceListController@createNewPrice');
+    Route::post('admin/prices/newprice', 'AdminPriceListController@storeNewPrice');
 });
 
 Route::get('blog', array('as' => 'blog', 'uses' => 'BlogPostController@index'));

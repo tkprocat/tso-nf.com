@@ -3,7 +3,7 @@
 {{-- Web site Title --}}
 @section('title')
 @parent
-Add new adventure
+UpdatePrice
 @stop
 
 {{-- Content --}}
@@ -17,22 +17,15 @@ Add new adventure
                     <li><a href="/admin/adventures">Adventures</a></li>
                     <li><a href="/admin/adventures/create">- Add new adventure</a></li>
                     <li><a href="/admin/prices">Prices</a></li>
-                    <li class="active"><a href="/admin/prices/create">- Add new item <span class="sr-only">(current)</span></a></li>
+                    <li><a href="/admin/prices/create">- Add new item</a></li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h4>Add new adventure</h4>
+                <h4>Update price for {{ $item->name }}</h4>
                 {{ HTML::ul($errors->all()) }}
                 <div class="well">
-                    {{ Form::open(array('action' => 'AdminPriceListController@store', 'class' => "form-horizontal")) }}
-
-                    <div class="form-group {{ ($errors->has('name')) ? 'has-error' : '' }}" for="name">
-                        {{ Form::label('name', 'Name:', array('class' =>  'col-sm-2 control-label')) }}
-                        <div div class="col-sm-4">
-                            {{ Form::text('name', null, array('class' => 'form-control', 'placeholder' => 'Item name')) }}
-                        </div>
-                        {{ ($errors->has('name') ? $errors->first('name') : '') }}
-                    </div>
+                    {{ Form::open(array('action' => 'AdminPriceListController@storeNewPrice', 'class' => "form-horizontal")) }}
+                    {{ Form::hidden('item_id', $item->id) }}
 
                     <div class="form-group {{ ($errors->has('min_price')) ? 'has-error' : '' }}" for="min_price">
                         {{ Form::label('min_price', 'Min. price:', array('class' =>  'col-sm-2 control-label')) }}
@@ -58,27 +51,10 @@ Add new adventure
                         {{ ($errors->has('max_price') ? $errors->first('max_price') : '') }}
                     </div>
 
-                    {{ Form::submit('Add', array('class' => 'btn btn-primary')) }}
+                    {{ Form::submit('Update', array('class' => 'btn btn-primary')) }}
 
                     {{ Form::close() }}
                 </div>
-                <script>
-                    var items = [ ];
-                    $(document).ready(function() {
-                        $.get( "/admin/adventures/getItemTypes", function( data ) {
-                            items = data;
-                        });
-
-                        $(".items").autocomplete({
-                            source: function( request, response ) {
-                                var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-                                response( $.grep( items, function( item ){
-                                    return matcher.test( item );
-                                }) );
-                            }
-                        });
-                    });
-                </script>
             </div>
         </div>
     </div>

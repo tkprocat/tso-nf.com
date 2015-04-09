@@ -21,12 +21,12 @@
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h4>Adventures:</h4>
+                <h4>Price list item details:</h4>
 
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">{{ $adventure->name }}</div>
+                            <div class="panel-heading">{{ $item->name }}</div>
                             <div class="panel-body">
                                 <table class="table table-striped table-hover sortable" id="adventures">
                                     <thead>
@@ -37,19 +37,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($adventure->loot as $loot)
+                                    @foreach($price_history as $historyItem)
                                         <tr>
-                                            <td>{{ $loot->slot }}</td>
-                                            <td>{{ $loot->type }}</td>
-                                            <td>{{ $loot->amount }}</td>
+                                            <td>{{ $historyItem->min_price }}</td>
+                                            <td>{{ $historyItem->avg_price }}</td>
+                                            <td>{{ $historyItem->max_price }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <a href="{{ URL::to("/admin/adventures") }}" class="btn btn-primary">Back</a>
-                        <a href="{{ URL::to("/admin/adventures/$adventure->id/edit") }}" class="btn btn-warning">Update</a>
                     </div>
                 </div>
             </div>

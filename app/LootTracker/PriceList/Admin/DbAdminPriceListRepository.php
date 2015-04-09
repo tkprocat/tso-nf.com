@@ -9,29 +9,37 @@ class DbAdminPriceListRepository implements AdminPriceListInterface
 {
     protected $priceList;
     public $validator;
+    public $validatorNewPrice;
 
-    public function __construct(Model $priceList, AdminPriceListFormValidator $validator)
+    public function __construct(Model $priceList, AdminPriceItemFormValidator $validator, AdminPriceItemNewPriceFormValidator $validatorNewPrice)
     {
         $this->priceList = $priceList;
         $this->validator = $validator;
+        $this->validatorNewPrice = $validatorNewPrice;
     }
 
     public function getAllItems()
     {
         // Get all the adventures
-        $key = 'Prices';
-        if (\Cache::has($key)) {
-            $prices = \Cache::get($key);
+        $key = 'all_items';
+        if (\Cache::tags('pricelist_item')->has($key)) {
+            $prices = \Cache::tags('pricelist_item')->get($key);
         } else {
             $prices = $this->priceList->orderBy('Name')->get();
-            \Cache::add($key, $prices, 1440); // Saves result for a day.
+            \Cache::tags('pricelist_item')->add($key, $prices, 1440); // Saves result for a day.
         }
         return $prices;
     }
 
+    public function findPriceById($item_id)
+    {
+        $priceChanges = PriceListItem::findOrFail($item_id);
+        return $priceChanges;
+    }
+
     public function getAllPriceChangesForItemById($item_id)
     {
-        $priceChanges = PriceListItemPrice::where('pricelist_item_id', $item_id)->orderBy('created_at desc')->get();
+        $priceChanges = PriceListItemPrice::where('pricelist_item_id', $item_id)->orderBy('created_at', 'desc')->get();
         return $priceChanges;
     }
 
@@ -49,6 +57,12 @@ class DbAdminPriceListRepository implements AdminPriceListInterface
         $price->save();
     }
 
+    public function updateItem($id, $data) {
+        $item = PriceListItem::findOrFail($id);
+        $item->name = $data['name'];
+        $item->save();
+    }
+
     public function updatePriceForItem($item_id, $min_price, $avg_price, $max_price)
     {
         $price = new PriceListItemPrice();
@@ -57,5 +71,11 @@ class DbAdminPriceListRepository implements AdminPriceListInterface
         $price->avg_price = $avg_price;
         $price->max_price = $max_price;
         $price->save();
+    }
+
+    public function deleteItem($item_id)
+    {
+        $item = PriceListItem::findOrFail($item_id);
+        $item->delete();
     }
 }
