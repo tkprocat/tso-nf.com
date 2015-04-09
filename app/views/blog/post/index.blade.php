@@ -22,8 +22,8 @@ Home
     <div class="panel-body">
         <p>{{ BBCode::parse($blog->content) }}</p>
     </div>
-    <div class="panel-footer" style="height: 55px">
-        <div class="col-md-6" style="vertical-align: middle">
+    <div class="panel-footer" style="height: 55px; line-height: 35px">
+        <div class="col-md-6" style="vertical-align: middle;">
             <a href="{{ URL::to('blog/'.$blog->slug) }}">
             @if (count($blog->comments) == 0)
                 No comments
@@ -34,7 +34,6 @@ Home
             @endif
             </a>
         </div>
-
         @if ((Sentry::getUser()) && (Sentry::hasAccess('admin')))
         <div class="col-md-6" style="height: 80%; text-align: right">
             <a href="{{ URL::to('blog/'.$blog->id.'/edit') }}" class="btn btn-warning">Edit</a>
