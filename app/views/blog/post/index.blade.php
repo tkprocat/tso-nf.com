@@ -12,16 +12,27 @@ Home
 
 @foreach($blogs as $blog)
 <div class="panel panel-default">
-    <div class="panel-heading"><a href="{{ URL::to('blog/'.$blog->slug) }}">{{ $blog->title }}</a></div>
+    <div class="panel-heading">
+        <a href="{{ URL::to('blog/'.$blog->slug) }}">{{ $blog->title }}</a><br>
+        Posted by {{ $blog->user->username }} at {{ $blog->created_at }}
+        @if ($blog->updated_at > $blog->created_at)
+            - Last updated at {{ $blog->updated_at }}
+        @endif
+    </div>
     <div class="panel-body">
         <p>{{ BBCode::parse($blog->content) }}</p>
     </div>
     <div class="panel-footer" style="height: 55px">
-        <div class="col-md-6" style="height: 80%; vertical-align: middle">
-            Posted by {{ $blog->user->username }} at {{ $blog->created_at }}
-            @if ($blog->updated_at > $blog->created_at)
-            - Last updated at {{ $blog->updated_at }}
+        <div class="col-md-6" style="vertical-align: middle">
+            <a href="{{ URL::to('blog/'.$blog->slug) }}">
+            @if (count($blog->comments) == 0)
+                No comments
+            @elseif (count($blog->comments) == 1)
+                1 comment
+            @else
+                {{ count($blog->comments) }} comments
             @endif
+            </a>
         </div>
 
         @if ((Sentry::getUser()) && (Sentry::hasAccess('admin')))
