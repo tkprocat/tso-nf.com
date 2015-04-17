@@ -13,10 +13,14 @@ class AddFieldsToAdventure extends Migration {
 	public function up()
 	{
         Schema::table('adventure', function($table) {
-            $table->string('type');
-            $table->boolean('disabled');
+            if (!Schema::hasColumn('adventure', 'type')) {
+                $table->string('type')->default('');
+            }
+            if (!Schema::hasColumn('adventure', 'disabled')) {
+                $table->boolean('disabled')->default(0);
+            }
         });
-	}
+    }
 
 	/**
 	 * Reverse the migrations.
@@ -26,8 +30,10 @@ class AddFieldsToAdventure extends Migration {
 	public function down()
 	{
         Schema::table('adventure', function($table) {
-            $table->string('type');
-            $table->boolean('disabled');
+            if (!Schema::hasColumn('adventure', 'type'))
+                $table->dropColumn('type');
+            if (!Schema::hasColumn('adventure', 'disabled'))
+                $table->dropColumn('disabled');
         });
 	}
 

@@ -13,10 +13,12 @@ class UserAdventureAddForeignkeyToAdventure extends Migration {
 	public function up()
 	{
         //Yes, below aren't database independent, but I can't find a better way of doing it.
-        DB::statement('ALTER TABLE user_adventure MODIFY COLUMN adventure_id INT(10) UNSIGNED NOT NULL');
-        Schema::table('user_adventure', function($table) {
-            $table->foreign('adventure_id')->references('id')->on('adventure')->onDelete('cascade');
-        });
+        if (DB::connection()->getDatabaseName() != ':memory:') { //We need to fix this.
+            DB::statement('ALTER TABLE user_adventure MODIFY COLUMN adventure_id INT(10) UNSIGNED NOT NULL');
+            Schema::table('user_adventure', function ($table) {
+                $table->foreign('adventure_id')->references('id')->on('adventure')->onDelete('cascade');
+            });
+        }
 	}
 
 	/**
@@ -26,10 +28,12 @@ class UserAdventureAddForeignkeyToAdventure extends Migration {
 	 */
 	public function down()
 	{
-        Schema::table('user_adventure', function($table) {
-            $table->dropForeign('user_adventure_adventure_id_foreign');
-        });
-        DB::statement('ALTER TABLE user_adventure MODIFY COLUMN adventure_id INT(11) NOT NULL');
+        if (DB::connection()->getDatabaseName() != ':memory:') { //We need to fix this.
+            Schema::table('user_adventure', function ($table) {
+                $table->dropForeign('user_adventure_adventure_id_foreign');
+            });
+            DB::statement('ALTER TABLE user_adventure MODIFY COLUMN adventure_id INT(11) NOT NULL');
+        }
 	}
 
 }
