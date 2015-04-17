@@ -118,7 +118,7 @@ class StatsController extends BaseController
             ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
             ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')
             ->select(array('adventure.name', 'adventure_loot.type', DB::raw('((COUNT(\'' . \DB::getTablePrefix() . 'user_adventure_loot.*\' ) * ' . \DB::getTablePrefix() . 'adventure_loot.Amount) DIV (SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE adventure_id = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id )) AS avg_drop')))
-            ->where('type', $type)
+            ->where('adventure_loot.type', $type)
             ->groupBy('adventure_loot.adventure_id')
             ->orderBy('avg_drop', 'desc')->take(10)->get();
         return Response::json($result);
@@ -131,7 +131,7 @@ class StatsController extends BaseController
             ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
             ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')
             ->select(array('adventure.name', 'adventure_loot.type', DB::raw('(COUNT(\'' . \DB::getTablePrefix() . 'user_adventure_loot.*\' ) / (SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE Adventure_ID = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id ) * 100) AS drop_chance'), DB::raw('(SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE adventure_id = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id) AS played')))
-            ->where('type', $type)
+            ->where('adventure_loot.type', $type)
             ->groupBy('adventure_loot.adventure_id')
             ->orderBy('drop_chance', 'Desc')->take(10)->get();
         return Response::json($result);
