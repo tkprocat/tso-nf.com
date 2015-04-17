@@ -88,6 +88,7 @@ Route::group(array('before' => 'auth'), function()
     //Admin/Adventure
     Route::get('admin/adventures/create', 'AdminAdventureController@create');
     Route::get('admin/adventures/getItemTypes', 'AdminAdventureController@getItemTypes');
+    Route::get('admin/adventures/getAdventureTypes', 'AdminAdventureController@getAdventureTypes');
     Route::resource('admin/adventures', 'AdminAdventureController');
 
     //Admin

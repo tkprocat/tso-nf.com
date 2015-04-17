@@ -33,6 +33,22 @@ Add new adventure
                         {{ ($errors->has('name') ? $errors->first('name') : '') }}
                     </div>
 
+                    <div class="form-group {{ ($errors->has('type')) ? 'has-error' : '' }}">
+                        {{ Form::label('type', 'Type:', array('class' =>  'col-sm-2 control-label')) }}
+                        <div class="col-sm-10">
+                            {{ Form::text('type', null, array('class' => 'form-control', 'placeholder' => 'Adventure type')) }}
+                        </div>
+                        {{ ($errors->has('type') ? $errors->first('type') : '') }}
+                    </div>
+
+                    <div class="form-group {{ ($errors->has('disabled')) ? 'has-error' : '' }}">
+                        {{ Form::label('disabled', 'Disabled:', array('class' =>  'col-sm-2 control-label')) }}
+                        <div class="col-sm-10">
+                            {{ Form::checkbox('disabled', null, null, array('class' => 'checkbox-inline')) }}
+                        </div>
+                        {{ ($errors->has('disabled') ? $errors->first('disabled') : '') }}
+                    </div>
+
                     <div class="row">
                         <div div class="col-sm-2"></div>
                         <div div class="col-sm-1">Slot</div>

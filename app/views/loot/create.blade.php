@@ -22,7 +22,7 @@
             <div class="form-group">
                 {{ Form::label('adventure_id', 'Adventure:', array('class' => 'control-label col-sm-2')); }}
                 <div class="col-sm-3">
-                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('class' => 'form-control')) }}
+                {{ Form::select('adventure_id', $adventures->lists('type_and_name', 'id'), '0', array('class' => 'form-control')) }}
                 </div>
             </div>
         </div>

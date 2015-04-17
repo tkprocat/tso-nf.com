@@ -37,6 +37,22 @@
                                 {{ ($errors->has('name') ? $errors->first('name') : '') }}
                             </div>
 
+                            <div class="form-group {{ ($errors->has('type')) ? 'has-error' : '' }}">
+                                {{ Form::label('type', 'Type:', array('class' =>  'col-sm-2 control-label')) }}
+                                <div class="col-sm-10">
+                                    {{ Form::text('type', $adventure->type, array('class' => 'form-control', 'placeholder' => 'Adventure type')) }}
+                                </div>
+                                {{ ($errors->has('type') ? $errors->first('type') : '') }}
+                            </div>
+
+                            <div class="form-group {{ ($errors->has('disabled')) ? 'has-error' : '' }}">
+                                {{ Form::label('disabled', 'Disabled:', array('class' =>  'col-sm-2 control-label')) }}
+                                <div class="col-sm-10">
+                                    {{ Form::checkbox('disabled', null, $adventure->disabled, array('class' => 'checkbox-inline')) }}
+                                </div>
+                                {{ ($errors->has('disabled') ? $errors->first('disabled') : '') }}
+                            </div>
+
                             <div class="row">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-1">Slot</div>
@@ -87,17 +103,29 @@
 
     <script>
         var items = [];
+        var adventureTypes = [];
         $(document).ready(function () {
             $.get("/admin/adventures/getItemTypes", function (data) {
                 items = data;
             });
+            $.get("/admin/adventures/getAdventureTypes", function (data) {
+                adventureTypes = data;
+            });
         });
-
 
         $(".items").autocomplete({
             source: function (request, response) {
                 var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
                 response($.grep(items, function (item) {
+                    return matcher.test(item);
+                }));
+            }
+        });
+
+        $("#type").autocomplete({
+            source: function (request, response) {
+                var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(adventureTypes, function (item) {
                     return matcher.test(item);
                 }));
             }

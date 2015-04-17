@@ -5,6 +5,8 @@ namespace LootTracker\Adventure;
 interface AdventureInterface {
     public function findAllAdventures();
 
+    public function findAllActiveAdventures();
+
     public function create($data);
 
     public function findAdventureById($id);

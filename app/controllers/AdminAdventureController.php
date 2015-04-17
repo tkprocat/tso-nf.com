@@ -155,4 +155,10 @@ class AdminAdventureController extends \BaseController
         //TODO: Move to repo.
         return DB::table('adventure_loot')->groupBy('type')->orderBy('type')->lists('type');
     }
+
+    public function getAdventureTypes()
+    {
+        //TODO: Move to repo.
+        return DB::table('adventure')->groupBy('type')->orderBy('type')->lists('type');
+    }
 }

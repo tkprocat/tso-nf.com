@@ -31,12 +31,22 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Disabled</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($adventures as $adventure)
                                     <tr>
                                         <td>{{ link_to("/admin/adventures/$adventure->id", $adventure->name) }}</td>
+                                        <td>{{ $adventure->type }}</td>
+                                        <td>
+                                            @if($adventure->disabled === 1)
+                                            Yes
+                                            @else
+                                            No
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

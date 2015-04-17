@@ -25,6 +25,19 @@ class DbAdventureRepository implements AdventureInterface
         return $adventures;
     }
 
+    public function findAllActiveAdventures()
+    {
+        // Get all the adventures
+        $key = 'ActiveAdventuresOrderByName';
+        if (\Cache::has($key)) {
+            $adventures = \Cache::get($key);
+        } else {
+            $adventures = $this->adventure->where('disabled', '0')->orderBy('Name')->get();
+            \Cache::add($key, $adventures, 1440); // Saves result for a day.
+        }
+        return $adventures;
+    }
+
     public function findAdventureById($id)
     {
         return $this->adventure->findOrFail($id);
@@ -32,7 +45,7 @@ class DbAdventureRepository implements AdventureInterface
 
     public function getAdventuresWithLoot()
     {
-        return $this->adventure->orderBy('Name')->with('loot')->get();
+        return $this->adventure->where('disabled', '0')->orderBy('Name')->with('loot')->get();
     }
 
 

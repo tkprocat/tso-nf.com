@@ -11,4 +11,9 @@ class Adventure extends \BaseModel {
     public function played() {
         return $this->hasMany('\LootTracker\Loot\UserAdventure');
     }
+
+    public function getTypeAndNameAttribute()
+    {
+        return trim($this->type . ' - ' . $this->name);
+    }
 }

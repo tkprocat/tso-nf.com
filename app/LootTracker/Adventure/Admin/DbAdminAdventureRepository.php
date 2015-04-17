@@ -43,6 +43,8 @@ class DbAdminAdventureRepository implements AdminAdventureInterface
     {
         $adventure = new Adventure();
         $adventure->name = $data['name'];
+        $adventure->type = $data['type'];
+        $adventure->disabled = ($data['disabled'] == 'on');
         $adventure->save();
 
         foreach($data['items'] as $item) {
@@ -63,6 +65,8 @@ class DbAdminAdventureRepository implements AdminAdventureInterface
     {
         $adventure = Adventure::findOrFail($id);
         $adventure->name = $data['name'];
+        $adventure->type = $data['type'];
+        $adventure->disabled = ($data['disabled'] == 'on');
         $adventure->save();
 
         foreach($data['items'] as $item) {

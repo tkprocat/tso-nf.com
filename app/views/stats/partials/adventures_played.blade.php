@@ -9,7 +9,7 @@
     </thead>
     @for($i=0; $i < (count($adventures) / 2) ; $i++)
     <tr>
-        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
+        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->type . ' - ' . $adventures[$i]->name }}</a></td>
         <td>{{ $adventures[$i]->played->count() }}</td>
         <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
     </tr>
@@ -28,7 +28,7 @@
     </thead>
 		@for($i= $displayed ; $i < count($adventures); $i++)
 		<tr>
-			<td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->name }}</a></td>
+			<td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->type . ' - ' . $adventures[$i]->name }}</a></td>
 			<td>{{ $adventures[$i]->played->count() }}</td>
 			<td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
 		</tr>
