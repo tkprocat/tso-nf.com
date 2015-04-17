@@ -21,7 +21,7 @@
         <div class="form-group">
             {{ Form::label('adventure_id', 'Adventure:',array('class' => 'col-lg-2 control-label')); }}
             <div style="col-lg-10">
-                {{ Form::select('adventure_id', $adventures->lists('type_and_name', 'id'), $useradventure->adventure_id,
+                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), $useradventure->adventure_id,
                 array('style' => 'width: 200px', 'class' => 'form-control')); }}
             </div>
         </div>
