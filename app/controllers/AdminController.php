@@ -96,5 +96,25 @@ class AdminController extends \BaseController {
 		//
 	}
 
+    public function getLast10Weeks()
+    {
+        $date = \Carbon\Carbon::now();
+        for ($i = 1; $i <= 10; $i++)
+        {
+            $weeks[] =  $date->weekOfYear;
+            $date = $date->subWeek();
+        }
+        return Response::json(array_reverse($weeks));
+    }
 
+    public function getSubmissionsForTheLast10Weeks()
+    {
+        $date = \Carbon\Carbon::now();
+        for ($i = 1; $i <= 10; $i++)
+        {
+            $weeks[] = $this->adminAdventure->getSubmissionsForWeek($date);
+            $date = $date->subWeek();
+        }
+        return Response::json(array_reverse($weeks));
+    }
 }

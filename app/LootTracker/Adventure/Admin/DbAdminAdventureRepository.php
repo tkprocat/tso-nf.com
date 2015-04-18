@@ -4,6 +4,7 @@ namespace LootTracker\Adventure\Admin;
 use LootTracker\Adventure\Adventure;
 use LootTracker\Adventure\AdventureLoot;
 use Illuminate\Database\Eloquent\Model;
+use LootTracker\Loot\UserAdventure;
 
 class DbAdminAdventureRepository implements AdminAdventureInterface
 {
@@ -106,5 +107,12 @@ class DbAdminAdventureRepository implements AdminAdventureInterface
     public function findAllDifferentLootTypes()
     {
         return AdventureLoot::distinct('type')->orderBy('type')->lists('type');
+    }
+
+    public function getSubmissionsForWeek($date)
+    {
+        $startOfWeek = clone $date->startOfWeek();
+        $endOfWeek = $date->endOfWeek();
+        return UserAdventure::where('created_at', '>=', $startOfWeek)->where('created_at', '<=', $endOfWeek)->get()->count();
     }
 }

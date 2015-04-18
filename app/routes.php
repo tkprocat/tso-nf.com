@@ -93,6 +93,8 @@ Route::group(array('before' => 'auth'), function()
 
     //Admin
     Route::get('admin', 'AdminController@index');
+    Route::get('admin/getLast10Weeks', 'AdminController@getLast10Weeks');
+    Route::get('admin/getSubmissionsForTheLast10Weeks', 'AdminController@getSubmissionsForTheLast10Weeks');
 
     //Admin users
     Route::resource('admin/users', 'AdminUserController');
