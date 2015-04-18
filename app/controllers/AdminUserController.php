@@ -17,13 +17,12 @@ class AdminUserController extends \BaseController {
 	 */
 	public function index()
 	{
-		if (Cache::tags('users')->has('all')) {
-			$users = Cache::tags('users')->get('all');
-		} else {
-			$users = $this->user->all();
-			Cache::tags('users')->forever('all', $users);
-		}
-
+        if (\Cache::tags('users')->has('all_users')) {
+            $users = \Cache::tags('users')->get('all_users');
+        } else {
+            $users = $this->user->all();
+            \Cache::tags('users')->forever('all_users', $users);
+        }
 		return View::make('admin.users.index')->with('users', $users);
 	}
 

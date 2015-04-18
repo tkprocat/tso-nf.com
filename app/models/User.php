@@ -26,6 +26,16 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
      */
     protected $hidden = array('password');
 
+    public static function boot() {
+        static::observe(new ModelObserver);
+    }
+
+    public static function table()
+    {
+        $instance = new static;
+        return $instance->getTable();
+    }
+
     /**
      * Get the unique identifier for the user.
      *
