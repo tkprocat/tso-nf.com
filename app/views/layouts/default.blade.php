@@ -46,7 +46,7 @@
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav">
-                    <li>
+                    <li {{ (Request::is('blog') ? 'class="active"' : '') }}>
                         <a href="{{ URL::to('blog') }}">Blog</a>
                     </li>
                     @if (Sentry::check())
@@ -98,7 +98,10 @@
                     </li>
                     @else
                     <li {{ (Request::is('login') ? 'class="active"' : '') }}>
-                    <a href="{{ URL::to('login') }}">Login</a>
+                        <a href="{{ URL::to('login') }}">Login</a>
+                    </li>
+                    <li {{ (Request::is('register') ? 'class="active"' : '') }}>
+                        <a href="{{ URL::to('register') }}">Sign up</a>
                     </li>
                     @endif
                 </ul>
