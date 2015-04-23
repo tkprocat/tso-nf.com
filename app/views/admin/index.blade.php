@@ -33,14 +33,18 @@
 
 <script>
     var categories;
-    var data;
+    var submissions;
+    var newUsers;
     //We NEED the data before loading the graph.
     jQuery.ajaxSetup({async:false});
     $.get("/stats/getLast10Weeks", function(json) {
        categories = json;
     });
     $.get("/stats/getSubmissionsForTheLast10Weeks", function(json) {
-        data = json;
+        submissions = json;
+    });
+    $.get("/stats/getNewUserCountForTheLast10Weeks", function(json) {
+        newUsers = json;
     });
     jQuery.ajaxSetup({async:true});
 
@@ -53,6 +57,9 @@
                 text: 'Last 10 weeks submission rate'
             },
             xAxis: {
+                title: {
+                    text: 'Week'
+                },
                 categories: categories,
                 crosshair: true
             },
@@ -63,8 +70,8 @@
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                headerFormat: '<span style="font-size:10px">Week {point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
@@ -77,7 +84,10 @@
             },
             series: [{
                 name: 'Submissions',
-                data: data
+                data: submissions
+            }, {
+                name: 'New users',
+                data: newUsers
             }]
         });
     });

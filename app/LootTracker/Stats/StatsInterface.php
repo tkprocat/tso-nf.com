@@ -16,4 +16,6 @@ interface StatsInterface
     public function getLootDropCountForUser($user_id, $from, $to);
 
     public function getSubmissionsForWeek($date);
+
+    public function getNewUsersForWeek($date);
 }

@@ -2,6 +2,7 @@
 namespace LootTracker\Stats;
 
 use DB;
+use User;
 use LootTracker\Adventure\Adventure;
 use LootTracker\Loot\LootInterface;
 use LootTracker\Loot\UserAdventure;
@@ -99,5 +100,12 @@ class DbStatsRepository implements StatsInterface
         $startOfWeek = clone $date->startOfWeek();
         $endOfWeek = $date->endOfWeek();
         return UserAdventure::where('created_at', '>=', $startOfWeek)->where('created_at', '<=', $endOfWeek)->get()->count();
+    }
+
+    public function getNewUsersForWeek($date)
+    {
+        $startOfWeek = clone $date->startOfWeek();
+        $endOfWeek = $date->endOfWeek();
+        return User::where('created_at', '>=', $startOfWeek)->where('created_at', '<=', $endOfWeek)->get()->count();
     }
 }

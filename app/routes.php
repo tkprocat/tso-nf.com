@@ -86,7 +86,7 @@ Route::group(array('before' => 'auth'), function()
     Route::get('stats/getTop10BestAdventuresForLootTypeByDropChance', array('as' => 'stats', 'uses' => 'StatsController@getTop10BestAdventuresForLootTypeByDropChance'));
     Route::get('stats/getLast10Weeks', 'StatsController@getLast10Weeks');
     Route::get('stats/getSubmissionsForTheLast10Weeks', 'StatsController@getSubmissionsForTheLast10Weeks');
-
+    Route::get('stats/getNewUserCountForTheLast10Weeks', 'StatsController@getNewUserCountForTheLast10Weeks');
 
     //Admin/Adventure
     Route::get('admin/adventures/create', 'AdminAdventureController@create');

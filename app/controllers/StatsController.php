@@ -158,4 +158,15 @@ class StatsController extends BaseController
         }
         return Response::json(array_reverse($weeks));
     }
+
+    public function getNewUserCountForTheLast10Weeks()
+    {
+        $date = \Carbon\Carbon::now();
+        for ($i = 1; $i <= 10; $i++)
+        {
+            $weeks[] = $this->stats->getNewUsersForWeek($date);
+            $date = $date->subWeek();
+        }
+        return Response::json(array_reverse($weeks));
+    }
 }
