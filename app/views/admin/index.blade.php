@@ -36,10 +36,10 @@
     var data;
     //We NEED the data before loading the graph.
     jQuery.ajaxSetup({async:false});
-    $.get("/admin/getLast10Weeks", function(json) {
+    $.get("/stats/getLast10Weeks", function(json) {
        categories = json;
     });
-    $.get("/admin/getSubmissionsForTheLast10Weeks", function(json) {
+    $.get("/stats/getSubmissionsForTheLast10Weeks", function(json) {
         data = json;
     });
     jQuery.ajaxSetup({async:true});

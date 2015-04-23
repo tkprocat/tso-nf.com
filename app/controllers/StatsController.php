@@ -136,4 +136,26 @@ class StatsController extends BaseController
             ->orderBy('drop_chance', 'Desc')->take(10)->get();
         return Response::json($result);
     }
+
+    public function getLast10Weeks()
+    {
+        $date = \Carbon\Carbon::now();
+        for ($i = 1; $i <= 10; $i++)
+        {
+            $weeks[] =  $date->weekOfYear;
+            $date = $date->subWeek();
+        }
+        return Response::json(array_reverse($weeks));
+    }
+
+    public function getSubmissionsForTheLast10Weeks()
+    {
+        $date = \Carbon\Carbon::now();
+        for ($i = 1; $i <= 10; $i++)
+        {
+            $weeks[] = $this->stats->getSubmissionsForWeek($date);
+            $date = $date->subWeek();
+        }
+        return Response::json(array_reverse($weeks));
+    }
 }

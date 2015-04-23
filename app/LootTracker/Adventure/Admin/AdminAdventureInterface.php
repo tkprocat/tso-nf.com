@@ -16,6 +16,4 @@ interface AdminAdventureInterface {
     public function findAllLootForAdventure($id);
 
     public function findAllDifferentLootTypes();
-
-    public function getSubmissionsForWeek($date);
 }

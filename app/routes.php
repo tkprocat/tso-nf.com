@@ -84,6 +84,9 @@ Route::group(array('before' => 'auth'), function()
     Route::get('stats/top10bydropchance', array('as' => 'stats', 'uses' => 'StatsController@showTop10BestAdventuresForLootTypeByDropChance'));
     Route::get('stats/getTop10BestAdventuresForLootTypeByAvgDrop', array('as' => 'stats', 'uses' => 'StatsController@getTop10BestAdventuresForLootTypeByAvgDrop'));
     Route::get('stats/getTop10BestAdventuresForLootTypeByDropChance', array('as' => 'stats', 'uses' => 'StatsController@getTop10BestAdventuresForLootTypeByDropChance'));
+    Route::get('stats/getLast10Weeks', 'StatsController@getLast10Weeks');
+    Route::get('stats/getSubmissionsForTheLast10Weeks', 'StatsController@getSubmissionsForTheLast10Weeks');
+
 
     //Admin/Adventure
     Route::get('admin/adventures/create', 'AdminAdventureController@create');
@@ -93,8 +96,6 @@ Route::group(array('before' => 'auth'), function()
 
     //Admin
     Route::get('admin', 'AdminController@index');
-    Route::get('admin/getLast10Weeks', 'AdminController@getLast10Weeks');
-    Route::get('admin/getSubmissionsForTheLast10Weeks', 'AdminController@getSubmissionsForTheLast10Weeks');
 
     //Admin users
     Route::resource('admin/users', 'AdminUserController');

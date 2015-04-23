@@ -108,11 +108,4 @@ class DbAdminAdventureRepository implements AdminAdventureInterface
     {
         return AdventureLoot::distinct('type')->orderBy('type')->lists('type');
     }
-
-    public function getSubmissionsForWeek($date)
-    {
-        $startOfWeek = clone $date->startOfWeek();
-        $endOfWeek = $date->endOfWeek();
-        return UserAdventure::where('created_at', '>=', $startOfWeek)->where('created_at', '<=', $endOfWeek)->get()->count();
-    }
 }

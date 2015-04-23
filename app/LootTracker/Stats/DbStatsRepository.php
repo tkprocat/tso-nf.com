@@ -4,6 +4,7 @@ namespace LootTracker\Stats;
 use DB;
 use LootTracker\Adventure\Adventure;
 use LootTracker\Loot\LootInterface;
+use LootTracker\Loot\UserAdventure;
 use \Carbon\Carbon;
 
 class DbStatsRepository implements StatsInterface
@@ -91,5 +92,12 @@ class DbStatsRepository implements StatsInterface
             $query->whereBetween('user_adventure.created_at', array($from, $to));
 
         return $query->lists('dropped', 'id');
+    }
+
+    public function getSubmissionsForWeek($date)
+    {
+        $startOfWeek = clone $date->startOfWeek();
+        $endOfWeek = $date->endOfWeek();
+        return UserAdventure::where('created_at', '>=', $startOfWeek)->where('created_at', '<=', $endOfWeek)->get()->count();
     }
 }
