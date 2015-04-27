@@ -60,7 +60,6 @@ class DbBlogPostRepository implements BlogPostInterface {
 
     public function updateBlogPost($id, $data) {
         $this->blogPost = $this->blogPost->find($id);
-        $this->blogPost->user_id = $data['user_id'];
         $this->blogPost->title = e($data['title']);
         $this->blogPost->slug = Str::slug($this->blogPost->title);
         $this->blogPost->content = e($data['content']);
