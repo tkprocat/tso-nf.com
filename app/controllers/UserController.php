@@ -52,7 +52,7 @@ class UserController extends BaseController
 		$this->suspendUserForm = $suspendUserForm;
 
 		//Check CSRF token on POST
-		$this->beforeFilter('csrf', array('on' => 'post'));
+        $this->beforeFilter('csrf', array('on' => array('post', 'put', 'patch', 'delete')));
 
 		// Set up Auth Filters
 		$this->beforeFilter('auth', array('only' => array('change')));
