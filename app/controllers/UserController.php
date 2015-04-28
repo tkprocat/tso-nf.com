@@ -57,7 +57,6 @@ class UserController extends BaseController
 		// Set up Auth Filters
 		$this->beforeFilter('auth', array('only' => array('change')));
 		$this->beforeFilter('inGroup:Admins', array('only' => array('show', 'index', 'destroy', 'suspend', 'unsuspend', 'ban', 'unban', 'edit', 'update')));
-		//array('except' => array('create', 'store', 'activate', 'resend', 'forgot', 'reset')));
 	}
 
 
@@ -68,7 +67,12 @@ class UserController extends BaseController
 	 */
 	public function index()
 	{
-        $users = User::orderBy('username')->get();
+        function sortUsername($a, $b)
+        {
+            return strcasecmp($a->username, $b->username);
+        }
+        $users = $this->user->all();
+        usort($users, "sortUsername");
       
         return View::make('users.index')->with('users', $users);
 	}
@@ -122,22 +126,15 @@ class UserController extends BaseController
 	 */
 	public function show($id)
 	{
-        $user = $this->user->byId(Sentry::getUser()->id);
-        if ((($user != null) && ($user->hasAccess('admin') === true)) || Sentry::getUser()->id == $id)
+        if ($this->user->isAdmin() || $this->user->checkCurrentUserIs($id))
         {
-
             $user = $this->user->byId($id);
-
-            if($user == null || !is_numeric($id))
-            {
-                // @codeCoverageIgnoreStart
-                return \App::abort(404);
-                // @codeCoverageIgnoreEnd
-            }
+            if($user == null)
+                return Redirect::to('/users')->with('error', 'User not found.');
 
             return View::make('users.show')->with(array('user' => $user));
-         }else {
-            return Redirect::to('/');
+         } else {
+            return Redirect::to('/')->with('error', 'Sorry you do not have permission to do this!');
         }
 	}
 
@@ -149,15 +146,11 @@ class UserController extends BaseController
 	 */
 	public function edit($id)
 	{
-        $user = $this->user->byId($id);
-        if ($this->user->byId(Sentry::getUser()->id)->hasAccess('admin') === true || Sentry::getUser()->id == $id)
+        if ($this->user->isAdmin() || $this->user->checkCurrentUserIs($id))
         {
-            if($user == null || !is_numeric($id))
-            {
-                // @codeCoverageIgnoreStart
-                return \App::abort(404);
-                // @codeCoverageIgnoreEnd
-            }
+            $user = $this->user->byId($id);
+            if($user == null)
+                return Redirect::to('/users')->with('error', 'User not found.');
 
             $currentGroups = $user->getGroups()->toArray();
             $userGroups = array();
@@ -168,7 +161,7 @@ class UserController extends BaseController
 
             return View::make('users.edit')->with('user', $user)->with('userGroups', $userGroups)->with('allGroups', $allGroups);
         } else {
-            return Redirect::to('/');
+            return Redirect::to('/')->with('error', 'Sorry you do not have permission to do this!');
         }
 	}
 
@@ -180,27 +173,21 @@ class UserController extends BaseController
 	 */
 	public function update($id)
 	{
-        if(!is_numeric($id))
-        {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
+        if ($this->user->isAdmin() || $this->user->checkCurrentUserIs($id)) {
+            // Form Processing
+            $result = $this->userForm->update(Input::all());
 
-		// Form Processing
-        $result = $this->userForm->update( Input::all() );
+            if ($result['success']) {
+                // Success!
+                Session::flash('success', $result['message']);
+                return Redirect::action('UserController@show', array($id));
 
-        if( $result['success'] )
-        {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::action('UserController@show', array($id));
-
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::action('UserController@edit', array($id))
-                ->withInput()
-                ->withErrors( $this->userForm->errors() );
+            } else {
+                Session::flash('error', $result['message']);
+                return Redirect::action('UserController@edit', array($id))
+                    ->withInput()
+                    ->withErrors($this->userForm->errors());
+            }
         }
 	}
 
@@ -213,22 +200,16 @@ class UserController extends BaseController
 	 */
 	public function destroy($id)
 	{
-        if(!is_numeric($id))
-        {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-		if ($this->user->destroy($id))
-		{
-			Session::flash('success', 'User Deleted');
-            return Redirect::to('/users');
-        }
-        else 
-        {
-        	Session::flash('error', 'Unable to Delete User');
-            return Redirect::to('/users');
+        if ($this->user->isAdmin() || $this->user->checkCurrentUserIs($id)) {
+            if ($this->user->destroy($id)) {
+                Session::flash('success', 'User Deleted');
+                return Redirect::to('/users');
+            } else {
+                Session::flash('error', 'Unable to Delete User');
+                return Redirect::to('/users');
+            }
+        } else {
+            return Redirect::to('/')->with('error', 'Sorry you do not have permission to do this!');
         }
 	}
 
