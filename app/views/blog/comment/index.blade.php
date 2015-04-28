@@ -15,7 +15,8 @@
         @if (Sentry::check())
             @if (((Sentry::getUser()) && (Sentry::hasAccess('admin')) || (Sentry::getUser()->id == $comment->user_id)))
             <div class="col-md-6" style="height: 80%; text-align: right">
-                <a href="{{ URL::to('blog/comment/'.$comment->id.'/edit') }}" class="btn btn-warning">Edit</a>
+                <a href="{{ URL::to('blog/'.$comment->post_id.'/comment/'.$comment->id.'/edit') }}" class="btn btn-warning">Edit</a>
+                <a href="#" class="btn btn-danger deleteBlogCommentBtn" data-target="{{ $comment->id }}">Delete</a>
             </div>
             @endif
         @endif
@@ -26,3 +27,5 @@
 @if ($comments->count() == 0)
 <p>Nobody has posted a comment yet.</p>
 @endif
+
+@include('blog.comment.partials.delete')

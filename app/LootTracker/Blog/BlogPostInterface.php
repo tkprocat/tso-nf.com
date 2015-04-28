@@ -2,17 +2,17 @@
 namespace LootTracker\Blog;
 
 interface BlogPostInterface {
-    public function all();
+    public function create($data);
 
-    public function create($input);
+    public function update($id, $data);
+
+    public function delete($id);
+
+    public function all();
 
     public function findPage($page, $limit);
 
     public function findSlug($slug);
-
-    public function delete($id);
-
-    public function saveBlogPost($data);
 
     public function findId($id);
 

@@ -64,7 +64,7 @@ class BlogPostController extends \BaseController
 
         if ($this->blogPost->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
-            $this->blogPost->saveBlogPost($data);
+            $this->blogPost->create($data);
             return Redirect::to('blog')->with('success', 'Blog posted successfully');
         } else {
             //Failed validation
@@ -120,11 +120,11 @@ class BlogPostController extends \BaseController
 
         if ($this->blogPost->validator->with($post)->passes()) {
             //Passed validation, store the blog post.
-            $this->blogPost->updateBlogPost($post['id'], $post);
+            $this->blogPost->update($post['id'], $post);
             return Redirect::to('blog')->with('success', 'Blog updated successfully');
         } else {
             //Failed validation
-            return Redirect::back()->withErrors($this->blogPost->validator->errors())->withInput($post);
+            return Redirect::to('blog/'.$post['id'].'/edit')->withErrors($this->blogPost->validator->errors())->withInput($post);
         }
     }
 

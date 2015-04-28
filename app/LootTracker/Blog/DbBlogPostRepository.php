@@ -20,11 +20,6 @@ class DbBlogPostRepository implements BlogPostInterface {
         return $this->blogPost->all();
     }
 
-    public function create($input)
-    {
-        return $this->blogPost->create($input)->toArray();
-    }
-
     public function findPage($page, $limit)
     {
         $result = new \StdClass;
@@ -44,27 +39,6 @@ class DbBlogPostRepository implements BlogPostInterface {
         return $this->blogPost->where('slug', $slug)->first();
     }
 
-    public function delete($id)
-    {
-        return $this->blogPost->find($id)->delete();
-    }
-
-    public function saveBlogPost($data)
-    {
-        $this->blogPost->user_id = $data['user_id'];
-        $this->blogPost->title = e($data['title']);
-        $this->blogPost->slug = Str::slug($this->blogPost->title);
-        $this->blogPost->content = e($data['content']);
-        $this->blogPost->save();
-    }
-
-    public function updateBlogPost($id, $data) {
-        $this->blogPost = $this->blogPost->find($id);
-        $this->blogPost->title = e($data['title']);
-        $this->blogPost->slug = Str::slug($this->blogPost->title);
-        $this->blogPost->content = e($data['content']);
-        $this->blogPost->update();
-    }
 
     public function findId($id)
     {
@@ -74,5 +48,28 @@ class DbBlogPostRepository implements BlogPostInterface {
     public function findComments($id)
     {
         return $this->comments->findCommentsForPost($id);
+    }
+
+    public function create($data)
+    {
+        $this->blogPost->user_id = $data['user_id'];
+        $this->blogPost->title = e($data['title']);
+        $this->blogPost->slug = Str::slug($this->blogPost->title);
+        $this->blogPost->content = e($data['content']);
+        $this->blogPost->save();
+    }
+
+    public function update($id, $data) {
+        $this->blogPost = $this->blogPost->find($id);
+        $this->blogPost->title = e($data['title']);
+        $this->blogPost->slug = Str::slug($this->blogPost->title);
+        $this->blogPost->content = e($data['content']);
+        $this->blogPost->update();
+    }
+
+    public function delete($id)
+    {
+        $post = BlogPost::findOrFail($id);
+        $post->delete();
     }
 }

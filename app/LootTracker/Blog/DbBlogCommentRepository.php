@@ -1,6 +1,7 @@
 <?php
 namespace LootTracker\Blog;
 
+use LootTracker\Blog\BlogComment;
 use Illuminate\Database\Eloquent\Model;
 
 class DbBlogCommentRepository implements BlogCommentInterface
@@ -19,7 +20,7 @@ class DbBlogCommentRepository implements BlogCommentInterface
         return $this->comment->where('post_id', $blogPostId)->get();
     }
 
-    public function saveBlogComment($data)
+    public function create($data)
     {
         $this->comment->post_id = $data['post_id'];
         $this->comment->user_id = $data['user_id'];
@@ -27,7 +28,7 @@ class DbBlogCommentRepository implements BlogCommentInterface
         $this->comment->save();
     }
 
-    public function updateBlogComment($id, $data)
+    public function update($id, $data)
     {
         $this->comment = $this->comment->find($id);
         $this->comment->user_id = $data['user_id'];
@@ -36,8 +37,14 @@ class DbBlogCommentRepository implements BlogCommentInterface
         return $this->comment;
     }
 
+    public function delete($id)
+    {
+        $comment = BlogComment::findOrFail($id);
+        $comment->delete();
+    }
+
     public function find($id)
     {
-        return $this->comment->findOrFail($id);
+        return BlogComment::findOrFail($id);
     }
 }

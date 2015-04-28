@@ -12,7 +12,7 @@ Edit Profile
 <h4>Edit blog post</h4>
 <div class="well">
     {{ Form::open(array(
-    'url' => 'blog/comment/'.$comment->id,
+    'url' => 'blog/'.$comment->post_id.'/comment/'.$comment->id,
     'method' => 'put',
     'class' => 'form-horizontal',
     'role' => 'form'

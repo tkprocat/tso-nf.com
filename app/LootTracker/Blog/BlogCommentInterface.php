@@ -4,11 +4,13 @@ namespace LootTracker\Blog;
 
 interface BlogCommentInterface
 {
+    public function create($data);
+
+    public function update($id, $data);
+
+    public function delete($id);
+
     public function findCommentsForPost($blogPostId);
-
-    public function saveBlogComment($data);
-
-    public function updateBlogComment($id, $data);
 
     public function find($id);
 }

@@ -38,15 +38,8 @@ Route::get('stats/global', 'StatsController@getGlobalStats');
 Route::group(array('before' => 'auth'), function()
 {
     //Blog
-    Route::get('blog/create', 'BlogPostController@create');
-    Route::get('blog/{id}/edit', 'BlogPostController@edit');
-    Route::post('blog/store', 'BlogPostController@store');
-    Route::put('blog/update', 'BlogPostController@update');
-    Route::delete('blog/{id}', 'BlogPostController@destroy');
-    Route::get('blog/{id}/comment/create', 'BlogCommentController@create')->where('id', '[0-9]+');
-    Route::get('blog/comment/{id}/edit', 'BlogCommentController@edit')->where('id', '[0-9]+');
-    Route::post('blog/comment/store', 'BlogCommentController@store');
-    Route::put('blog/comment/{id}', 'BlogCommentController@update');
+    Route::resource('blog/{post}/comment', 'BlogCommentController');
+    Route::resource('blog', 'BlogPostController');
 
     //Loot
     Route::get('loot/create', 'LootController@create');

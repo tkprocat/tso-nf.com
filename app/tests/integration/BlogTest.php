@@ -4,17 +4,20 @@ class BlogTest extends TestCase
 {
 
     protected $fake;
+    protected $blogCommentRepository;
+    protected $blogPostRepository;
 
     public function setUp()
     {
         parent::setUp();
         Route::enableFilters();
         $this->fake = Faker\Factory::create();
+        $this->blogCommentRepository = App::make('LootTracker\Blog\BlogCommentInterface');
+        $this->blogPostRepository = App::make('LootTracker\Blog\BlogPostInterface');
     }
 
     public function test_create_blog_post_as_guest()
     {
-        Route::enableFilters();
         $this->call('GET', 'blog/create');
         $this->assertRedirectedTo('login');
     }
@@ -78,10 +81,22 @@ class BlogTest extends TestCase
         //Log in
         $this->login();
 
-        $blog = $this->create_blog_post();
-        $this->call('POST', '/blog/store', $blog);
+        $title = $this->fake->sentence;
+        $post = array(
+            'id' => 1,
+            'title' => $title,
+            'slug' => \Str::slug($title),
+            'content' => $this->fake->text,
+            'user_id' => Sentry::getUser()->id
+        );
+
+        $this->call('POST', '/blog', $post);
 
         $this->assertRedirectedToRoute('blog', array(), array('success' => 'Blog posted successfully'));
+
+        //Check that it's saved.
+        $blogPostCount = $this->blogPostRepository->all()->count();
+        $this->assertEquals(1, $blogPostCount);
     }
 
     /** @test */
@@ -90,10 +105,10 @@ class BlogTest extends TestCase
         //Log in
         $this->login();
 
-        $blog = array(
+        $post = array(
             'title' => $this->fake->title,
         );
-        $this->call('POST', '/blog/store', $blog);
+        $this->call('POST', '/blog', $post);
 
         $this->assertRedirectedTo('blog/create', array(), array('success' => 'Blog posted successfully'));
     }
@@ -110,6 +125,17 @@ class BlogTest extends TestCase
     }
 
     /** @test */
+    public function can_see_page_2_on_blog_post()
+    {
+        //Log in
+        $this->login();
+
+        $this->create_blog_post();
+        $this->call('GET', 'blog?page=2');
+        $this->assertResponseOk();
+    }
+
+    /** @test */
     public function can_edit_blog_post()
     {
         //Log in
@@ -120,8 +146,8 @@ class BlogTest extends TestCase
         $this->assertRedirectedTo('blog', array('error' => 'Blog post not found!'));
 
         //Check we can load the edit page.
-        $blog = $this->create_blog_post();
-        $this->call('GET', '/blog/'.$blog['id'].'/edit');
+        $post = $this->create_blog_post();
+        $this->call('GET', '/blog/'.$post['id'].'/edit');
         $this->assertResponseOk();
 
         //Check we can save changes.
@@ -137,12 +163,133 @@ class BlogTest extends TestCase
         $this->assertRedirectedTo('blog', array('success' => 'Blog updated successfully'));
 
         //Check the changes got saved.
-        $blogRepository = App::make('LootTracker\Blog\BlogPostInterface');
-        $savedBlog = $blogRepository->findId(1);
+        $savedBlog = $this->blogPostRepository->findId(1);
 
         $this->assertEquals($blogNew['title'], $savedBlog['title']);
         $this->assertEquals($blogNew['slug'], $savedBlog['slug']);
         $this->assertEquals($blogNew['content'], $savedBlog['content']);
+    }
+
+    /** @test */
+    public function fails_updating_blog_post_with_invalid_data()
+    {
+        //Log in
+        $this->login();
+
+        //create a post
+        $post = $this->create_blog_post();
+
+        //Mess things up
+        unset($post['title']);
+
+        //Check
+        $this->call('PUT', '/blog/'.$post['id'], $post);
+        $this->assertRedirectedTo('blog/'.$post['id'].'/edit');
+    }
+
+    /** @test */
+    public function can_delete_blog_post()
+    {
+        //Log in
+        $this->login();
+
+        //create dummy post.
+        $post = $this->create_blog_post();
+
+        //check how many blog posts we have
+        $blogPostCount = $this->blogPostRepository->all()->count();
+
+        //It should have returned 1.
+        $this->assertEquals($blogPostCount, 1);
+
+        //Delete the post again.
+        $this->call('DELETE', '/blog/'.$post['id']);
+
+        //It should be zero now.
+        $blogPostCount = $this->blogPostRepository->all()->count();
+        $this->assertEquals(0, $blogPostCount);
+    }
+
+    /** @test */
+    public function can_create_blog_comment()
+    {
+        //Log in
+        $this->login();
+
+        //create dummy post.
+        $post = $this->create_blog_post();
+
+        //create dummy post.
+        $comment = array(
+            'id' => 2,
+            'post_id' => $post['id'],
+            'user_id' => Sentry::getUser()->id,
+            'content' => $this->fake->text
+        );
+        $this->call('POST', '/blog/'.$post['id'].'/comment', $comment);
+
+        //check how many blog comments we have
+        $blogPostCount = $this->blogPostRepository->all()->count();
+
+        //It should have returned 1.
+        $this->assertEquals(1, $blogPostCount);
+    }
+
+    /** @test */
+    public function can_update_blog_comment()
+    {
+        //Log in
+        $this->login();
+
+        //create dummy post.
+        $post = $this->create_blog_post();
+
+        //create dummy comment
+        $this->create_blog_comment($post);
+        $comment = $this->create_blog_comment($post);
+
+        //Check we can load the edit page.
+        $this->call('GET', '/blog/'.$post['id'].'/comment/'.$comment['id'].'/edit');
+        $this->assertResponseOk();
+
+        //update the text
+        $oldContent = $comment['content'];
+        $newContent = $this->fake->text;
+
+        //Just to make sure nothing bad happens later.
+        $this->assertNotEquals($oldContent, $newContent);
+
+        $comment['content'] = $newContent;
+        $this->call('PUT', '/blog/'.$post['id'].'/comment/'.$comment['id'], $comment);
+
+        $comment = $this->blogCommentRepository->find($comment['id']);
+        $this->assertEquals($comment['content'], $newContent);
+    }
+
+    /** @test */
+    public function can_delete_blog_comment()
+    {
+        //Log in
+        $this->login();
+
+        //create dummy post.
+        $post = $this->create_blog_post();
+
+        //create dummy comment
+        $comment = $this->create_blog_comment($post);
+
+        //check how many blog comments we have
+        $blogCommentCount = $this->blogCommentRepository->findCommentsForPost($post['id'])->count();
+
+        //It should have returned 1.
+        $this->assertEquals(1, $blogCommentCount);
+
+        //Now delete the comment again.
+        $this->call('DELETE', '/blog/'.$post['id'].'/comment/'.$comment['id']);
+
+        //It should now it should be zero.
+        $blogCommentCount = $this->blogCommentRepository->findCommentsForPost($post['id'])->count();
+        $this->assertEquals(0, $blogCommentCount);
     }
 
     protected function create_blog_post()
@@ -155,9 +302,20 @@ class BlogTest extends TestCase
             'content' => $this->fake->text,
             'user_id' => Sentry::getUser()->id
         );
-        $blog_repository = App::make('LootTracker\Blog\BlogPostInterface');
-        $blog_repository->create($blog);
+        $this->blogPostRepository->create($blog);
         return $blog;
+    }
+
+    protected function create_blog_comment($blogPost)
+    {
+        $comment = array(
+            'id' => 1,
+            'post_id' => $blogPost['id'],
+            'user_id' => Sentry::getUser()->id,
+            'content' => $this->fake->text
+        );
+        $this->blogCommentRepository->create($comment);
+        return $comment;
     }
 
     public function tearDown()

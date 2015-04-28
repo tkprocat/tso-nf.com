@@ -59,7 +59,7 @@ class BlogCommentController extends \BaseController
 
         if ($this->blogComment->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
-            $this->blogComment->saveBlogComment($data);
+            $this->blogComment->create($data);
             $post = $this->blogPost->findId($data['post_id']);
             return Redirect::to('blog/'.$post->slug)->with('success', 'Comment posted successfully');
         } else {
@@ -75,7 +75,7 @@ class BlogCommentController extends \BaseController
      * @param  int $id
      * @return Response
      */
-    public function show($id)
+    public function show($post_id, $comment_id)
     {
     }
 
@@ -86,9 +86,9 @@ class BlogCommentController extends \BaseController
      * @param  int $id
      * @return Response
      */
-    public function edit($id)
+    public function edit($post_id, $comment_id)
     {
-        $comment = $this->blogComment->find($id);
+        $comment = $this->blogComment->find($comment_id);
         return View::make('blog.comment.edit')->with('comment', $comment);
     }
 
@@ -98,11 +98,10 @@ class BlogCommentController extends \BaseController
      *
      * @return Response
      */
-    public function update($id)
+    public function update($post_id, $comment_id)
     {
         //Check if the user has permission to post news.
-        $comment = $this->blogComment->find($id);
-
+        $comment = $this->blogComment->find($comment_id);
 
         $user =  Sentry::getUser();
         //Bail if it's not the user nor an admin editing.
@@ -114,7 +113,7 @@ class BlogCommentController extends \BaseController
 
         if ($this->blogComment->validator->with($comment)->passes()) {
             //Passed validation, store the blog post.
-            $comment = $this->blogComment->updateBlogComment($comment['id'], $comment);
+            $comment = $this->blogComment->update($comment_id, $comment);
             return Redirect::to('blog/'.$comment->post->slug)->with('success', 'Comment updated successfully');
         } else {
             //Failed validation
@@ -129,8 +128,13 @@ class BlogCommentController extends \BaseController
      * @param  int $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($post_id, $comment_id)
     {
-        //
+        //Check if the user has permission to post news.
+        $user =  Sentry::getUser();
+        if (!$user->hasAccess('admin'))
+            return Redirect::to('login');
+
+        $this->blogComment->delete($comment_id);
     }
 }
