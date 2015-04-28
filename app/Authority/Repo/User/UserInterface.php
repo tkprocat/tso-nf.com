@@ -1,5 +1,9 @@
 <?php namespace Authority\Repo\User;
 
+/**
+ * Interface UserInterface
+ * @package Authority\Repo\User
+ */
 interface UserInterface {
 
 	/**
@@ -33,6 +37,14 @@ interface UserInterface {
 	 */
 	public function byId($id);
 
+    /**
+     * Return a specific user from the given username
+     *
+     * @param $username
+     * @return User
+     */
+    public function byUsername($username);
+
 	/**
 	 * Return all the registered users
 	 *
@@ -40,4 +52,42 @@ interface UserInterface {
 	 */
 	public function all();
 
+    /**
+     * @return mixed
+     */
+    public function getUser();
+
+    /**
+     * Return the users id
+     *
+     * @return mixed
+     */
+    public function getUserID();
+
+    /**
+     * Redirect users to login if they are not auth'ed.
+     *
+     * @return mixed
+     */
+    public function redirectNonAuthedUser();
+
+    /**
+     * Checks if the given id matches the current user's id.
+     *
+     * @param $user_id
+     * @return mixed
+     */
+    public function checkCurrentUserIs($user_id);
+
+    /**
+     * Check if the current user is an admin.
+     *
+     * @return mixed
+     */
+    public function isAdmin();
+
+    /**
+     * @return mixed
+     */
+    public function check();
 }

@@ -27,12 +27,7 @@ Route::post('users/{id}/change', 'UserController@change');
 Route::get('users/{id}/reset/{code}', 'UserController@reset')->where('id', '[0-9]+');
 Route::resource('users', 'UserController');
 
-//Loot
-Route::post('loot/getJSONLoot', 'LootController@getLootForAdventure');
-Route::get('loot/getJSONLoot', 'LootController@getLootForAdventure');
 
-//Stats
-Route::get('stats/global', 'StatsController@getGlobalStats');
 
 //Authenticated Routes
 Route::group(array('before' => 'auth'), function()
@@ -42,7 +37,8 @@ Route::group(array('before' => 'auth'), function()
     Route::resource('blog', 'BlogPostController');
 
     //Loot
-    Route::get('loot/create', 'LootController@create');
+    Route::post('loot/getJSONLoot', 'LootController@getLootForAdventure');
+    Route::get('loot/getJSONLoot', 'LootController@getLootForAdventure');
     Route::get('loot/createpopup', 'LootController@createpopup');
     Route::resource('loot', 'LootController');
     Route::get('loot/adventure/{adventure}', 'LootController@index');
@@ -50,7 +46,6 @@ Route::group(array('before' => 'auth'), function()
 
 
     //Guilds
-    Route::get('guilds/applications/create/{id}', 'GuildApplicationController@create');
     Route::resource('guilds', 'GuildController');
     Route::resource('guildapplications', 'GuildApplicationController');
     Route::get('guilds/{guild_id}/promote/{user_id}', 'GuildController@promoteMember')->where('guild_id', '[0-9]+');
@@ -59,12 +54,6 @@ Route::group(array('before' => 'auth'), function()
     Route::get('guilds/{guild_tag}/promote/{user_id}', 'GuildController@promoteMemberByTag')->where('guild_tag', '[0-9A-Za-z]+');
     Route::get('guilds/{guild_tag}/demote/{user_id}', 'GuildController@demoteMemberByTag')->where('guild_tag', '[0-9A-Za-z]+');
     Route::post('guilds/addMember', array('as' => 'guildAddMember', 'uses' => 'GuildController@addMember'));
-
-    //Labs
-    Route::get('labs', 'LabController@labs');
-    Route::get('labs/lab3', 'LabController@lab3');
-    Route::get('labs/getTop10BestAdventuresForLootTypeByAvgDrop', 'LabController@getTop10BestAdventuresForLootTypeByAvgDrop');
-    Route::get('labs/getTop10BestAdventuresForLootTypeByDropChance', 'LabController@getTop10BestAdventuresForLootTypeByDropChance');
 
     //Stats
     Route::get('stats/personal', 'StatsController@getPersonalStats');
@@ -80,6 +69,7 @@ Route::group(array('before' => 'auth'), function()
     Route::get('stats/getLast10Weeks', 'StatsController@getLast10Weeks');
     Route::get('stats/getSubmissionsForTheLast10Weeks', 'StatsController@getSubmissionsForTheLast10Weeks');
     Route::get('stats/getNewUserCountForTheLast10Weeks', 'StatsController@getNewUserCountForTheLast10Weeks');
+    Route::get('stats/global', 'StatsController@getGlobalStats');
 
     //Admin/Adventure
     Route::get('admin/adventures/create', 'AdminAdventureController@create');
@@ -102,5 +92,4 @@ Route::group(array('before' => 'auth'), function()
 Route::get('blog', array('as' => 'blog', 'uses' => 'BlogPostController@index'));
 Route::get('blog/{slug}', 'BlogPostController@show');
 
-Route::get('guilds', 'GuildController@index');
 Route::get('prices', 'PriceController@index');

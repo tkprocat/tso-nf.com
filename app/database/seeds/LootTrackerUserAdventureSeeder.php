@@ -12,7 +12,7 @@ class LootTrackerUserAdventureSeeder extends Seeder
     {
         $loot = App::make('LootTracker\Loot\LootInterface');
         $data = array(
-            'user_id' => 1,
+            'user_id' => 2,
             'adventure_id' => '1',
             'slot1' => '1',
             'slot2' => '7',

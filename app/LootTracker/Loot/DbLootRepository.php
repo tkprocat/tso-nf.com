@@ -39,8 +39,13 @@ class DbLootRepository implements LootInterface
     public function paginate($itemsPerPage, $adventure_name)
     {
         if ($adventure_name != '') {
-            $adventure = \App::make('LootTracker\Adventure\AdventureInterface');
-            return $this->userAdventure->where('adventure_id', $adventure->findAdventureByName(urldecode($adventure_name))->id)->orderBy('created_at', 'desc')->paginate($itemsPerPage);
+            $adventureRepo = \App::make('LootTracker\Adventure\AdventureInterface');
+            $adventure = $adventureRepo->findAdventureByName(urldecode($adventure_name));
+            //Check if we have the adventure
+            if ($adventure != null)
+                return $this->userAdventure->where('adventure_id', $adventure->id)->orderBy('created_at', 'desc')->paginate($itemsPerPage);
+            else
+                return $this->userAdventure->orderBy('created_at', 'desc')->paginate($itemsPerPage); //Return all if we can't find it.
         } else
             return $this->userAdventure->orderBy('created_at', 'desc')->paginate($itemsPerPage);
     }

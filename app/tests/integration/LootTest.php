@@ -13,8 +13,9 @@ class LootTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $user = Sentry::findUserByLogin('admin');
+        $user = Sentry::findUserByLogin('user1');
         Sentry::login($user);
+        Route::enableFilters();
         $this->adventure = App::make('LootTracker\Adventure\AdventureInterface');
         $this->loot = App::make('LootTracker\Loot\LootInterface');
     }
@@ -22,10 +23,14 @@ class LootTest extends TestCase
     /** @test */
     public function check_loot_index()
     {
-        $this->action('GET', 'LootController@index');
-        $this->assertResponseOk();
-
         $this->call('GET', '/loot');
+        $this->assertResponseOk();
+    }
+
+    /** @test */
+    public function can_get_loot_index_with_adventure_name()
+    {
+        $this->call('GET', '/loot/adventure/Epic+-+The+Black+Knights');
         $this->assertResponseOk();
     }
 
@@ -33,45 +38,35 @@ class LootTest extends TestCase
     public function check_latest_loot_for_player()
     {
         $username = Sentry::getUser()->username;
-        $this->action('GET', 'LootController@show', $username);
-        $this->assertResponseOk();
 
         $this->call('GET', '/loot/'.$username);
         $this->assertResponseOk();
     }
 
-
     /** @test */
-    public function can_add_loot_to_adventure()
+    public function can_get_adventure_loots_from_json_api()
     {
-        //Test that we can add loot to it.
-        $userAdventure = new UserAdventure;
-        $userAdventure->adventure_id = 1;
-        $userAdventure->user_id = Sentry::getUser()->getId();
-        $this->assertTrue($userAdventure->validate(), $userAdventure->errors);
-    }
+        //Add an adventure so we have something to reply.
+        $adventure = $this->add_the_black_knights_adventure();
+        $json = json_encode($adventure->loot->toArray());
 
-    /** @test */
-    public function can_get_loot_index_with_username()
-    {
-        $this->action('GET', 'LootController@index', '', array('username' => 'user'));
-
+        //Test with GET
+        $response = $this->call('GET', '/loot/getJSONLoot?adventure='.$adventure->id);
         $this->assertResponseOk();
-    }
+        $this->assertJson($response->getContent());
+        $this->assertStringStartsWith($json, $response->getContent());
 
-    /** @test */
-    public function can_get_loot_index_without_username()
-    {
-        $this->action('GET', 'LootController@index');
-
+        //Test with POST
+        $response = $this->call('POST', '/loot/getJSONLoot', array('adventure' => $adventure->id));
         $this->assertResponseOk();
+        $this->assertJson($response->getContent());
+        $this->assertStringStartsWith($json, $response->getContent());
     }
 
     /** @test */
     public function can_load_add_loot_page()
     {
         $this->call('GET', '/loot/create');
-
         $this->assertResponseOk();
     }
 
@@ -133,6 +128,9 @@ class LootTest extends TestCase
     /** @test */
     public function can_update_loot()
     {
+        //Check we can load the edit page.
+        $this->call('GET', '/loot/1/edit');
+
         $data = array(
             'adventure_id' => '1',
             'slot1' => '2',
@@ -158,9 +156,107 @@ class LootTest extends TestCase
     }
 
     /** @test */
+    public function fails_if_editing_another_users_loot()
+    {
+        $user = Sentry::findUserByLogin('user2');
+        Sentry::login($user);
+
+        //Check that we get an error.
+        $this->call('GET', '/loot/1/edit');
+        $this->assertRedirectedTo('/', array('error' => 'Sorry you do not have permission to do this!'));
+
+        $data = array(
+            'adventure_id' => '1',
+            'slot1' => '2',
+            'slot2' => '8',
+            'slot3' => '10',
+            'slot4' => '14',
+            'slot5' => '18',
+            'slot6' => '22',
+            'slot8' => '28'
+        );
+
+        //Check that we get an error.
+        $this->call('PUT', '/loot/1', $data);
+        $this->assertRedirectedTo('/', array('error' => 'Sorry you do not have permission to do this!'));
+    }
+
+    /** @test */
+    public function can_delete_loot()
+    {
+        //Get loot count
+        $count = $this->loot->all()->count();
+
+        //Check we can load the edit page.
+        $this->call('DELETE', '/loot/1');
+
+        //Get new count
+        $countNew = $this->loot->all()->count();
+        $this->assertEquals($count - 1, $countNew);
+    }
+
+    /** @test */
     public function can_get_latest_loot_for_a_single_adventure() {
         $this->call('GET', '/loot/admin/Bandit+Nest');
         $this->assertResponseOk();
+    }
+
+
+    protected function add_the_black_knights_adventure()
+    {
+        $data = array(
+            'name' => 'The Black Knights',
+            'slot1' => array(
+                array('type' => 'Exotic Wood Log', 'amount' => '1400'),
+                array('type' => 'Exotic Wood Log', 'amount' => '1600'),
+                array('type' => 'Granite', 'amount' => '1100'),
+                array('type' => 'Granite', 'amount' => '1300'),
+                array('type' => 'Saltpeter', 'amount' => '300'),
+                array('type' => 'Saltpeter', 'amount' => '400'),
+                array('type' => 'Titanium Ore', 'amount' => '200'),
+                array('type' => 'Titanium Ore', 'amount' => '300')
+            ),
+            'slot2' => array(
+                array('type' => 'Hardwood Plank', 'amount' => '2000'),
+                array('type' => 'Marble', 'amount' => '2000')
+            ),
+            'slot3' => array(
+                array('type' => 'Cannon', 'amount' => '150'),
+                array('type' => 'Crossbow', 'amount' => '500'),
+                array('type' => 'Damascene Sword', 'amount' => '300'),
+                array('type' => 'Steel Sword', 'amount' => '800')
+            ),
+            'slot4' => array(
+                array('type' => 'Cannon', 'amount' => '150'),
+                array('type' => 'Crossbow', 'amount' => '500'),
+                array('type' => 'Damascene Sword', 'amount' => '300'),
+                array('type' => 'Steel Sword', 'amount' => '800')
+            ),
+            'slot5' => array(
+                array('type' => 'Brew', 'amount' => '400'),
+                array('type' => 'Bread', 'amount' => '500'),
+                array('type' => 'Sausage', 'amount' => '200'),
+                array('type' => 'Settler', 'amount' => '400')
+            ),
+            'slot6' => array(
+                array('type' => 'Angel Monument', 'amount' => '1'),
+                array('type' => 'Dark Castle', 'amount' => '1'),
+                array('type' => 'Gold Coin', 'amount' => '300'),
+                array('type' => 'Gold Coin', 'amount' => '600'),
+                array('type' => 'Wheat Refill', 'amount' => '3000'),
+            ),
+            'slot7' => array(
+
+            ),
+            'slot8' => array(
+                array('type' => 'Exotic Wood Log', 'amount' => '3400'),
+                array('type' => 'Granite', 'amount' => '2200'),
+                array('type' => 'Saltpeter', 'amount' => '3400'),
+                array('type' => 'Titanium Ore', 'amount' => '2060'),
+                array('type' => 'Nothing', 'amount' => '1')
+            ),
+        );
+        return $this->adventure->create($data);
     }
 
     public function tearDown()

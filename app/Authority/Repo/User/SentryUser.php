@@ -491,6 +491,25 @@ class SentryUser extends RepoAbstract implements UserInterface {
 		return $user;
 	}
 
+    /**
+     * Return a specific user from the given id
+     *
+     * @param $username
+     * @return User
+     */
+    public function byUsername($username)
+    {
+        try
+        {
+            $user = $this->sentry->findUserByLogin($username);
+        }
+        catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
+        {
+            return false;
+        }
+        return $user;
+    }
+
 	/**
 	 * Return all the registered users
 	 *
@@ -564,5 +583,36 @@ class SentryUser extends RepoAbstract implements UserInterface {
             }
         }
         return $password;
+    }
+
+    public function getUser() {
+        return $this->sentry->getUser();
+   }
+
+    public function getUserID() {
+        $user = $this->sentry->getUser();
+        if ($user == null)
+            return 0;
+        else
+            return $this->sentry->getUser()->id;
+    }
+
+    public function redirectNonAuthedUser() {
+        if (!$this->sentry->check()) {
+            return Redirect::to('/login');
+        }
+        return;
+    }
+
+    public function checkCurrentUserIs($user_id) {
+        return ($this->getUserID() == $user_id);
+    }
+
+    public function isAdmin() {
+        return $this->sentry->hasAccess('admin');
+    }
+
+    public function check() {
+        return $this->sentry->check();
     }
 }

@@ -2,6 +2,7 @@
 
 use LootTracker\Adventure\AdventureInterface;
 use LootTracker\Loot\LootInterface;
+use Authority\Repo\User\UserInterface;
 
 /**
  * Class LootController
@@ -23,13 +24,19 @@ class LootController extends BaseController
     protected $adventure;
 
     /**
+     * @var UserInterface
+     */
+    protected $user;
+
+    /**
      * @param LootInterface $loot
      * @param AdventureInterface $adventure
      */
-    function __construct(LootInterface $loot, AdventureInterface $adventure)
+    function __construct(LootInterface $loot, AdventureInterface $adventure, UserInterface $user)
     {
         $this->loot = $loot;
         $this->adventure = $adventure;
+        $this->user = $user;
     }
 
     /**
@@ -48,13 +55,12 @@ class LootController extends BaseController
      */
     public function show($username = '', $adventure_name = '')
     {
-
         //Make sure the username is filled out.
         if ($username == '')
             return Redirect::to('loot');
 
         //Get the user.
-        $user = Sentry::findUserByLogin($username);
+        $user = $this->user->byUsername($username);
 
         $page = Input::get('page', 1);
         $lootPerPage = 25;
@@ -80,10 +86,17 @@ class LootController extends BaseController
      */
     public function edit($id)
     {
+        //If for some reason the person posting isn't logged in, bail!
+        $this->user->redirectNonAuthedUser();
+
+        //Check it's an admin or it's the same user.
+        $user_adventure = $this->loot->findUserAdventureById($id)->first();
+        if ((!$this->user->IsAdmin()) && (!$this->user->CheckCurrentUserIs($user_adventure->User->id)))
+            return Redirect::to('/')->with('error', 'Sorry you do not have permission to do this!');
+
         $adventures = $this->adventure->findAllAdventures();
         $adventure_loot = $this->adventure->findAllLootForAdventure($id);
         $user_adventure_loot = $this->loot->findAllLootForUserAdventure($id);
-        $user_adventure = $this->loot->findUserAdventureById($id)->first();
         $adventure = $user_adventure->adventure;
 
         $loot_slots = array();
@@ -105,24 +118,22 @@ class LootController extends BaseController
     public function update($id)
     {
         //if for some reason the person posting isn't logged in, bail!
-        if (!Sentry::check()) {
-            return Redirect::to('/login');
-        }
+        $this->user->redirectNonAuthedUser();
 
+        //Check it's an admin or it's the same user.
         $user_adventure = $this->loot->findUserAdventureById($id)->first();
-
-        if (!Sentry::hasAccess('admin') && $user_adventure->User->id != Sentry::getID())
+        if (!$this->user->isAdmin() && !$this->user->checkCurrentUserIs($user_adventure->User->id))
             return Redirect::to('/')->with('error', 'Sorry you do not have permission to do this!');
 
         $data = Input::all();
-        $data['user_id'] = Sentry::getID();
+        $data['user_id'] = $this->user->getUserID();
         $data['user_adventure_id'] = $id;
         $this->loot->validator->updateRules($data['adventure_id']);
 
         if ($this->loot->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
             $this->loot->update($data);
-            return Redirect::to('loot/'.$id.'/edit')->with('success', 'Loot updated successfully');
+            return Redirect::to('loot')->with('success', 'Loot updated successfully');
         } else {
             //Failed validation
             $adventure = $this->adventure->findAdventureById($data['adventure_id']);
@@ -171,12 +182,10 @@ class LootController extends BaseController
     public function store()
     {
         //if for some reason the person posting isn't logged in, bail!
-        if (!Sentry::check()) {
-            return Redirect::to('/login');
-        }
+        $this->user->redirectNonAuthedUser();
 
         $data = Input::all();
-        $data['user_id'] = Sentry::getID();
+        $data['user_id'] = $this->user->getUserID();
         $this->loot->validator->updateRules($data['adventure_id']);
 
         if ($this->loot->validator->with($data)->passes()) {
@@ -195,7 +204,7 @@ class LootController extends BaseController
      */
     public function destroy($id)
     {
-        if (!Sentry::check()) {
+        if (!$this->user->check()) {
             App::abort(403, 'You are not authorized.');
         }
 
@@ -206,7 +215,7 @@ class LootController extends BaseController
             $useradventure = $this->loot->findUserAdventureById($id)->first();
             //Check if the userid deleting matches the userid on the record.
 
-            if (($useradventure->user_id == Sentry::getID()) || (Sentry::hasAccess('admin'))) {
+            if (($this->user->checkCurrentUserIs($useradventure->user_id)) || ($this->user->isAdmin())) {
                 foreach ($useradventure->loot as $loot) {
                     $loot->delete();
                 }
