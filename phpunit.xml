@@ -8,8 +8,17 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
->
+         syntaxCheck="false">
+    <filter>
+        <blacklist>
+            <directory>.vagrant</directory>
+            <directory>bootstrap</directory>
+            <directory>node_modules</directory>
+            <directory>public</directory>
+            <directory>scripts</directory>
+            <directory>vendor</directory>
+        </blacklist>
+    </filter>
     <testsuites>
         <testsuite name="Application Test Suite">
             <directory>./app/tests/</directory>

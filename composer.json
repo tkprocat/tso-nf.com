@@ -12,7 +12,7 @@
         "barryvdh/laravel-debugbar": "1.8",
         "barryvdh/laravel-ide-helper": "1.*",
         "way/generators": "~2.0",
-		"phpunit/phpunit": "4.4.0",
+		"phpunit/phpunit": "4.*",
         "fzaninotto/Faker": "1.4.*",
         "doctrine/dbal":"dev-master"
     },
