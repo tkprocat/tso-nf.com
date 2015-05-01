@@ -25,15 +25,15 @@ abstract class AbstractValidator implements ValidableInterface {
 
     public function passes()
     {
-        $this->validator = $this->validator->make(
+        $validator = $this->validator->make(
             $this->data,
             $this->rules,
             $this->messages
         );
 
-        if ($this->validator->fails())
+        if ($validator->fails())
         {
-            $this->errors = $this->validator->messages();
+            $this->errors = $validator->messages();
             return false;
         }
 
