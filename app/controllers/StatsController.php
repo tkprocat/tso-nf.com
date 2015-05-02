@@ -2,6 +2,7 @@
 use LootTracker\Adventure\AdventureInterface;
 use LootTracker\Loot\LootInterface;
 use LootTracker\Stats\StatsInterface;
+use Authority\Repo\User\UserInterface;
 
 class StatsController extends BaseController
 {
@@ -10,12 +11,14 @@ class StatsController extends BaseController
     protected $loot;
     protected $adventure;
     protected $stats;
+    protected $user;
 
-    function __construct(LootInterface $loot, AdventureInterface $adventure, StatsInterface $stats)
+    function __construct(LootInterface $loot, AdventureInterface $adventure, StatsInterface $stats, UserInterface $user)
     {
         $this->loot = $loot;
         $this->adventure = $adventure;
         $this->stats = $stats;
+        $this->user = $user;
     }
 
     public function getGlobalStats()
@@ -31,9 +34,13 @@ class StatsController extends BaseController
     public function getPersonalStats($username = '')
     {
         //Check if username is set and get the userid, otherwise fill userid with the current users.
-        if ($username == '')
-            $username = Sentry::getUser()->username;
-        $user_id = $this->getUserId($username);
+        if ($username == '') {
+            $user = $this->user->getUser();
+            $user_id = $user->id;
+            $username = $user->username;
+        } else {
+            $user_id = $this->user->byUsername($username)->id;
+        }
 
         $mostPlayedAdventure = $this->stats->getMostPlayedAdventureForUser($user_id);
         $leastPlayedAdventure = $this->stats->getLeastPlayedAdventureForUser($user_id);
@@ -50,9 +57,11 @@ class StatsController extends BaseController
     public function getAccumulatedLootBetween($username = '', $dateFrom = '1970-01-01', $dateTo = '2030-31-12')
     {
         //Check if username is set and get the userid, otherwise fill userid with the current users.
-        if ($username == '')
-            $username = Sentry::getUser()->username;
-        $user_id = $this->getUserId($username);
+        if ($username == '') {
+            $user_id = $this->user->getUserID();
+        } else {
+            $user_id = $this->user->byUsername($username)->id;
+        }
 
         $accumulatedloot = DB::table('user_adventure')
             ->join('user_adventure_loot', 'user_adventure_loot.user_adventure_id', '=', 'user_adventure.id')
@@ -70,9 +79,13 @@ class StatsController extends BaseController
     public function getAdventuresPlayedBetween($username = '', $date_from = '1970-01-01', $date_to = '2030-31-12')
     {
         //Check if username is set and get the userid, otherwise fill userid with the current users.
-        if ($username == '')
-            $username = Sentry::getUser()->username;
-        $user_id = $this->getUserId($username);
+        if ($username == '') {
+            $user = $this->user->getUser();
+            $user_id = $user->id;
+            $username = $user->username;
+        } else {
+            $user_id = $this->user->byUsername($username)->id;
+        }
 
         // Get all played adventures.
         $adventures = $this->stats->getAdventuresForUserWithPlayed($user_id, $date_from, $date_to)->get();
@@ -82,19 +95,9 @@ class StatsController extends BaseController
         return View::make('stats.partials.adventures_played', compact('adventures', 'total_played', 'drop_count_list', 'username'));
     }
 
-    private function getUserId($username)
-    {
-        //Check if username is set and get the userid, otherwise fill userid with the current users.
-        if ($username == '')
-            return Sentry::getID();
-        else
-            return Sentry::findUserByLogin($username)->getId();
-    }
-
     public function getJSONLootTypes()
     {
-        $lootTypes = DB::table('adventure_loot')
-            ->select('Type')->distinct()->orderBy('Type')->get();
+        $lootTypes = DB::table('adventure_loot')->select('Type')->distinct()->orderBy('Type')->get();
         return Response::json($lootTypes);
     }
 
@@ -111,9 +114,7 @@ class StatsController extends BaseController
         return View::make('stats.top10byavgdropchance', compact('loot_types'));
     }
 
-    public function getTop10BestAdventuresForLootTypeByAvgDrop(){
-        $data = Input::all();
-        $type = $data['type'];
+    public function getTop10BestAdventuresForLootTypeByAvgDrop($type){
         $result = DB::table('adventure_loot')
             ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
             ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')
@@ -124,9 +125,7 @@ class StatsController extends BaseController
         return Response::json($result);
     }
 
-    public function getTop10BestAdventuresForLootTypeByDropChance(){
-        $data = Input::all();
-        $type = $data['type'];
+    public function getTop10BestAdventuresForLootTypeByDropChance($type){
         $result = DB::table('adventure_loot')
             ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
             ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')

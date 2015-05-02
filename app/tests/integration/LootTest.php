@@ -142,7 +142,7 @@ class LootTest extends TestCase
             'slot8' => '28'
         );
         $this->call('PUT', '/loot/1', $data);
-        $this->assertRedirectedTo('/loot/1/edit', array('success' => 'Loot updated successfully'));
+        $this->assertRedirectedTo('/loot/', array('success' => 'Loot updated successfully'));
 
         $user_adventure = $this->loot->findUserAdventureById(1)->first();
         $this->assertNotNull($user_adventure);
