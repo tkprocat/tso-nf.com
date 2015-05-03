@@ -19,7 +19,7 @@ class LootFormValidator extends AbstractValidator
         //Check what slots the given adventure has and add those to the rules.
         $adventureRepo = \App::make('LootTracker\Adventure\AdventureInterface');
         $adventure = $adventureRepo->findAdventureById($adventure_id);
-        for($slot = 1; $slot < 9; $slot++) {
+        for($slot = 1; $slot < 30; $slot++) {
             $this->rules = array_except($this->rules, 'slot' . $slot); //Not sure it's needed, but added just in case.
             if ($adventure->loot()->slot($slot)->count() > 0)
                 $this->rules = array_add($this->rules, 'slot' . $slot, 'required|exists:adventure_loot,id,slot,'.$slot);
