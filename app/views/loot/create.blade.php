@@ -22,7 +22,7 @@
             <div class="form-group">
                 {{ Form::label('adventure_id', 'Adventure:', array('class' => 'control-label col-sm-2')); }}
                 <div class="col-sm-3">
-                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('class' => 'form-control')) }}
+                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('class' => 'form-control', 'required' => 'required')) }}
                 </div>
             </div>
         </div>
@@ -153,18 +153,22 @@
     });
 
     $('#adventure_id').change(function (element) {
-        adventureid = $('#adventure_id').val();
-        $.ajax({
-            type: "POST",
-            url: "{{ URL::to('/loot/getJSONLoot') }}",
-            cache: false,
-            data: {
-                adventure: $('#adventure_id option:selected').val()
-            }
-        }).done(function (msg) {
-            lootdata = msg;
-            updateLootData();
-        });
+
+        var adventureid = $('#adventure_id option:selected').val()
+
+        if (adventure > 0) {
+            $.ajax({
+                type: "POST",
+                url: "{{ URL::to('/loot/getJSONLoot') }}",
+                cache: false,
+                data: {
+                    adventure: adventureid
+                }
+            }).done(function (msg) {
+                lootdata = msg;
+                updateLootData();
+            });
+        }
     });
 
     function updateLootData() {
