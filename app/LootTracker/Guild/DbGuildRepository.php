@@ -40,6 +40,8 @@ class DbGuildRepository implements GuildInterface
      */
     public function create($data, $user_id)
     {
+        $user = $this->user->byId($user_id);
+
         $guild = new Guild;
         $guild->tag = e($data['tag']);
         $guild->name = e($data['name']);
@@ -47,7 +49,7 @@ class DbGuildRepository implements GuildInterface
 
         \Sentry::createGroup(array('name' => 'Guild_' . $guild->tag . '_Members'));
         $group = \Sentry::createGroup(array('name' => 'Guild_' . $guild->tag . '_Admins'));
-        \Sentry::getUser()->addGroup($group);
+        $user->addGroup($group);
 
         //Add the user to the guild.
         $this->addMember($guild->id, $user_id);

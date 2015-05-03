@@ -59,7 +59,7 @@ class GuildApplicationController extends BaseController
      */
     public function store()
     {
-        $user = Sentry::getUser();
+        $user = $this->user->getUser();
         //Check if the user is admin or fail
         if (($user != null) && ($user->hasPermission('admin'))) {
             // Form Processing
@@ -117,7 +117,7 @@ class GuildApplicationController extends BaseController
      */
     public function update($id)
     {
-        $user = Sentry::getUser();
+        $user = $this->user->getUser();
         //Check if the user is admin or fail
         if (($user != null) && ($user->hasPermission('admin'))) {
             if (!is_numeric($id)) {
@@ -154,7 +154,7 @@ class GuildApplicationController extends BaseController
      */
     public function destroy($id)
     {
-        $user = Sentry::getUser();
+        $user = $this->user->getUser();
         //Check if the user is admin or fail
         if (($user != null) && ($user->hasPermission('admin'))) {
             if (!is_numeric($id)) {

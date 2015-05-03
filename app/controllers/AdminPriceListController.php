@@ -45,13 +45,13 @@ class AdminPriceListController extends \BaseController
     public function store()
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
         $data = Input::all();
 
-        $data['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $data['user_id'] = $user->id;
 
         if ($this->adminPriceList->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
@@ -101,12 +101,12 @@ class AdminPriceListController extends \BaseController
     public function update()
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
         $price = Input::all();
-        $price['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $price['user_id'] = $user->id;
 
         if ($this->adminPriceList->validator->with($price)->passes()) {
             //Passed validation, make the update.
@@ -153,13 +153,13 @@ class AdminPriceListController extends \BaseController
     public function storeNewPrice()
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
         $data = Input::all();
 
-        $data['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $data['user_id'] = $user->id; //This feels wrong....
 
         if ($this->adminPriceList->validatorNewPrice->with($data)->passes()) {
             //Passed validation, store the blog post.

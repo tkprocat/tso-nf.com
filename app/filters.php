@@ -35,8 +35,10 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
+    $user = App::make('Authority\Repo\User\UserInterface');
+
 	// Check if the user is logged in
-	if ( ! Sentry::check())
+	if (!$user->check())
 	{
 		// Store the current uri in the session
 		Session::put('loginRedirect', Request::url());
@@ -80,8 +82,10 @@ Route::filter('guest', function()
 
 Route::filter('admin-auth', function()
 {
+    $user = App::make('Authority\Repo\User\UserInterface');
+
 	// Check if the user is logged in
-	if ( ! Sentry::check())
+	if ($user->check())
 	{
 		// Store the current uri in the session
 		Session::put('loginRedirect', Request::url());
@@ -91,7 +95,7 @@ Route::filter('admin-auth', function()
 	}
 
 	// Check if the user has access to the admin page
-	if ( ! Sentry::getUser()->hasAccess('admin'))
+	if (!$user->getUser()->hasAccess('admin'))
 	{
 		// Show the insufficient permissions page
 		return App::abort(403);

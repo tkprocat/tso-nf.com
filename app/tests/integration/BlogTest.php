@@ -6,6 +6,7 @@ class BlogTest extends TestCase
     protected $fake;
     protected $blogCommentRepository;
     protected $blogPostRepository;
+    protected $user;
 
     public function setUp()
     {
@@ -14,6 +15,7 @@ class BlogTest extends TestCase
         $this->fake = Faker\Factory::create();
         $this->blogCommentRepository = App::make('LootTracker\Blog\BlogCommentInterface');
         $this->blogPostRepository = App::make('LootTracker\Blog\BlogPostInterface');
+        $this->user = App::make('Authority\Repo\User\UserInterface');
     }
 
     public function test_create_blog_post_as_guest()
@@ -87,7 +89,7 @@ class BlogTest extends TestCase
             'title' => $title,
             'slug' => \Str::slug($title),
             'content' => $this->fake->text,
-            'user_id' => Sentry::getUser()->id
+            'user_id' => $this->user->id
         );
 
         $this->call('POST', '/blog', $post);
@@ -157,7 +159,7 @@ class BlogTest extends TestCase
             'title' => $title,
             'slug' => \Str::slug($title),
             'content' => $this->fake->text,
-            'user_id' => Sentry::getUser()->id
+            'user_id' => $this->user->id
         );
         $this->call('PUT', '/blog/update', $blogNew);
         $this->assertRedirectedTo('blog', array('success' => 'Blog updated successfully'));
@@ -223,7 +225,7 @@ class BlogTest extends TestCase
         $comment = array(
             'id' => 2,
             'post_id' => $post['id'],
-            'user_id' => Sentry::getUser()->id,
+            'user_id' => $this->user->id,
             'content' => $this->fake->text
         );
         $this->call('POST', '/blog/'.$post['id'].'/comment', $comment);
@@ -300,7 +302,7 @@ class BlogTest extends TestCase
             'title' => $title,
             'slug' => \Str::slug($title),
             'content' => $this->fake->text,
-            'user_id' => Sentry::getUser()->id
+            'user_id' => $this->user->id
         );
         $this->blogPostRepository->create($blog);
         return $blog;
@@ -311,7 +313,7 @@ class BlogTest extends TestCase
         $comment = array(
             'id' => 1,
             'post_id' => $blogPost['id'],
-            'user_id' => Sentry::getUser()->id,
+            'user_id' => $this->user->id,
             'content' => $this->fake->text
         );
         $this->blogCommentRepository->create($comment);

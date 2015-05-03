@@ -8,14 +8,11 @@ class GuildController extends BaseController
 
     protected $guild;
     protected $user;
-    protected $sentry;
 
-    public function __construct(GuildInterface $guild, \Authority\Repo\User\UserInterface $user,
-                                Cartalyst\Sentry\Sentry $sentry)
+    public function __construct(GuildInterface $guild, \Authority\Repo\User\UserInterface $user)
     {
         $this->guild = $guild;
         $this->user = $user;
-        $this->sentry = $sentry;
     }
 
     /**
@@ -55,11 +52,10 @@ class GuildController extends BaseController
      */
     public function store()
     {
-        if (!Sentry::check())
-            return Redirect::to('login');
+        $this->user->redirectNonAuthedUser();
 
         $data = Input::all();
-        $user_id = Sentry::getUser()->id;
+        $user_id = $this->user->getUserID();
         if ($this->guild->validator->with($data)->passes()) {
             //Passed validation, store the guild.
             $this->guild->create($data, $user_id);
@@ -92,9 +88,10 @@ class GuildController extends BaseController
      */
     public function edit($id)
     {
-        $guild = $this->guild->findId($id);
+        $this->user->redirectNonAuthedUser();
 
-        if ((Sentry::hasAccess('admin')) || (Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins')))) {
+        $guild = $this->guild->findId($id);
+        if (($this->user->isAdmin()) || ($this->user->getUser()->hasAccess('guild_'.$guild->tag.'_admins'))) {
             return View::make('guilds.edit')->with('guild', $guild);
         } else {
             Session::flash('error', 'Sorry, you do not have the necessary permissions to edit this guild.');
@@ -110,12 +107,13 @@ class GuildController extends BaseController
      */
     public function update($id)
     {
-        $user = Sentry::getUser();
+        $this->user->redirectNonAuthedUser();
+
         $data = Input::all();
         $guild = $this->guild->findId($id);
 
         //Check if the user is admin or fail
-        if (($user != null) && ((Sentry::hasAccess('admin')) || (Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))) {
+        if ((($this->user->isAdmin()) || ($this->user->getUser()->hasAccess('guild_'.$guild->tag.'_admins')))) {
             if (!is_numeric($id)) {
                 App::abort(404);
             }
@@ -124,11 +122,11 @@ class GuildController extends BaseController
                 $this->guild->update($data);
 
                 // Success!
-                Session::flash('success', 'Guild "' . Input::get('name') . '" updated.');
+                Session::flash('success', 'Guild "' . $guild->name . '" updated.');
                 return Redirect::to('guilds');
             } else {
                 Session::flash('error', 'Error updating the guild information.');
-                return Redirect::action('UserController@edit', array($id))->withInput()->withErrors($this->guild->validator->errors());
+                return Redirect::action('GuildController@edit', array($id))->withInput()->withErrors($this->guild->validator->errors());
             }
         } else {
             return Redirect::route('login');
@@ -143,11 +141,11 @@ class GuildController extends BaseController
      */
     public function destroy($id)
     {
-        $user = Sentry::getUser();
+        $this->user->redirectNonAuthedUser();
         $guild = $this->guild->findId($id);
 
         //Check if the user is admin or fail
-        if (($user != null) && ((Sentry::hasAccess('admin')) || (Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))) {
+        if (($this->user->isAdmin()) || ($this->user->getUser()->hasAccess('guild_'.$guild->tag.'_admins'))) {
             if (!is_numeric($id)) {
                 App::abort(404);
             }
@@ -167,13 +165,10 @@ class GuildController extends BaseController
 
     public function addMember()
     {
-        $user = null;
-        try {
-            $user = $this->sentry->findUserByLogin(Input::get('username'));
-        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            Session::put('error', 'User does not exists.');
-            return Redirect::back();
-        }
+        $this->user->redirectNonAuthedUser();
+        $user = $this->user->byUsername(Input::get('username'));
+        if ($user == null)
+            return Redirect::back()->withErrors('User not found.');
 
         //Get the guild or return an error.
         $guild_id = Input::get('guild_id');
@@ -182,7 +177,7 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))
+        if (!($this->user->isAdmin() || $this->user->getUser()->hasAccess('guild_'.$guild->tag.'_admins')))
             return Redirect::back()->withErrors(array('username' => 'You do not have sufficient permissions.'));
 
         $this->guild->addMember($guild_id, $user->id);
@@ -191,12 +186,11 @@ class GuildController extends BaseController
 
     public function removeMember()
     {
-        $user = $this->sentry->findUserByLogin(Input::get('username'));
-        if (!isset($user)) {
-            $errors = new MessageBag();
-            $errors->add('username', 'User not found.');
-            return Redirect::back()->withErrors($errors);
-        }
+        $this->user->redirectNonAuthedUser();
+
+        $user = $this->user->byUsername(Input::get('username'));
+        if ($user == null)
+            return Redirect::back()->withErrors('User not found.');
 
         //Get the guild or return an error.
         $guild_id = Input::get('guild_id');
@@ -205,7 +199,7 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))
+        if (!($this->user->isAdmin() || $this->user->getUser()->hasAccess('guild_'.$guild->tag.'_admins')))
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
 
         $this->guild->removeMember($guild_id, $user->id);
@@ -215,12 +209,11 @@ class GuildController extends BaseController
 
     public function removeMemberById($guild_id, $user_id)
     {
-        $user = $this->sentry->findUserById($user_id);
-        if (!isset($user)) {
-            $errors = new MessageBag();
-            $errors->add('username', 'User not found.');
-            return Redirect::back()->withErrors($errors);
-        }
+        $this->user->redirectNonAuthedUser();
+
+        $user = $this->user->byUsername(Input::get('username'));
+        if ($user == null)
+            return Redirect::back()->withErrors('User not found.');
 
         //Get the guild or return an error.
         $guild = $this->guild->findId($guild_id);
@@ -228,7 +221,7 @@ class GuildController extends BaseController
             return Redirect::back()->withErrors('Guild not found.');
 
         //Check if the user has permission to do this action.
-        if (!(Sentry::hasAccess('admin') || Sentry::inGroup(Sentry::findGroupByName('Guild_'.$guild->tag.'_Admins'))))
+        if (!($this->user->isAdmin() || $this->user->getUser()->hasAccess('guild_'.$guild->tag.'_admins')))
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
 
         $this->guild->removeMember($guild_id, $user->id);
@@ -236,24 +229,32 @@ class GuildController extends BaseController
     }
     public function promoteMemberByTag($guild_tag, $user_id)
     {
+        $this->user->redirectNonAuthedUser();
+
         $guild = $this->guild->findTag($guild_tag);
         $this->promoteMember($guild->id, $user_id);
     }
 
     public function promoteMember($guild_id, $user_id)
     {
+        $this->user->redirectNonAuthedUser();
+
         $this->guild->promoteMember($guild_id, $user_id);
         return Redirect::back();
     }
 
     public function demoteMemberByTag($guild_tag, $user_id)
     {
+        $this->user->redirectNonAuthedUser();
+
         $guild = $this->guild->findTag($guild_tag);
         $this->demoteMember($guild->id, $user_id);
     }
 
     public function demoteMember($guild_id, $user_id)
     {
+        $this->user->redirectNonAuthedUser();
+
         $this->guild->demoteMember($guild_id, $user_id);
         return Redirect::back();
     }

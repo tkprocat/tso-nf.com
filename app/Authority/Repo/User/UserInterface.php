@@ -87,7 +87,18 @@ interface UserInterface {
     public function isAdmin();
 
     /**
+     * Checks if the user is logged in.
+     *
      * @return mixed
      */
     public function check();
+
+
+    /**
+     * Used to log in the given user.
+     *
+     * @param $user
+     * @return mixed
+     */
+    public function login($user);
 }

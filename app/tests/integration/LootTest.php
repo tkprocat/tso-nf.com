@@ -13,8 +13,7 @@ class LootTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $user = Sentry::findUserByLogin('user1');
-        Sentry::login($user);
+        $this->login();
         Route::enableFilters();
         $this->adventure = App::make('LootTracker\Adventure\AdventureInterface');
         $this->loot = App::make('LootTracker\Loot\LootInterface');
@@ -37,7 +36,7 @@ class LootTest extends TestCase
     /** @test */
     public function check_latest_loot_for_player()
     {
-        $username = Sentry::getUser()->username;
+        $username = $this->getUser()->username;
 
         $this->call('GET', '/loot/'.$username);
         $this->assertResponseOk();
@@ -158,8 +157,8 @@ class LootTest extends TestCase
     /** @test */
     public function fails_if_editing_another_users_loot()
     {
-        $user = Sentry::findUserByLogin('user2');
-        Sentry::login($user);
+        $user = $this->user->byUsername('user2');
+        $this->user->login($user);
 
         //Check that we get an error.
         $this->call('GET', '/loot/1/edit');

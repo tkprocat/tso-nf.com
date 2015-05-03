@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder {
         $this->call('LootTrackerAdventureSeeder');
         $this->call('LootTrackerUserAdventureSeeder');
 		$this->call('LootTrackerPriceListSeeder');
+        $this->call('GuildSeeder');
 	}
 
 }

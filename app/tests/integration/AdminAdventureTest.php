@@ -8,8 +8,7 @@ class AdminAdventureTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $user = Sentry::findUserByLogin('admin');
-        Sentry::login($user);
+        $this->login();
         $this->adventure = App::make('LootTracker\Adventure\Admin\AdminAdventureInterface');
     }
 

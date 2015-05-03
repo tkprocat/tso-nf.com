@@ -585,10 +585,16 @@ class SentryUser extends RepoAbstract implements UserInterface {
         return $password;
     }
 
+    /**
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
     public function getUser() {
         return $this->sentry->getUser();
    }
 
+    /**
+     * @return int
+     */
     public function getUserID() {
         $user = $this->sentry->getUser();
         if ($user == null)
@@ -597,6 +603,9 @@ class SentryUser extends RepoAbstract implements UserInterface {
             return $this->sentry->getUser()->id;
     }
 
+    /**
+     *
+     */
     public function redirectNonAuthedUser() {
         if (!$this->sentry->check()) {
             return Redirect::to('/login');
@@ -604,15 +613,32 @@ class SentryUser extends RepoAbstract implements UserInterface {
         return;
     }
 
+    /**
+     * @param $user_id
+     * @return bool
+     */
     public function checkCurrentUserIs($user_id) {
         return ($this->getUserID() == $user_id);
     }
 
+    /**
+     * @return mixed
+     */
     public function isAdmin() {
         return $this->sentry->hasAccess('admin');
     }
 
+    /**
+     * @return bool
+     */
     public function check() {
         return $this->sentry->check();
+    }
+
+    /**
+     * @param $user
+     */
+    public function login($user) {
+        $this->sentry->login($user);
     }
 }

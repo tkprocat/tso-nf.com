@@ -51,11 +51,11 @@ class BlogCommentController extends \BaseController
     public function store()
     {
         //Check if the user has permission to post news.
-        if (!Sentry::check())
+        if (!$this->user->check())
             return Redirect::to('login');
 
         $data = Input::all();
-        $data['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $data['user_id'] = $this->user->getUser()->id; //This feels wrong....
 
         if ($this->blogComment->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
@@ -103,13 +103,13 @@ class BlogCommentController extends \BaseController
         //Check if the user has permission to post news.
         $comment = $this->blogComment->find($comment_id);
 
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         //Bail if it's not the user nor an admin editing.
-        if ((!$user->hasAccess('admin')) && ($comment->user_id != Sentry::getUser()->id))
+        if ((!$user->hasAccess('admin')) && ($comment->user_id != $user->id))
             return Redirect::to('login');
 
         $comment = Input::all();
-        $comment['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $comment['user_id'] = $user->id; //This feels wrong....
 
         if ($this->blogComment->validator->with($comment)->passes()) {
             //Passed validation, store the blog post.
@@ -131,7 +131,7 @@ class BlogCommentController extends \BaseController
     public function destroy($post_id, $comment_id)
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 

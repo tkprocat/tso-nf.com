@@ -45,7 +45,7 @@ class AdminAdventureController extends \BaseController
     public function store()
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
@@ -62,7 +62,7 @@ class AdminAdventureController extends \BaseController
         }
 
         $this->adminAdventure->validator->updateRules($data);
-        $data['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $data['user_id'] = $this->user->getUser()->id; //This feels wrong....
 
         if ($this->adminAdventure->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
@@ -111,12 +111,12 @@ class AdminAdventureController extends \BaseController
     public function update()
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
         $adventure = Input::all();
-        $adventure['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $adventure['user_id'] = $user->id;
 
         //Removes any "empty" items.
         $itemCount = count($adventure["items"]);

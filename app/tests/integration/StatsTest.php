@@ -8,8 +8,7 @@ class StatsTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $user = Sentry::findUserByLogin('admin');
-        Sentry::login($user);
+        $this->login();
         $this->stats_repo = App::make('LootTracker\Stats\StatsInterface');
         $this->loot_repo = App::make('LootTracker\Loot\LootInterface');
     }

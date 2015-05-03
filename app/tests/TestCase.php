@@ -32,7 +32,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
     protected function login()
     {
         //Log in
-        $user = Sentry::findUserByLogin('admin');
-        Sentry::login($user);
+        $user = $this->user->login('admin');
+        $this->user->login($user);
+        return $user;
     }
 }

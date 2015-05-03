@@ -55,12 +55,12 @@ class BlogPostController extends \BaseController
     public function store()
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
         $data = Input::all();
-        $data['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $data['user_id'] = $user->id; //This feels wrong....
 
         if ($this->blogPost->validator->with($data)->passes()) {
             //Passed validation, store the blog post.
@@ -111,12 +111,12 @@ class BlogPostController extends \BaseController
     public function update()
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
         $post = Input::all();
-        $post['user_id'] = Sentry::getUser()->id; //This feels wrong....
+        $post['user_id'] = $user->id; //This feels wrong....
 
         if ($this->blogPost->validator->with($post)->passes()) {
             //Passed validation, store the blog post.
@@ -138,7 +138,7 @@ class BlogPostController extends \BaseController
     public function destroy($id)
     {
         //Check if the user has permission to post news.
-        $user =  Sentry::getUser();
+        $user = $this->user->getUser();
         if (!$user->hasAccess('admin'))
             return Redirect::to('login');
 
