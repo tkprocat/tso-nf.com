@@ -119,3 +119,22 @@ Validator::extend('alpha_spaces', function($translator, $data, $rules, $messages
 {
 	return preg_match('/^[A-Za-z0-9\-_ ]+$/i', $data);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Model observer setup
+|--------------------------------------------------------------------------
+*/
+
+$modelObserver = new ModelObserver;
+User::observe($modelObserver);
+\LootTracker\Blog\BlogComment::observe($modelObserver);
+\LootTracker\Blog\BlogPost::observe($modelObserver);
+\LootTracker\Adventure\Adventure::observe($modelObserver);
+\LootTracker\Adventure\AdventureLoot::observe($modelObserver);
+\LootTracker\Loot\UserAdventure::observe($modelObserver);
+\LootTracker\Loot\UserAdventureLoot::observe($modelObserver);
+\LootTracker\Guild\Guild::observe($modelObserver);
+\LootTracker\Guild\GuildApplication::observe($modelObserver);
+
+
