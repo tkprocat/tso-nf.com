@@ -638,7 +638,7 @@ class SentryUser extends RepoAbstract implements UserInterface {
     /**
      * @param $user
      */
-    public function login($user) {
-        $this->sentry->login($user);
+    public function login($user, $remember = false) {
+        $this->sentry->login($user, $remember);
     }
 }

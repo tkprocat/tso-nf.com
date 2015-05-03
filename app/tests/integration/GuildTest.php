@@ -5,7 +5,6 @@ use Mockery as m;
 class GuildTest extends TestCase
 {
     protected $guild;
-    protected $user;
 
     public function setUp()
     {
@@ -13,7 +12,6 @@ class GuildTest extends TestCase
         $this->login();
         Route::enableFilters();
         $this->guild = App::make('LootTracker\Guild\GuildInterface');
-        $this->user = App::make('Authority\Repo\User\UserInterface');
     }
 
     public function test_index_page()
@@ -74,7 +72,7 @@ class GuildTest extends TestCase
             'tag' => 'LM'
         );
         $this->guild->create($data, $this->user->getUser()->id);
-        $this->guild->addMember(1, $user->id);
+        $this->guild->addMember(1, $this->user->getUserID());
 
         //Required since addMember changed the user information.
         $user = $this->user->byUsername('admin');
@@ -103,7 +101,7 @@ class GuildTest extends TestCase
         $this->guild->create($data, $this->user->getUser()->id);
 
         $guild1 = $this->guild->findId($data['id']);
-        $this->assertEquals('admin', $guild1->admins()[0]->username);
+        $this->assertEquals('user1', $guild1->admins()[0]->username);
     }
 
     public function tearDown()

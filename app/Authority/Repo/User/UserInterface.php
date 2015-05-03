@@ -100,5 +100,5 @@ interface UserInterface {
      * @param $user
      * @return mixed
      */
-    public function login($user);
+    public function login($user, $remember = false);
 }

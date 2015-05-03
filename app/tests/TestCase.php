@@ -2,6 +2,8 @@
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
+    protected $user;
+
 	/**
 	 * Creates the application.
 	 *
@@ -13,12 +15,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
 		$testEnvironment = 'testing';
 
-		return require __DIR__.'/../../bootstrap/start.php';
+    	return require __DIR__.'/../../bootstrap/start.php';
 	}
 
     public function setUp()
     {
         parent::setUp();
+
+        $this->user = \App::make('Authority\Repo\User\UserInterface');
 
         Artisan::call('migrate');
         Artisan::call('db:seed');
@@ -32,7 +36,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
     protected function login()
     {
         //Log in
-        $user = $this->user->login('admin');
+        $user = $this->user->byUsername('admin');
         $this->user->login($user);
         return $user;
     }

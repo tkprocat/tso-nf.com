@@ -9,7 +9,6 @@ class LootTest extends TestCase
     protected $adventure;
     protected $loot;
 
-
     public function setUp()
     {
         parent::setUp();
@@ -36,7 +35,7 @@ class LootTest extends TestCase
     /** @test */
     public function check_latest_loot_for_player()
     {
-        $username = $this->getUser()->username;
+        $username = $this->user->getUser()->username;
 
         $this->call('GET', '/loot/'.$username);
         $this->assertResponseOk();
