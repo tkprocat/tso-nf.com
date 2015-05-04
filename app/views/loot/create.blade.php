@@ -22,7 +22,7 @@
             <div class="form-group">
                 {{ Form::label('adventure_id', 'Adventure:', array('class' => 'control-label col-sm-2')); }}
                 <div class="col-sm-3">
-                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('class' => 'form-control', 'required' => 'required')) }}
+                {{ Form::select('adventure_id', $adventures->lists('name', 'id'), '0', array('class' => 'form-control')) }}
                 </div>
             </div>
         </div>
@@ -156,7 +156,7 @@
 
         var adventureid = $('#adventure_id option:selected').val()
 
-        if (adventure > 0) {
+        if (adventureid > 0) {
             $.ajax({
                 type: "POST",
                 url: "{{ URL::to('/loot/getJSONLoot') }}",

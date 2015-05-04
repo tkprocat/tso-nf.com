@@ -185,6 +185,10 @@ class LootController extends BaseController
         $this->user->redirectNonAuthedUser();
 
         $data = Input::all();
+
+        if (!isset($data['adventure_id']) || !is_numeric($data['adventure_id']))
+            return Redirect::to('loot/create')->withInput()->withErrors(array('Please select an adventure.'));
+
         $data['user_id'] = $this->user->getUserID();
         $this->loot->validator->updateRules($data['adventure_id']);
 
