@@ -83,9 +83,9 @@ module.exports = function(grunt) {
             bootstrapjs:{
                 files: [
                     {
-                        cwd: 'public/assets/bower/bootstrap/dist/js/',
-                        src: 'bootstrap.js',
-                        dest: 'public/assets/js/',
+                        cwd: 'public/assets/bower/bootstrap/dist/',
+                        src: ['js/bootstrap.js', 'fonts/*'],
+                        dest: 'public/assets/',
                         expand: true
                     }
                 ]
