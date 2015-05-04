@@ -17,8 +17,6 @@
     {{ HTML::style('https://code.jquery.com/ui/1.11.2/themes/ui-darkness/jquery-ui.css') }}
     {{ HTML::style('/assets/bower/bootstrap-sortable/Contents/bootstrap-sortable.css') }}
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.js"></script>
-    <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/jquery.validate.js"></script>
-    <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/bootstrap.js"></script>
     <script type="text/javascript" src="{{ URL::to('/') }}/assets/js/bootstrap-sortable.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>

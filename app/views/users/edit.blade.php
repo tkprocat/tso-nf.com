@@ -111,6 +111,7 @@ Edit Profile
     {{ Form::close() }}
 </div>
 
+<script type="text/javascript" src="https://tso-nf.com/assets/js/jquery.cookie.js"></script>
 <script>
     $('#theme').on('change', function () {
         $.cookie('theme', $('#theme').val(), {path: '/', expires: 365});
