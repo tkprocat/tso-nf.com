@@ -7,14 +7,18 @@
         <th>Played %</th>
     </tr>
     </thead>
-    @for($i=0; $i < (count($adventures) / 2) ; $i++)
-    <tr>
-        <td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->type . ' - ' . $adventures[$i]->name }}</a></td>
-        <td>{{ $adventures[$i]->played->count() }}</td>
-        <td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
-    </tr>
-        <?php $displayed++; ?>
-    @endfor
+    <tbody>
+    {{--*/ $no = 0 /*--}}
+    @foreach($adventures->slice(0, count($adventures)/2) as $adventure)
+        <tr>
+            <td><a href="#{{ str_replace(' ','',$adventure->name); }}">{{ $adventure->type . ' - ' . $adventure->name }}</a></td>
+            <td>{{ $adventure->played->count() }}</td>
+            <td>{{ number_format($adventure->played->count() / $total_played * 100) }}%</td>
+        </tr>
+
+        {{--*/ $no++ /*--}}
+    @endforeach
+    </tbody>
 </table>
 
 @if (count($adventures) > 1)
@@ -26,15 +30,26 @@
         <th>Played %</th>
     </tr>
     </thead>
-		@for($i= $displayed ; $i < count($adventures); $i++)
-		<tr>
-			<td><a href="#{{ str_replace(' ','',$adventures[$i]->name); }}">{{ $adventures[$i]->type . ' - ' . $adventures[$i]->name }}</a></td>
-			<td>{{ $adventures[$i]->played->count() }}</td>
-			<td>{{ number_format($adventures[$i]->played->count() / $total_played * 100) }}%</td>
-		</tr>
-		@endfor
+    <tbody>
+    @foreach($adventures->slice($no, count($adventures)/2) as $adventure)
+        <tr>
+            <td><a href="#{{ str_replace(' ','',$adventure->name); }}">{{ $adventure->type . ' - ' . $adventure->name }}</a></td>
+            <td>{{ $adventure->played->count() }}</td>
+            <td>{{ number_format($adventure->played->count() / $total_played * 100) }}%</td>
+        </tr>
+
+        {{--*/ $no++ /*--}}
+    @endforeach
+    @if ($no % 2 != 0)
+        <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+        </tr>
+    @endif
+    </tbody>
 </table>
-	@endif
+@endif
 
 <div class="clearfix"></div>
 <table class="table table-striped table-bordered">
@@ -57,7 +72,7 @@
             <thead>
             <tr>
                 <th colspan="5">
-                    <div style="text-align: center">{{$adventure->name}}</div>
+                    <div style="text-align: center">{{$adventure->type}} - {{$adventure->name}}</div>
                 </th>
             </tr>
             <tr>
