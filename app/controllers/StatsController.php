@@ -25,6 +25,9 @@ class StatsController extends BaseController
     {
         // Get all played adventures.
         $adventures = $this->loot->getAllAdventuresWithPlayedAndLoot()->get();
+        $adventures = $adventures->sortBy(function($adventure) {
+            return $adventure->type. ' - '.$adventure->name;
+        });
         $total_played = $this->loot->getAllUserAdventuresWithLoot()->count();
         $drop_count_list = $this->loot->getLootDropCount();
 
