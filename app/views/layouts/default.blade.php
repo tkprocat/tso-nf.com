@@ -49,7 +49,7 @@
                     </li>
                     @if (Sentry::check())
                     <?php $currentUser = Sentry::getUser(); ?>
-                    <li class="dropdown">
+                    <li {{ (Request::is('stats') ? 'class="dropdown active"' : 'dropdown') }}>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -66,7 +66,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li {{ (Request::is('loot') ? 'class="dropdown active"' : 'dropdown') }}>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Loot<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -77,10 +77,10 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li {{ (Request::is('users') ? 'class="active"' : '') }}>
                         <a href="{{ URL::to('users') }}">Users</a>
                     </li>
-                    <li>
+                    <li {{ (Request::is('guilds') ? 'class="active"' : '') }}>
                         <a href="{{ URL::to('guilds') }}">Guilds</a>
                     </li>
                     <li {{ (Request::is('users/' . $currentUser->id) ? 'class="active"' : '') }}>
