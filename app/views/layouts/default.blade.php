@@ -44,12 +44,12 @@
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav">
-                    <li {{ (Request::is('blog') ? 'class="active"' : '') }}>
+                    <li {{ (Request::segment(1) === 'blog' ? 'class="active"' : '') }}>
                         <a href="{{ URL::to('blog') }}">Blog</a>
                     </li>
                     @if (Sentry::check())
                     <?php $currentUser = Sentry::getUser(); ?>
-                    <li {{ (Request::is('stats') ? 'class="dropdown active"' : 'dropdown') }}>
+                    <li {{ ((Request::segment(1) === 'stats') ? 'class="dropdown active"' : 'dropdown') }}>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -66,7 +66,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li {{ (Request::is('loot') ? 'class="dropdown active"' : 'dropdown') }}>
+                    <li {{ ((Request::segment(1) === 'loot') ? 'class="dropdown active"' : 'dropdown') }}>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Loot<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -80,11 +80,11 @@
                     <li {{ (Request::is('users') ? 'class="active"' : '') }}>
                         <a href="{{ URL::to('users') }}">Users</a>
                     </li>
-                    <li {{ (Request::is('guilds') ? 'class="active"' : '') }}>
+                    <li {{ ((Request::segment(1) === 'guilds') ? 'class="active"' : '') }}>
                         <a href="{{ URL::to('guilds') }}">Guilds</a>
                     </li>
                     <li {{ (Request::is('users/' . $currentUser->id) ? 'class="active"' : '') }}>
-                    <a href="{{ URL::to('users') .'/'. $currentUser->id }}">{{ $currentUser->username }}</a>
+                        <a href="{{ URL::to('users') .'/'. $currentUser->id }}">{{ $currentUser->username }}</a>
                     </li>
                     @if (Sentry::hasAccess('admin'))
                     <li>
