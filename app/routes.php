@@ -70,7 +70,10 @@ Route::group(array('before' => 'auth'), function()
     Route::get('stats/getSubmissionsForTheLast10Weeks', 'StatsController@getSubmissionsForTheLast10Weeks');
     Route::get('stats/getNewUserCountForTheLast10Weeks', 'StatsController@getNewUserCountForTheLast10Weeks');
     Route::get('stats/global', 'StatsController@getGlobalStats');
+});
 
+Route::group(array('before' => 'admin-auth'), function()
+{
     //Admin/Adventure
     Route::get('admin/adventures/create', 'AdminAdventureController@create');
     Route::get('admin/adventures/getItemTypes', 'AdminAdventureController@getItemTypes');

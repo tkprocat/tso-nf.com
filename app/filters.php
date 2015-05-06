@@ -85,20 +85,20 @@ Route::filter('admin-auth', function()
     $user = App::make('Authority\Repo\User\UserInterface');
 
 	// Check if the user is logged in
-	if ($user->check())
+	if (!$user->check())
 	{
 		// Store the current uri in the session
 		Session::put('loginRedirect', Request::url());
 
 		// Redirect to the login page
-		return Redirect::route('signin');
+		return Redirect::route('login')->with('error', 'You are not logged in.');;
 	}
 
 	// Check if the user has access to the admin page
 	if (!$user->getUser()->hasAccess('admin'))
 	{
 		// Show the insufficient permissions page
-		return App::abort(403);
+        return Redirect::route('home')->with('error', 'Sorry you do not have permission to do this!');
 	}
 });
 
