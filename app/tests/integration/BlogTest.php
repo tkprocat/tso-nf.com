@@ -26,7 +26,7 @@ class BlogTest extends TestCase
     public function can_load_create_new_blog_post()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         $this->call('GET', 'blog/create');
         $this->assertResponseOk();
@@ -44,7 +44,7 @@ class BlogTest extends TestCase
     /** @test */
     public function can_load_create_new_blog_comment()
     {
-        $this->login();
+        $this->loginAsAdmin();
 
         //Post with ID 1 haven't been created so it should redirect to the blog frontpag with an error.
         $this->call('GET', 'blog/1/comment/create');
@@ -69,7 +69,7 @@ class BlogTest extends TestCase
     public function fail_to_create_comment_if_blog_does_not_exists()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
         $this->call('GET', 'blog/99999999999/comment/create');
 
         $this->assertRedirectedToRoute('blog', array(), array('error' => 'Blog post not found.'));
@@ -79,7 +79,7 @@ class BlogTest extends TestCase
     public function can_create_new_blog_post()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         $title = $this->fake->sentence;
         $post = array(
@@ -103,7 +103,7 @@ class BlogTest extends TestCase
     public function fails_creating_blog_post_with_invalid_data()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         $post = array(
             'title' => $this->fake->title,
@@ -117,7 +117,7 @@ class BlogTest extends TestCase
     public function can_see_detailed_blog_post()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         $blog = $this->create_blog_post();
         $this->call('GET', 'blog/'.$blog['slug']);
@@ -128,7 +128,7 @@ class BlogTest extends TestCase
     public function can_see_page_2_on_blog_post()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         $this->create_blog_post();
         $this->call('GET', 'blog?page=2');
@@ -139,7 +139,7 @@ class BlogTest extends TestCase
     public function can_edit_blog_post()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         //If the blog post doesn't exist, return to the blog frontpage with an error.
         $this->call('GET', 'blog/test9999/edit');
@@ -174,7 +174,7 @@ class BlogTest extends TestCase
     public function fails_updating_blog_post_with_invalid_data()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         //create a post
         $post = $this->create_blog_post();
@@ -191,7 +191,7 @@ class BlogTest extends TestCase
     public function can_delete_blog_post()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         //create dummy post.
         $post = $this->create_blog_post();
@@ -214,7 +214,7 @@ class BlogTest extends TestCase
     public function can_create_blog_comment()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         //create dummy post.
         $post = $this->create_blog_post();
@@ -239,7 +239,7 @@ class BlogTest extends TestCase
     public function can_update_blog_comment()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         //create dummy post.
         $post = $this->create_blog_post();
@@ -270,7 +270,7 @@ class BlogTest extends TestCase
     public function can_delete_blog_comment()
     {
         //Log in
-        $this->login();
+        $this->loginAsAdmin();
 
         //create dummy post.
         $post = $this->create_blog_post();

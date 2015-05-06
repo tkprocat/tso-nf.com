@@ -101,4 +101,45 @@ interface UserInterface {
      * @return mixed
      */
     public function login($user, $remember = false);
+
+    /**
+     * See if a user has access to the passed permission(s).
+     * Permissions are merged from all groups the user belongs to
+     * and then are checked against the passed permission(s).
+     *
+     * If multiple permissions are passed, the user must
+     * have access to all permissions passed through, unless the
+     * "all" flag is set to false.
+     *
+     * Super users have access no matter what.
+     *
+     * @param  string|array  $permissions
+     * @param  bool  $all
+     * @return bool
+     */
+    public function hasAccess($permissions, $all = true);
+    /**
+     * See if a user has access to the passed permission(s).
+     * Permissions are merged from all groups the user belongs to
+     * and then are checked against the passed permission(s).
+     *
+     * If multiple permissions are passed, the user must
+     * have access to all permissions passed through, unless the
+     * "all" flag is set to false.
+     *
+     * Super users DON'T have access no matter what.
+     *
+     * @param  string|array  $permissions
+     * @param  bool $all
+     * @return bool
+     */
+    public function hasPermission($permissions, $all = true);
+    /**
+     * Returns if the user has access to any of the
+     * given permissions.
+     *
+     * @param  array  $permissions
+     * @return bool
+     */
+    public function hasAnyAccess(array $permissions);
 }

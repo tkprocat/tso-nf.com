@@ -33,7 +33,15 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
         Artisan::call('migrate:reset');
     }
 
-    protected function login()
+    protected function login($username = 'user1')
+    {
+        //Log in
+        $user = $this->user->byUsername($username);
+        $this->user->login($user);
+        return $user;
+    }
+
+    protected function loginAsAdmin()
     {
         //Log in
         $user = $this->user->byUsername('admin');

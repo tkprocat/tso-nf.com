@@ -56,6 +56,8 @@ class DbGuildRepository implements GuildInterface
 
         //Add response message to the user.
         \Session::flash('success', 'Guild created.');
+
+        return $guild;
     }
 
     /**
@@ -102,7 +104,7 @@ class DbGuildRepository implements GuildInterface
      */
     public function findTag($guild_tag)
     {
-        return $this->guild->where('tag', $guild_tag)->findOrFail();
+        return $this->guild->where('tag', $guild_tag)->firstOrFail();
     }
 
 
