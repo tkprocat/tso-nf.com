@@ -18,7 +18,7 @@
                 <td><strong>{{ $loot->User->username }}</strong><br><i>
                         <small>{{ $loot->User->guild() !== null ? $loot->User->guild()->name : '' }}</small>
                     </i></td>
-                <td>{{ $loot->Adventure->name }}<br><i><small>{{ $loot->Adventure->type }}</small></i></td>
+                <td><a href="/stats/global/#{{ str_replace(' ','',$loot->Adventure->name); }}">{{ $loot->Adventure->name }}</a><br><i><small>{{ $loot->Adventure->type }}</small></i></td>
                 <td>{{ $loot->lootText() }}</td>
                 @if (Sentry::hasAccess('admin') || (Sentry::getUser()->id == $loot->User->id))
                     <td>
