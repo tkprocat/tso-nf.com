@@ -51,7 +51,8 @@ module.exports = function(grunt) {
                 files: {
                     'public/assets/js/loottracker.min.js': ['public/assets/js/loottracker.js'],
                     'public/assets/js/bootstrap.min.js': ['public/assets/js/bootstrap.js'],
-                    'public/assets/js/jquery.validate.min.js': ['public/assets/js/jquery.validate.js']
+                    'public/assets/js/jquery.validate.min.js': ['public/assets/js/jquery.validate.js'],
+                    'public/assets/js/jquery.cookie.min.js': ['public/assets/js/jquery.cookie.js']
                 }
             }
         },
@@ -86,6 +87,16 @@ module.exports = function(grunt) {
                         cwd: 'public/assets/bower/bootstrap/dist/',
                         src: ['js/bootstrap.js', 'fonts/*'],
                         dest: 'public/assets/',
+                        expand: true
+                    }
+                ]
+            },
+            jquerycookie:{
+                files: [
+                    {
+                        cwd: 'public/assets/bower/jquery-cookie/',
+                        src: ['jquery.cookie.js'],
+                        dest: 'public/assets/js/',
                         expand: true
                     }
                 ]
@@ -140,6 +151,7 @@ module.exports = function(grunt) {
         'copy:datepickerjs',
         'copy:sortablejs',
         'copy:tinymce',
+        'copy:jquerycookie',
         'uglify',
         'less',
         'jshint'
