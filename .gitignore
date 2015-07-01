@@ -14,5 +14,6 @@ aliases
 Homestead.yaml
 Vagrantfile
 /.vagrant/
-/scripts/
+/.ssh/
+/.homestead/
 _ide_helper.php

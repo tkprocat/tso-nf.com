@@ -2,50 +2,53 @@
 	"name": "laravel/laravel",
 	"description": "The Laravel Framework.",
 	"keywords": ["framework", "laravel"],
-    "require": {
-        "laravel/framework": "4.2.*",
-        "cartalyst/sentry": "2.1.*",
-        "golonka/bbcodeparser": "1.3"
-    },
-    "require-dev": {
-        "mockery/mockery": "dev-master",
-        "barryvdh/laravel-debugbar": "1.8",
-        "barryvdh/laravel-ide-helper": "1.*",
-        "way/generators": "~2.0",
-		"phpunit/phpunit": "4.*",
-        "fzaninotto/Faker": "1.4.*",
-        "doctrine/dbal":"dev-master"
-    },
+	"license": "MIT",
+	"type": "project",
+	"require": {
+        "php": ">=5.5.9",
+        "laravel/framework": "5.1.x-dev",
+        "zizaco/entrust": "dev-laravel-5",
+        "golonka/bbcodeparser": "~1.4",
+		"guzzlehttp/guzzle": "~4.0"
+	},
+	"require-dev": {
+        "barryvdh/laravel-debugbar": "dev-master",
+        "barryvdh/laravel-ide-helper": "dev-master",
+		"phpunit/phpunit": "~4.0",
+		"phpspec/phpspec": "~2.1",
+        "mockery/mockery": "0.9.*",
+        "symfony/psr-http-message-bridge": "^0.1.0",
+        "fzaninotto/faker": "~1.4"
+	},
 	"autoload": {
 		"classmap": [
-            "app/commands",
-            "app/controllers",
-            "app/models",
-            "app/database/migrations",
-            "app/database/seeds",
-            "app/tests"
+			"database"
 		],
-		"psr-0": {
-            "Authority": "app",
-            "LootTracker": "app"
-        }
+		"psr-4": {
+			"LootTracker\\": "app/"
+		}
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/TestCase.php"
+		]
 	},
 	"scripts": {
-        "pre-update-cmd": [
-            "php artisan clear-compiled"
-        ],
 		"post-install-cmd": [
+			"php artisan clear-compiled",
 			"php artisan optimize"
 		],
 		"post-update-cmd": [
+			"php artisan clear-compiled",
 			"php artisan optimize"
 		],
 		"post-create-project-cmd": [
+			"php -r \"copy('.env.example', '.env');\"",
 			"php artisan key:generate"
 		]
 	},
 	"config": {
-		"preferred-install": "dist"
+		"preferred-install": "dis"
 	},
-	"minimum-stability": "stable"
+    "minimum-stability": "stable"
 }

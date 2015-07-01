@@ -1,19 +1,7 @@
 {
-  "name": "LMLoottracker",
-  "version": "0.0.1",
-  "description": "Lazy Monkeys Loot Tracker",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Procat",
+  "private": true,
   "devDependencies": {
-    "bower": "*",
-    "grunt": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-less": "*",
-    "grunt-contrib-copy": "*"
+    "gulp": "^3.8.8",
+    "laravel-elixir": "^2.0.0"
   }
 }

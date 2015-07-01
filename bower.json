@@ -1,22 +1,23 @@
 {
-  "name": "LM Loot Tracker",
+  "name": "tso-nf.com Loot Tracker",
   "version": "1.0.0",
-  "homepage": "https://tso-nf.com",
-  "description": "Lazy Monkeys Loot Tracker",
+  "description": "tso-nf.com Loot Tracker",
   "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
-    "public/assets/bower",
     "test",
     "tests"
   ],
   "dependencies": {
-    "bootstrap-sortable": "~1.9.0",
+    "bootstrap-sortable": "~1.11.0",
     "bootstrap": "~3.3.0",
     "bootstrap-3-datepicker": "*",
-    "tinymce": "~4.1.9"
+    "tinymce": "~4.1.9",
+    "jquery": "~2.1.4",
+    "jquery-ui": "~1.11.4",
+    "bootstrap-combobox": "~1.1.6"
   }
 }
