@@ -1,6 +1,6 @@
 <?php namespace LootTracker\Http\Controllers;
 
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Http\Request;
 use Validator;
 use App;
 use LootTracker\Repositories\Adventure\AdventureInterface;
@@ -67,7 +67,7 @@ class LootController extends Controller
     }
 
     /**
-     * @param $id
+     * @param $user_adventure_id
      * @return \Illuminate\View\View
      */
     public function edit($user_adventure_id)
@@ -98,7 +98,7 @@ class LootController extends Controller
     }
 
     /**
-     * @param $id
+     * @param $user_adventure_id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update($user_adventure_id)
@@ -152,6 +152,10 @@ class LootController extends Controller
         }
     }
 
+    /**
+     * @param $adventure_id
+     * @return \Illuminate\View\View
+     */
     public function create_form($adventure_id)
     {
         $adventure = $this->adventure->findAdventureWithLoot($adventure_id);
@@ -184,9 +188,11 @@ class LootController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param $id
      * @return mixed
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if (!$this->user->check()) {
             App::abort(403, 'You are not authorized.');
@@ -200,10 +206,11 @@ class LootController extends Controller
             //Check if the userid deleting matches the userid on the record.
 
             if (($this->user->getUser()->id === $userAdventure->User->id) || ($this->user->isAdmin())) {
-                foreach ($userAdventure->loot as $loot) {
-                    $loot->delete();
+                $this->loot->delete($id);
+                if ($request->ajax()) {
+                    return $id;
                 }
-                $userAdventure->delete();
+                return redirect()->back()->with(array('success' => 'Loot deleted.'));
             } else {
                 App::abort(403, 'You are not authorized.');
             }

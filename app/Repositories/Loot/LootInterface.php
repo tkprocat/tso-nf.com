@@ -27,6 +27,8 @@ interface LootInterface
 
     public function create($data);
 
+    public function delete($id);
+
     public function paginate($itemsPerPage, $adventure_name = '', $user_id = 0);
 
     public function update($data);

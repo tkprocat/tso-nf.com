@@ -71,6 +71,12 @@ class EloquentLootRepository implements LootInterface
         }
     }
 
+    public function delete($id)
+    {
+        $userAdventure = $this->byId($id);
+        $userAdventure->delete();
+    }
+
     /**
      * @param $data
      */
