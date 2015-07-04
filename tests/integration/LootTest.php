@@ -21,14 +21,14 @@ class LootTest extends TestCase
     }
 
     /** @test */
-    public function check_loot_index()
+    public function checkLootIndex()
     {
-        $this->call('GET', '/loot');
-        $this->assertResponseOk();
+        $this->visit('loot')
+            ->seePageIs('/loot');
     }
 
     /** @test */
-    public function can_get_loot_index_with_adventure_name()
+    public function canGetLootIndexWithAdventureName()
     {
         $adventure = $this->addTheBlackKnightsAdventure();
         $this->visit('/loot/adventure/'.urlencode($adventure->name));
@@ -39,40 +39,41 @@ class LootTest extends TestCase
     {
         $username = $this->user->getUser()->username;
 
-        $this->call('GET', '/loot/'.$username);
-        $this->assertResponseOk();
+        $this->visit('/loot/'.$username);
     }
 
     /** @test */
-    public function can_get_adventure_loots_from_json_api()
+    public function canGetAdventureLootsFromJsonAPI()
     {
         //Add an adventure so we have something to reply.
         $adventure = $this->addTheBlackKnightsAdventure();
-        $json = json_encode($adventure->loot->toArray());
 
         //Test with GET
-        $response = $this->call('GET', '/loot/getJSONLoot?adventure='.$adventure->id);
-        $this->assertResponseOk();
-        $this->assertJson($response->getContent());
-        $this->assertStringStartsWith($json, $response->getContent());
+        $this->visit('/loot/getJSONLoot?adventure='.$adventure->id)
+            ->seeJsonEquals($adventure->loot->toArray());
 
-        //Test with POST
+         //Test with POST
         $response = $this->call('POST', '/loot/getJSONLoot', array('adventure' => $adventure->id));
         $this->assertResponseOk();
         $this->assertJson($response->getContent());
-        $this->assertStringStartsWith($json, $response->getContent());
+        $this->assertStringStartsWith(json_encode($adventure->loot->toArray()), $response->getContent());
     }
 
     /** @test */
-    public function can_load_add_loot_page()
+    public function canLoadAddLootPage()
     {
-        $this->call('GET', '/loot/create');
-        $this->assertResponseOk();
+        $this->visit('/loot/create')
+            ->See('Add loot');
     }
 
     /** @test */
-    public function can_add_loot()
+    public function canAddLoot()
     {
+        //Simple test, we have too much javascript crap on this page to do proper testing here.
+        $this->visit('/loot/create')
+            ->see('Add loot')
+            ->select('1', 'adventure_id');
+
         $data = array(
             'adventure_id' => '1',
             'slot1' => '1',
@@ -98,40 +99,15 @@ class LootTest extends TestCase
     }
 
     /** @test */
-    public function will_get_error_adding_bogus_loot_in_slots()
+    public function canLoadEditLootPage()
     {
-        $data = array(
-            'adventure_id' => '1',
-            'user_id' => '1',
-            'slot1' => '99999',
-            'slot2' => '99999',
-            'slot3' => '99999',
-            'slot4' => '99999',
-            'slot5' => '99999',
-            'slot6' => '99999',
-            'slot7' => '99999',
-            'slot8' => '99999'
-        );
-
-        //TODO: See if we can replement this...
-//        $this->loot->validator->updateRules($data['adventure_id']);
-//        $this->loot->validator->with($data)->passes();
-//        $errors = $this->loot->validator->errors()->all();
-//        $this->assertEquals('The selected slot1 is invalid.', $errors[0]);
-//        $this->assertEquals('The selected slot2 is invalid.', $errors[1]);
-//        $this->assertEquals('The selected slot3 is invalid.', $errors[2]);
-//        $this->assertEquals('The selected slot4 is invalid.', $errors[3]);
-//        $this->assertEquals('The selected slot5 is invalid.', $errors[4]);
-//        $this->assertEquals('The selected slot6 is invalid.', $errors[5]);
-//        $this->assertEquals('The selected slot8 is invalid.', $errors[6]);
+        $this->visit('/loot/1/edit')
+            ->See('Update loot');
     }
 
-    /** @test */
-    public function can_update_loot()
+     /** @test */
+    public function canUpdateLoot()
     {
-        //Check we can load the edit page.
-        $this->call('GET', '/loot/1/edit');
-
         $data = array(
             'adventure_id' => '1',
             'slot1' => '2',
@@ -157,7 +133,7 @@ class LootTest extends TestCase
     }
 
     /** @test */
-    public function fails_if_editing_another_users_loot()
+    public function failsIfEditingAnotherUsersLoot()
     {
         $user = $this->user->byUsername('user2');
         $this->user->login($user);
@@ -183,8 +159,11 @@ class LootTest extends TestCase
     }
 
     /** @test */
-    public function can_delete_loot()
+    public function canDeleteLoot()
     {
+        $this->visit('/loot/')
+            ->see('Delete');
+
         //Get loot count
         $count = $this->loot->all()->count();
 
@@ -197,11 +176,10 @@ class LootTest extends TestCase
     }
 
     /** @test */
-    public function can_get_latest_loot_for_a_single_adventure() {
-        $this->call('GET', '/loot/admin/Bandit+Nest');
-        $this->assertResponseOk();
+    public function canGetLatestLootForASingleAdventure() {
+        $user = $this->user->getUser();
+        $this->visit('/loot/'.$user->username.'/Bandit+Nest');
     }
-
 
     protected function addTheBlackKnightsAdventure()
     {
