@@ -31,6 +31,12 @@ return [
     //emails
     'pleaseActivate'	=> 'Please activate your account.',
     'clickHereReset'	=> 'Click here to reset your password: ',
-    'clickHereActivate'	=> 'Click here to activate your account: ',
+    'clickHereActivate'	=> 'click here',
+    'toActivate'	    => 'To activate your account, ',
+    'toActivate2'	    => 'Or point your browser to this address: ',
+    'welcome'           => 'Welcome',
+    'account'           => 'Account',
+    'thankyou'           => 'Thank you,',
+    'admins'           => 'The tso-nf.com admins'
 
 ];
