@@ -2,43 +2,50 @@
 
 {{-- Content --}}
 @section('content')
-<h1>Add loot</h1>
-
-<div class="panel panel-default">
-    <form method="POST" action="/loot" accept-charset="UTF-8" class="form-horizontal" role="form" id="registerLoot">
-        {!! csrf_field() !!}
-        <div class="panel-heading" style="padding-top: 15px; padding-bottom: 5px">
-            @include('errors.list')
-            <div class="form-group">
-                <label for="adventure_id" class="control-label col-sm-2">Adventure:</label>
-                <div class="col-sm-4">
-                    <select name="adventure_id" id="adventure_id" class="form-control">
-                        @if(old('adventure_id') === null)
-                        <option value="" selected="selected">Please select an adventure</option>
-                        @endif
-                        @foreach($adventures->lists('name', 'id') as $id => $value)
-                            @if(old('adventure_id') == $id)
-                                <option value="{{ $id }}" selected>{{ $value }}</option>
-                            @else
-                                <option value="{{ $id }}">{{ $value }}</option>
-                            @endif
-                        @endforeach
-                    </select>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Add loot</div>
+                <div class="panel-body">
+                    <form method="POST" action="/loot" accept-charset="UTF-8" class="form-horizontal" role="form" id="registerLoot">
+                        {!! csrf_field() !!}
+                        <div class="panel-heading" style="padding-top: 15px; padding-bottom: 5px">
+                            @include('errors.list')
+                            <div class="form-group">
+                                <label for="adventure_id" class="control-label col-sm-2">Adventure:</label>
+                                <div class="col-sm-4">
+                                    <select name="adventure_id" id="adventure_id" class="form-control">
+                                        @if(old('adventure_id') === null)
+                                        <option value="" selected="selected">Please select an adventure</option>
+                                        @endif
+                                        @foreach($adventures->lists('name', 'id') as $id => $value)
+                                            @if(old('adventure_id') == $id)
+                                                <option value="{{ $id }}" selected>{{ $value }}</option>
+                                            @else
+                                                <option value="{{ $id }}">{{ $value }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="margin-left: 20px">
+                            <div class="row">
+                                @for($id = 1; $id<= 20; $id++)
+                                    @include('loot.partials.create-slot', array('partial_id' => $id))
+                                @endfor
+                            </div>
+                            <div style="text-align: center; margin-top: 15px">
+                                <input type="submit" value="Add" class="btn btn-primary">
+                                <button onclick="javascript:void window.open('./createpopup','1392066459886','width=1005,height=350,toolbar=0,menubar=0,location=0,status=1,scrollbars=0,resizable=1,left=0,top=0');return false;" class="btn btn-primary">Open Popup</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="panel-body" style="margin-left: 20px">
-            <div class="row">
-                @for($id = 1; $id<= 20; $id++)
-                    @include('loot.partials.create-slot', array('partial_id' => $id))
-                @endfor
-            </div>
-            <div style="text-align: center; margin-top: 15px">
-                <input type="submit" value="Add" class="btn btn-primary">
-                <button onclick="javascript:void window.open('./createpopup','1392066459886','width=1005,height=350,toolbar=0,menubar=0,location=0,status=1,scrollbars=0,resizable=1,left=0,top=0');return false;" class="btn btn-primary">Open Popup</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
 
 <script>
