@@ -1,6 +1,6 @@
 <h2>{{ trans('auth.welcome') }}</h2><br>
 <br>
-<strong>{{ trans('auth.account') }}: {{ $user }}</strong><br>
+<strong>{{ trans('auth.account') }}: {{ $username }}</strong><br>
 <br>
 {{ trans('auth.toActivate') }}<a href="{{ url('auth/activate/'.$code) }}" >{{ trans('clickHereActivate') }}</a><br>
 <br>
