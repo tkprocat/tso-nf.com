@@ -44,8 +44,8 @@ Home
 </div>
 @endforeach
 
-@if ((Auth::check()) && (Auth::user()->can('admin-blog')))
-<a href="{{ URL::to('blog/create') }}" class="btn btn-primary">Create new blog post.</a>
+@if (Auth::check() && Auth::user()->can('admin-blog'))
+<a href="{{ URL::to('blog/create') }}" class="btn btn-primary">Create new blog post</a>
 @include('blog.post.partials.delete')
 @endif
 @stop

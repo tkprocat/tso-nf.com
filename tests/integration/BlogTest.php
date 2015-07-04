@@ -65,8 +65,8 @@ class BlogTest extends TestCase
     {
         $this->loginAsAdmin();
 
-        //Post with ID 1 haven't been created so it should redirect to the blog frontpag with an error.
-        $this->visit('/blog/1/comment/create')
+        //Post with ID 2 haven't been created so it should redirect to the blog frontpag with an error.
+        $this->visit('/blog/2/comment/create')
             ->seePageIs('blog')
             ->see('Blog post not found.');
 
@@ -102,7 +102,7 @@ class BlogTest extends TestCase
 
         $title = $this->fake->sentence;
         $post = [
-            'id' => 1,
+            'id' => 2,
             'title' => $title,
             'slug' => Str::slug($title),
             'content' => $this->fake->text,
@@ -134,7 +134,7 @@ class BlogTest extends TestCase
     /** @test */
     public function canSeeDetailedBlogPost()
     {
-        $blog = $this->createBlogPost();
+        $blog = $this->blogPostRepository->byId(1);
         $this->visit('blog/' . $blog['slug'])
             ->see($blog['title'])
             ->see($blog['content']);
@@ -143,7 +143,6 @@ class BlogTest extends TestCase
     /** @test */
     public function canSeePage2OnBlogPost()
     {
-        $this->createBlogPost();
         $this->visit('blog?page=2');
     }
 
@@ -156,7 +155,7 @@ class BlogTest extends TestCase
         //If the blog post doesn't exist, return to the blog frontpage with an error.
         $this->visit('blog/test9999/edit')
             ->seePageIs('blog')
-            ->see('Blog post not found!');
+            ->see('Post not found!');
 
         //Check we can load the edit page.
         $post = $this->createBlogPost();
@@ -210,15 +209,15 @@ class BlogTest extends TestCase
         //check how many blog posts we have
         $blogPostCount = $this->blogPostRepository->all()->count();
 
-        //It should have returned 1.
-        $this->assertEquals($blogPostCount, 1);
+        //It should have returned 2.
+        $this->assertEquals($blogPostCount, 2);
 
         //Delete the post again.
         $this->call('DELETE', '/blog/' . $post['id']);
 
-        //It should be zero now.
+        //It should be one now.
         $blogPostCount = $this->blogPostRepository->all()->count();
-        $this->assertEquals(0, $blogPostCount);
+        $this->assertEquals(1, $blogPostCount);
     }
 
     /** @test */
@@ -242,8 +241,8 @@ class BlogTest extends TestCase
         //check how many blog comments we have
         $blogPostCount = $this->blogPostRepository->all()->count();
 
-        //It should have returned 1.
-        $this->assertEquals(1, $blogPostCount);
+        //It should have returned 2.
+        $this->assertEquals(2, $blogPostCount);
     }
 
     /** @test */
@@ -307,11 +306,11 @@ class BlogTest extends TestCase
     {
         $title = $this->fake->sentence;
         $blog = array(
-            'id' => 1,
+            'id' => 2,
             'title' => $title,
             'slug' => Str::slug($title),
             'content' => $this->fake->text,
-            'user_id' => $this->user->getUser()->id
+            'user_id' => 1
         );
         $this->blogPostRepository->create($blog);
 
@@ -321,7 +320,7 @@ class BlogTest extends TestCase
     protected function createBlogComment($blogPost)
     {
         $comment = array(
-            'id' => 1,
+            'id' => 2,
             'post_id' => $blogPost['id'],
             'user_id' => $this->user->getUser()->id,
             'content' => $this->fake->text

@@ -50,13 +50,14 @@ class BlogPostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param BlogPostRequest $request
      * @return Response
      */
     public function store(BlogPostRequest $request)
     {
         $this->blogPostRepo->create($request);
 
-        return redirect('blog');
+        return redirect('blog')->with('success', 'Post created successfully.');
     }
 
 
@@ -91,7 +92,7 @@ class BlogPostController extends Controller
         try {
             $blog = $this->blogPostRepo->byId($id);
         } catch (ModelNotFoundException $ex) {
-            return redirect('blog')->withError('Blog post not found!');
+            return redirect('blog')->withError('Post not found!');
         }
 
         return view('blog.post.edit')->with('blog', $blog);
@@ -107,7 +108,7 @@ class BlogPostController extends Controller
     {
         $this->blogPostRepo->update($id, $request->all());
 
-        return Redirect::to('blog')->with('success', 'Blog updated successfully');
+        return Redirect::to('blog')->with('success', 'Post updated successfully.');
     }
 
 

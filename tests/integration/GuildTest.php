@@ -10,27 +10,28 @@ class GuildTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->login();
+        $this->login('user1');
         $this->guild = App::make('LootTracker\Repositories\Guild\GuildInterface');
     }
 
     /** @test */
     public function canLoadGuildList()
     {
-        $this->call('GET', 'guilds');
-        $this->assertResponseOk();
+        $this->visit('guilds')
+            ->see("Tester&#039;s Guild");
     }
 
     /** @test */
     public function canLoadSpecificGuildPage()
     {
-        $guild = $this->createLMGuild();
-        $this->call('GET', 'guilds/'.$guild->id);
+        $this->visit('guilds/1')
+            ->see("Tester&#039;s Guild");
     }
 
     /** @test */
     public function canCreateNewGuild()
     {
+        $this->login('user2');
         $data = array(
             'name' => 'Hidden Sanctuary',
             'tag' => 'HS'
@@ -53,15 +54,14 @@ class GuildTest extends TestCase
     /** @test */
     public function canLoadUpdateGuildPage()
     {
-        $this->createLMGuild();
-        $this->call('GET', 'guilds/1/edit');
-        $this->assertResponseOk();
+        $this->login('user1');
+        $this->visit('guilds/1/edit')
+            ->see('Edit guild');
     }
 
     /** @test */
     public function canUpdateGuild()
     {
-        $this->createLMGuild();
         $data = array(
             'name' => 'Drunk Monkeys',
             'tag' => 'DM'
@@ -83,11 +83,9 @@ class GuildTest extends TestCase
     /** @test */
     public function canJoinGuild()
     {
-        $guild1 = $this->createLMGuild();
-        $this->assertNotNull($guild1);
-        $this->guild->addMember(1, $guild1->id);
-
-        $this->user = $this->user->byUsername('user1');
+        $user2 = $this->user->byUsername('user2');
+        $this->guild->addMember(1, $user2->id);
+        $this->user = $this->user->byUsername('user2');
         $this->assertEquals(1, $this->user->guild_id);
     }
 
@@ -99,16 +97,13 @@ class GuildTest extends TestCase
         //Make sure the user aren't in a guild.
         $this->assertEquals(0, $user->guild_id);
 
-        //Create new guild with the user as leader.
-        $guild = $this->createLMGuild();
-
         //Required since addMember changed the user information.
-        $user = $this->login('user2');
+        $user = $this->login('user1');
         //Checks the user was correctly added
-        $this->assertEquals($guild->id, $user->guild_id);
+        $this->assertEquals(1, $user->guild_id);
 
         //Use another user to make this guild
-        $this->login('user1');
+        $this->login('user2');
         $data = array(
             'id' => 2,
             'name' => 'Guild 2',
@@ -118,7 +113,7 @@ class GuildTest extends TestCase
 
         //Make sure all is right.
         $user = $this->login('user2');
-        $this->assertEquals($guild->id, $user->guild_id);
+        $this->assertEquals(2, $user->guild_id);
 
         //Attempt to add the user to second guild
         $this->setExpectedException('LootTracker\Repositories\Guild\UserAlreadyInAGuildException');
@@ -126,13 +121,13 @@ class GuildTest extends TestCase
 
         //Required since addMember changed the user information.
         $user = $this->user->byUsername('user2');
-        $this->assertEquals($guild->id, $user->guild_id);
+        $this->assertEquals(1, $user->guild_id);
     }
 
     /** @test */
     public function canGetAdminsForGuild()
     {
-        $guild1 = $this->createLMGuild();
+        $guild1 = $this->guild->byTag('TG');
         $this->assertCount(1, $guild1->admins());
         $this->assertEquals('user1', $guild1->admins()[0]->username);
     }
@@ -140,20 +135,17 @@ class GuildTest extends TestCase
     /** @test */
     public function canGetGuildByTag()
     {
-        $this->createLMGuild();
-        $guild = $this->guild->byTag('LM');
+        $guild = $this->guild->byTag('TG');
         $this->assertNotNull($guild);
-        $this->assertEquals('LM', $guild->tag);
+        $this->assertEquals('TG', $guild->tag);
     }
 
     /** @test */
     public function canDeleteGuild()
     {
-        $this->createLMGuild();
-
         //Test the button is there.
         $this->visit('/guilds/1')
-            ->see('Lazy Monkeys')
+            ->see('Tester&#039;s Guild')
             ->click('Disband guild');
 
         //Test that we can actually disband the guild.
@@ -164,9 +156,6 @@ class GuildTest extends TestCase
     /** @test */
     public function canPromoteMember()
     {
-        //Create test guild
-        $this->createLMGuild();
-
         //Get the user id for user2
         $user2 = $this->user->byUsername('user2');
 
@@ -196,9 +185,6 @@ class GuildTest extends TestCase
     /** @test */
     public function canDemoteMember()
     {
-        //Create test guild
-        $this->createLMGuild();
-
         //Get the user id for user2
         $user2 = $this->user->byUsername('user2');
 
@@ -223,10 +209,26 @@ class GuildTest extends TestCase
         $this->assertFalse($user2->hasRole('guild_admin'));
     }
 
+    /** @test */
+    public function failsDemotingLastAdmin()
+    {
+        //Get the user id for user2
+        $user1 = $this->user->byUsername('user1');
+
+        $this->visit('guilds/1');
+
+        //Demote the user again.
+        $this->visit('guilds/1/demote/'.$user1->id)
+            ->seePageIs('/guilds/1')
+            ->see('You can not demote the last admin in the guild, either promote a new one or disband the guild.');
+
+        $this->assertTrue($user1->hasRole('guild_admin'));
+    }
+
     protected function createLMGuild()
     {
         $data = array(
-            'id' => 1,
+            'id' => 2,
             'name' => 'Lazy Monkeys',
             'tag' => 'LM'
         );

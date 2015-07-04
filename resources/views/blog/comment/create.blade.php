@@ -14,11 +14,9 @@
             </div>
             <input type="hidden" name="post_id"  value="{{ $post_id }}">
             <input class="btn btn-primary" type="submit" value="Create">
-            
         </form>
     </div>
 </div>
-<script type="text/javascript" src="{{ URL::to('/') }}/assets/js/tinymce.min.js"></script>
 <script type="text/javascript">
     tinymce.init({
         selector: "textarea",
