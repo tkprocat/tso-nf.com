@@ -34,9 +34,10 @@ return [
     'clickHere'	        => 'click here',
     'toActivate'	    => 'To activate your account, ',
     'toActivate2'	    => 'Or point your browser to this address: ',
-    'welcome'           => 'Welcome',
+    'welcome'           => 'Account activation',
+    'welcome2'          => 'Welcome to tso-nf.com, we just need you to active your account before you can start adding all your sweet loot to our tracker.',
     'account'           => 'Account',
-    'thankyou'           => 'Thank you,',
-    'admins'           => 'The tso-nf.com admins'
+    'thankyou'          => 'Thank you,',
+    'admins'            => 'The tso-nf.com admins'
 
 ];
