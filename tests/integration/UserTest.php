@@ -15,9 +15,7 @@ class UserTest extends TestCase
     public function can_load_users_list()
     {
         $this->login();
-
-        $this->call('GET', '/users');
-        $this->assertResponseOk();
+        $this->visit('/users');
     }
 
     /** @test */
@@ -26,8 +24,7 @@ class UserTest extends TestCase
         $this->login();
 
         $user = $this->user->getUser();
-        $this->call('GET', 'users/'.$user->username);
-        $this->assertResponseOk();
+        $this->visit('users/'.$user->username);
     }
 
     /** @test */
