@@ -45,7 +45,7 @@ class EntrustSeeder extends Seeder
 
         $postBlogCommentPerm = new Permission(array('name' => 'post-blog-comment', 'display_name' => 'Can post/edit blog comments'));
         $postBlogCommentPerm->save();
-        $userRole->attachPermission($adminBlogPerm);
+        $userRole->attachPermission($postBlogCommentPerm);
 
         //Guild related roles/permissions
         $guildAdminRole = new Role(array('name' => 'guild_admin', 'display_name' => 'Guild admin'));

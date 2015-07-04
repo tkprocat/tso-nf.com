@@ -40,5 +40,13 @@ class UserSeeder extends Seeder
             'activated' => 1,
         ));
         $user2->attachRole($userRole);
+
+        $user3 = User::create(array(
+            'email' => 'user3@tso-nf.com',
+            'username' => 'user3',
+            'password' => Hash::make('user3'),
+            'activated' => 1,
+        ));
+        $user3->attachRole($userRole);
     }
 }

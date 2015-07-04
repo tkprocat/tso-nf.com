@@ -16,10 +16,14 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         $this->call('EntrustSeeder');
-        $this->call('UserSeeder');
-        //$this->call('GuildSeeder');
+
         $this->call('LootTrackerAdventureSeeder');
         $this->call('LootTrackerPriceListSeeder');
         $this->call('LootTrackerUserAdventureSeeder');
+        if (env('APP_ENV', 'production') === 'testing') {
+            $this->call('UserSeeder');
+            $this->call('GuildSeeder');
+            $this->call('BlogSeeder');
+        }
     }
 }
