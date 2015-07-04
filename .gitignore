@@ -19,3 +19,6 @@ Vagrantfile
 /.homestead/
 /resources/assets/bower/
 _ide_helper.php
+/public/js/
+/public/css/
+/public/tinymce/

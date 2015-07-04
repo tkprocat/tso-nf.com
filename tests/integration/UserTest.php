@@ -12,14 +12,14 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function can_load_users_list()
+    public function canLoadUsersList()
     {
         $this->login();
         $this->visit('/users');
     }
 
     /** @test */
-    public function can_load_user_page()
+    public function canLoadUserPage()
     {
         $this->login();
 
@@ -28,7 +28,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function check_permissions_is_set_correctly()
+    public function checkPermissionsIsSetCorrectly()
     {
         //Log in admin and check permissions.
         $user = $this->user->byUsername('admin');
@@ -41,6 +41,7 @@ class UserTest extends TestCase
         $user = $this->user->byUsername('user1');
         $this->user->login($user);
 
+        $this->assertFalse($this->user->getUser()->can('admin-blog'), 'User1 can admin blogs!');
         $this->assertFalse($this->user->getUser()->hasRole('admin'), 'User1 has admin access!');
         $this->assertTrue($this->user->getUser()->hasRole('user'), 'User1 does not have users access!');
 

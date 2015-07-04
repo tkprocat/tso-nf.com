@@ -16,11 +16,29 @@ class BlogTest extends TestCase
         $this->blogPostRepository = App::make('LootTracker\Repositories\Blog\BlogPostInterface');
     }
 
+
+    /** @test */
+    public function canLoadFrontPage()
+    {
+        $this->visit('blog')
+            ->see('News');
+
+        //Log in
+        $this->login();
+        $this->visit('blog')
+            ->see('Create new blog post', true);
+
+        //Log in
+        $this->loginAsAdmin();
+        $this->visit('blog')
+            ->see('Create new blog post');
+    }
+
     /** @test */
     public function canLoadCreateBlogPostAsGuest()
     {
-        $this->visit('http://localhost/blog/create')
-            ->followRedirects('http://localhost/auth/login');
+        $this->visit('blog/create')
+            ->followRedirects('auth/login');
     }
 
     /** @test */
@@ -48,22 +66,22 @@ class BlogTest extends TestCase
         $this->loginAsAdmin();
 
         //Post with ID 1 haven't been created so it should redirect to the blog frontpag with an error.
-        $test = $this->call('GET', '/blog/1/comment/create');
-        $this->assertRedirectedTo('blog', array('error' => 'Blog post not found.'));
+        $this->visit('/blog/1/comment/create')
+            ->seePageIs('blog')
+            ->see('Blog post not found.');
 
         //Create a blog post and try again.
         $this->createBlogPost();
-        $this->call('GET', '/blog/1/comment/create');
-        $this->assertResponseOk();
+        $this->visit('/blog/1/comment/create')
+            ->see('Post a comment');
     }
 
     /** @test */
     public function canNotLoadCreateNewBlogCommentWhenNotLoggedIn()
     {
-        $this->call('GET', 'blog/1/comment/create');
-
         //Check we get redirected to the login page.
-        $this->assertRedirectedTo('auth/login');
+        $this->visit('blog/1/comment/create')
+            ->seePageIs('auth/login');
     }
 
     /** @test */
@@ -71,10 +89,9 @@ class BlogTest extends TestCase
     {
         //Log in
         $this->loginAsAdmin();
-        //$this->visit('http://localhost/blog/99999999999/comment/create');
-        $this->call('GET', '/blog/99999999999/comment/create');
-        $this->assertRedirectedTo('/blog');
-        $this->assertSessionHas('error', 'Blog post not found.');
+        $this->visit('blog/99999999999/comment/create')
+            ->seePageIs('blog')
+            ->see('Blog post not found.');
     }
 
     /** @test */
@@ -92,13 +109,14 @@ class BlogTest extends TestCase
             'user_id' => $this->user->getUser()->id
         ];
 
-        $test = $this->call('POST', '/blog', $post);
-        //  dd($test);
-        $this->assertRedirectedTo('blog', array(), array('success' => 'Blog posted successfully'));
-
-        //Check that it's saved.
-        $blogPostCount = $this->blogPostRepository->all()->count();
-        $this->assertEquals(1, $blogPostCount);
+        $this->visit('blog')
+            ->click('Create new blog post')
+            ->type($post['title'], 'title')
+            ->type($post['content'], 'content')
+            ->press('Create')
+            ->seePageIs('blog')
+            ->see('Post created successfully')
+            ->seeInDatabase('posts', array('id' => $post['id'], 'title' => $post['title'], 'slug' => $post['slug'], 'content' => $post['content']));
     }
 
     /** @test */
@@ -106,33 +124,27 @@ class BlogTest extends TestCase
     {
         //Log in
         $this->loginAsAdmin();
-        $this->visit('http://localhost/blog/create')
+        $this->visit('/blog/create')
             ->type($this->fake->title, 'title')
             ->press('Create')
-            ->onPage('http://localhost/blog/create')
+            ->onPage('blog/create')
             ->assertSessionHasErrors('content');
     }
 
     /** @test */
     public function canSeeDetailedBlogPost()
     {
-        //Log in
-        $this->loginAsAdmin();
-
         $blog = $this->createBlogPost();
-        $this->call('GET', 'blog/' . $blog['slug']);
-        $this->assertResponseOk();
+        $this->visit('blog/' . $blog['slug'])
+            ->see($blog['title'])
+            ->see($blog['content']);
     }
 
     /** @test */
     public function canSeePage2OnBlogPost()
     {
-        //Log in
-        $this->loginAsAdmin();
-
         $this->createBlogPost();
-        $this->call('GET', 'blog?page=2');
-        $this->assertResponseOk();
+        $this->visit('blog?page=2');
     }
 
     /** @test */
@@ -142,32 +154,30 @@ class BlogTest extends TestCase
         $this->loginAsAdmin();
 
         //If the blog post doesn't exist, return to the blog frontpage with an error.
-        $this->call('GET', 'blog/test9999/edit');
-        $this->assertRedirectedTo('blog', array('error' => 'Blog post not found!'));
+        $this->visit('blog/test9999/edit')
+            ->seePageIs('blog')
+            ->see('Blog post not found!');
 
         //Check we can load the edit page.
         $post = $this->createBlogPost();
-        $this->call('GET', '/blog/' . $post['id'] . '/edit');
-        $this->assertResponseOk();
+        $this->visit('blog/' . $post['id'] . '/edit')
+            ->see('Edit blog');
 
         //Check we can save changes.
         $title = $this->fake->sentence;
-        $blogNew = array(
-            'id' => 1,
+        $updatedPost = array(
             'title' => $title,
             'slug' => Str::slug($title),
             'content' => $this->fake->text,
             'user_id' => $this->user->getUser()->id
         );
-        $this->call('PUT', '/blog/' . $blogNew['id'], $blogNew);
-        $this->assertRedirectedTo('blog', array('success' => 'Blog updated successfully'));
-
-        //Check the changes got saved.
-        $savedBlog = $this->blogPostRepository->byId(1);
-
-        $this->assertEquals($blogNew['title'], $savedBlog['title']);
-        $this->assertEquals($blogNew['slug'], $savedBlog['slug']);
-        $this->assertEquals($blogNew['content'], $savedBlog['content']);
+        $this->visit('blog/' . $post['id'] . '/edit')
+            ->type($updatedPost['title'], 'title')
+            ->type($updatedPost['content'], 'content')
+            ->press('Update')
+            ->seePageIs('blog')
+            ->see('Post updated successfully')
+            ->seeInDatabase('posts', array('id' => $post['id'], 'title' => $updatedPost['title'], 'slug' => $updatedPost['slug'], 'content' => $updatedPost['content']));
     }
 
     /** @test */
@@ -180,15 +190,12 @@ class BlogTest extends TestCase
         $post = $this->createBlogPost();
 
 
-        $url = '/blog/' . $post['id'].'/edit';
+        $url = '/blog/' . $post['id'] . '/edit';
         $this->visit($url)
-             ->see('Edit blog post');
-
-        //TODO: Fix this!
-//        $this->visit($url)
-//             ->type('', 'title')
-//             ->press('Update')
-//             ->seePageIs($url);
+            ->see('Edit blog post')
+            ->type('', 'title')
+            ->press('Update')
+            ->seePageIs($url);
     }
 
     /** @test */
