@@ -31,7 +31,7 @@ return [
     //emails
     'pleaseActivate'	=> 'Please activate your account.',
     'clickHereReset'	=> 'Click here to reset your password: ',
-    'clickHereActivate'	=> 'click here',
+    'clickHere'	        => 'click here',
     'toActivate'	    => 'To activate your account, ',
     'toActivate2'	    => 'Or point your browser to this address: ',
     'welcome'           => 'Welcome',
