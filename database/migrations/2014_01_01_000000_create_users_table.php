@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
                 $table->string('password', 60);
                 $table->boolean('activated');
                 $table->rememberToken();
+                $table->string('activation_code', 255)->nullable();
                 $table->timestamps();
                 $table->integer('guild_id')->default(0)->unsigned();
             });

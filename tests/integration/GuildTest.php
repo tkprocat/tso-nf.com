@@ -29,22 +29,19 @@ class GuildTest extends TestCase
     }
 
     /** @test */
-    public function canLoadCreateNewGuildPage()
-    {
-        $this->call('GET', 'guilds/create');
-        $this->assertResponseOk();
-    }
-
-    /** @test */
     public function canCreateNewGuild()
     {
         $data = array(
-            'id' => 2,
             'name' => 'Hidden Sanctuary',
             'tag' => 'HS'
         );
-        $this->call('POST', 'guilds', $data);
-        $this->assertRedirectedTo('/guilds', array('success' => 'Guild created successfully.'));
+
+        $this->visit('/guilds/create')
+            ->type($data['name'], 'name')
+            ->type($data['tag'], 'tag')
+            ->press('Create')
+            ->seePageIs('/guilds')
+            ->see('Guild created successfully.');
 
         $guild = $this->guild->byTag('HS');
         $this->assertNotNull($guild);
@@ -65,19 +62,21 @@ class GuildTest extends TestCase
     public function canUpdateGuild()
     {
         $this->createLMGuild();
-
         $data = array(
-            'id' => 1,
             'name' => 'Drunk Monkeys',
             'tag' => 'DM'
         );
-        $this->call('PUT', 'guilds/1', $data);
-        $this->assertRedirectedTo('/guilds', array('success' => 'Guild updated successfully.'));
+
+        $this->visit('/guilds/1/edit')
+            ->type($data['name'], 'name')
+            ->type($data['tag'], 'tag')
+            ->press('Update')
+            ->seePageIs('/guilds/1')
+            ->see('Guild updated successfully.')
+            ->seeInDatabase('guilds', ['tag' => $data['tag'], 'name' => $data['name']]);
 
         $guild = $this->guild->byTag('DM');
         $this->assertNotNull($guild);
-        $this->assertEquals($data['name'], $guild->name);
-        $this->assertEquals($data['tag'], $guild->tag);
         $this->assertEquals($this->user->getUser()->username, $guild->admins()[0]->username);
     }
 
@@ -122,6 +121,7 @@ class GuildTest extends TestCase
         $this->assertEquals($guild->id, $user->guild_id);
 
         //Attempt to add the user to second guild
+        $this->setExpectedException('LootTracker\Repositories\Guild\UserAlreadyInAGuildException');
         $this->guild->addMember(2, $user->id);
 
         //Required since addMember changed the user information.
@@ -150,8 +150,15 @@ class GuildTest extends TestCase
     public function canDeleteGuild()
     {
         $this->createLMGuild();
+
+        //Test the button is there.
+        $this->visit('/guilds/1')
+            ->see('Lazy Monkeys')
+            ->click('Disband guild');
+
+        //Test that we can actually disband the guild.
         $this->call('DELETE', 'guilds/1');
-        $this->assertRedirectedTo('/guilds', array('success' => 'Guild deleted successfully.'));
+        $this->assertRedirectedTo('/guilds', array('success' => 'Guild disbanded.'));
     }
 
     /** @test */
@@ -163,18 +170,57 @@ class GuildTest extends TestCase
         //Get the user id for user2
         $user2 = $this->user->byUsername('user2');
 
+        //Just to set the expected return page.
+        $this->visit('/guilds/1');
+
         //Check that we get a failure to promote the user since he is not currently a member.
-        $this->call('GET', 'guilds/1/promote/'.$user2->id, [], [], [], ['HTTP_REFERER' => 'guilds/1']);
-        $this->assertRedirectedTo('guilds/1', array('errors' => 'That user is not a member of the guild.'));
+        $this->visit('/guilds/1/promote/'.$user2->id)
+            ->seePageIs('/guilds/1')
+            ->see('That user is not a member of the guild.');
 
         //Add the user
-        $this->call('GET', 'guilds/1/add/'.$user2->id, [], [], [], ['HTTP_REFERER' => 'guilds/1']);
-        $this->assertRedirectedTo('guilds/1', array('errors' => 'That user is not a member of the guild.'));
+        $this->visit('guilds/1/add/'.$user2->id)
+            ->seePageIs('/guilds/1')
+            ->see('User added to guild.');
+
         $user2 = $this->user->byUsername('user2');
 
         //Promote the user again.
-        $this->call('GET', 'guilds/1/promote/'.$user2->id, [], [], [], ['HTTP_REFERER' => 'guilds/1']);
-        $this->assertRedirectedTo('guilds/1', array('success' => 'Member promoted.'));
+        $this->visit('guilds/1/promote/'.$user2->id)
+            ->seePageIs('/guilds/1')
+            ->see('Member promoted.');
+
+        $this->assertTrue($user2->hasRole('guild_admin'));
+    }
+
+    /** @test */
+    public function canDemoteMember()
+    {
+        //Create test guild
+        $this->createLMGuild();
+
+        //Get the user id for user2
+        $user2 = $this->user->byUsername('user2');
+
+        //Just to set the expected return page.
+        $this->visit('/guilds/1');
+
+        //Add the user
+        $this->visit('guilds/1/add/'.$user2->id)
+            ->seePageIs('/guilds/1')
+            ->see('User added to guild.');
+
+        //Promote the user.
+        $this->visit('guilds/1/promote/'.$user2->id)
+            ->seePageIs('/guilds/1')
+            ->see('Member promoted.');
+
+        //Demote the user again.
+        $this->visit('guilds/1/demote/'.$user2->id)
+            ->seePageIs('/guilds/1')
+            ->see('Member demoted.');
+
+        $this->assertFalse($user2->hasRole('guild_admin'));
     }
 
     protected function createLMGuild()

@@ -3,6 +3,7 @@ namespace LootTracker\Repositories\Guild;
 
 use Auth;
 use Entrust;
+use Exception;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use LootTracker\Repositories\User\Role;
@@ -95,39 +96,20 @@ class EloquentGuildRepository implements GuildInterface
     }
 
     /**
-     * @param $guild_id
      * @param $user_id
      * @return mixed
      */
-    public function demoteMember($guild_id, $user_id)
+    public function demoteMember($user_id)
     {
-        //Get the guild or return an error.
-        $guild = $this->byId($guild_id);
-        if ($guild == null) {
-            return Redirect::back()->withErrors('Guild not found.');
-        }
-
-        //Check if the user has permission to do this action.
-        if (!(Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members'))) {
-            return Redirect::back()->withErrors('You do not have sufficient permissions.');
-        }
-
         $user = $this->user->byId($user_id);
-        if ($user == null) {
-            return Redirect::back()->withErrors('Guild member not found.');
-        }
-
         $user->detachRole($this->getAdminRole());
-
-        return Redirect::to('guilds/' . $guild_id);
     }
 
     /**
-     * @param $guild_id
      * @param $user_id
      * @return mixed
      */
-    public function promoteMember($guild_id, $user_id)
+    public function promoteMember($user_id)
     {
         $user = $this->user->byId($user_id);
         $user->attachRole($this->getAdminRole());
@@ -139,20 +121,10 @@ class EloquentGuildRepository implements GuildInterface
      * @param $guild_id
      * @param $user_id
      * @return mixed
+     * @throws Exception
      */
     public function addMember($guild_id, $user_id)
     {
-        $guild = $this->byId($guild_id);
-        if ($guild == null) {
-            return Redirect::back()->withErrors('Guild not found.');
-        }
-
-        //Check if the user has permission to do this action.
-        $user = $this->user->byId(Auth::user()->id);
-        if (!($user->hasRole('admin') || $user->can('admin-guild-members'))) {
-            return Redirect::back()->withErrors('You do not have sufficient permissions.');
-        }
-
         $user = $this->user->byId($user_id);
         //Check if the user is unguilded before adding him to another.
         if ($user->guild_id == 0) {
@@ -162,27 +134,16 @@ class EloquentGuildRepository implements GuildInterface
             $user->guild_id = $guild_id;
             $user->save();
         } else {
-            Session::put('error', 'User is already in a guild.');
+            throw new UserAlreadyInAGuildException("User is already in a guild!");
         }
     }
 
     /**
-     * @param $guild_id
      * @param $user_id
      * @return mixed
      */
-    public function removeMember($guild_id, $user_id)
+    public function removeMember($user_id)
     {
-        $guild = $this->byId($guild_id);
-        if ($guild == null) {
-            return Redirect::back()->withErrors('Guild not found.');
-        }
-
-        //Check if the user has permission to do this action.
-        if (!(Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members'))) {
-            return Redirect::back()->withErrors('You do not have sufficient permissions.');
-        }
-
         $user = $this->user->byId($user_id);
         //Remove any guild related roles.
         $user->detachRole($this->getMemberRole());
@@ -194,15 +155,12 @@ class EloquentGuildRepository implements GuildInterface
     }
 
     /**
-     * @param $id
+     * @param $guild_id
+     * @internal param $id
      */
     public function delete($guild_id)
     {
         $guild = $this->byId($guild_id);
-        //Check if the user has permission to do this action.
-        if (!(Entrust::hasRole('admin') || Entrust::can('can_admin_guild'))) {
-            return Redirect::back()->withErrors('You do not have sufficient permissions.');
-        }
 
         foreach ($this->getMembers($guild->id) as $member) {
             $this->removeMember($guild->id, $member->id);
@@ -265,3 +223,5 @@ class EloquentGuildRepository implements GuildInterface
         return Role::whereName('guild_admin')->first();
     }
 }
+
+class UserAlreadyInAGuildException extends Exception {}

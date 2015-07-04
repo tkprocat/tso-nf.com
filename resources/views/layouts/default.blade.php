@@ -2,6 +2,8 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-param" content="_token" />
     <title>Loot Tracker</title>
     <link rel="stylesheet" href="/css/all.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/ui-darkness/jquery-ui.css">

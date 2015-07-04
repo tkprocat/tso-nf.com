@@ -14,7 +14,7 @@ Register
             <div class="panel panel-default">
                 <div class="panel-heading">Create new guild</div>
                 <div class="panel-body">
-                    <form method="POST" action="/guild" accept-charset="UTF-8" class="form-horizontal">
+                    <form method="POST" action="/guilds" accept-charset="UTF-8" class="form-horizontal">
                         {!! csrf_field() !!}
 
                         <div class="form-group">

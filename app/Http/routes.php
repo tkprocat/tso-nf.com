@@ -20,6 +20,7 @@ Route::controllers([
 //Loot
 Route::group(array('middleware' => ['auth'], 'permission' => ['add-loot']), function () {
     Route::get('loot/createpopup', 'LootController@createpopup');
+    Route::get('loot/adventure/{adventure}', 'LootController@index');
     Route::resource('loot', 'LootController', ['except' => ['index', 'show']]);
 });
 

@@ -21,6 +21,6 @@ elixir(function(mix) {
 });
 
 elixir(function(mix) {
-    mix.scripts(['bower/bootstrap/dist/js/bootstrap.js', '/bower/bootstrap-combobox/js/bootstrap-combobox.js'],
+    mix.scripts(['bower/bootstrap/dist/js/bootstrap.js', 'bower/bootstrap-combobox/js/bootstrap-combobox.js', 'bower/jquery-ujs/src/rails.js'],
          './public/js', './resources/assets/');
 })

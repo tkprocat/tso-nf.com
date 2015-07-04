@@ -10,14 +10,14 @@
     </tr>
     </thead>
     {{--*/ $no = 0 /*--}}
-    @foreach($adventures->slice(0, count($adventures)/2) as $adventure)
+    @foreach($adventures->slice(0, count($adventures)/2+1) as $adventure)
         <tr>
             <td><a href="/stats/global/{{ urlencode($adventure->name) }}">{{ $adventure->type . ' - ' . $adventure->name }}</a></td>
             <td>{{ $adventure->played->count() }}</td>
             <td>{{ number_format($adventure->played->count() / $total_played * 100) }}%</td>
         </tr>
 
-        {{--*/ $no++ /*--}}
+        @define($no++);
     @endforeach
 </table>
 
@@ -36,7 +36,7 @@
             <td>{{ number_format($adventure->played->count() / $total_played * 100) }}%</td>
         </tr>
 
-        {{--*/ $no++ /*--}}
+        @define($no++);
     @endforeach
     @if ($no % 2 != 0)
         <tr>

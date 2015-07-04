@@ -5,13 +5,6 @@ use LootTracker\Repositories\User\Role;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
-    /**
-     * The base URL to use while testing the application.
-     *
-     * @var string
-     */
-    protected $baseUrl = 'http://localhost/';
-
     protected $user;
 
     /**
@@ -25,13 +18,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
+        $this->baseUrl = env('TEST_URL', 'http://localhost');
+
         return $app;
     }
 
     public function setUp()
     {
         parent::setUp();
-        $this->baseUrl = '';
         $this->user = App::make(LootTracker\Repositories\User\UserInterface::class);
         $this->artisan('migrate');
         $this->artisan('db:seed');

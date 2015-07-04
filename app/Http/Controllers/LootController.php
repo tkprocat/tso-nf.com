@@ -46,7 +46,7 @@ class LootController extends Controller
      */
     public function index($adventure_name = '')
     {
-        $loots = $this->loot->paginate(25, $adventure_name);
+        $loots = $this->loot->paginate(25, urldecode($adventure_name));
         return view('loot.index')->with('loots', $loots);
     }
 

@@ -11,13 +11,13 @@ interface GuildInterface
 
     public function byTag($guild_tag);
 
-    public function demoteMember($guild_id, $user_id);
+    public function demoteMember($user_id);
 
-    public function promoteMember($guild_id, $user_id);
+    public function promoteMember($user_id);
 
     public function addMember($guild_id, $user_id);
 
-    public function removeMember($guild_id, $user_id);
+    public function removeMember($user_id);
 
     public function delete($guild_id);
 

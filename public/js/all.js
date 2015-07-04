@@ -1,7 +1,7 @@
 /*!
- * Bootstrap v3.3.4 (http://getbootstrap.com)
+ * Bootstrap v3.3.5 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Licensed under the MIT license
  */
 
 'use strict';
@@ -19,7 +19,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: transition.js v3.3.4
+ * Bootstrap: transition.js v3.3.5
  * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -82,7 +82,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.3.4
+ * Bootstrap: alert.js v3.3.5
  * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -100,7 +100,7 @@ if (typeof jQuery === 'undefined') {
     $(el).on('click', dismiss, this.close);
   };
 
-  Alert.VERSION = '3.3.4';
+  Alert.VERSION = '3.3.5';
 
   Alert.TRANSITION_DURATION = 150;
 
@@ -169,7 +169,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.3.4
+ * Bootstrap: button.js v3.3.5
  * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -188,7 +188,7 @@ if (typeof jQuery === 'undefined') {
     this.isLoading = false;
   };
 
-  Button.VERSION = '3.3.4';
+  Button.VERSION = '3.3.5';
 
   Button.DEFAULTS = {
     loadingText: 'loading...'
@@ -200,7 +200,7 @@ if (typeof jQuery === 'undefined') {
     var val = $el.is('input') ? 'val' : 'html';
     var data = $el.data();
 
-    state = state + 'Text';
+    state += 'Text';
 
     if (data.resetText == null) $el.data('resetText', $el[val]());
 
@@ -225,14 +225,19 @@ if (typeof jQuery === 'undefined') {
     if ($parent.length) {
       var $input = this.$element.find('input');
       if ($input.prop('type') == 'radio') {
-        if ($input.prop('checked') && this.$element.hasClass('active')) changed = false;else $parent.find('.active').removeClass('active');
+        if ($input.prop('checked')) changed = false;
+        $parent.find('.active').removeClass('active');
+        this.$element.addClass('active');
+      } else if ($input.prop('type') == 'checkbox') {
+        if ($input.prop('checked') !== this.$element.hasClass('active')) changed = false;
+        this.$element.toggleClass('active');
       }
-      if (changed) $input.prop('checked', !this.$element.hasClass('active')).trigger('change');
+      $input.prop('checked', this.$element.hasClass('active'));
+      if (changed) $input.trigger('change');
     } else {
       this.$element.attr('aria-pressed', !this.$element.hasClass('active'));
+      this.$element.toggleClass('active');
     }
-
-    if (changed) this.$element.toggleClass('active');
   };
 
   // BUTTON PLUGIN DEFINITION
@@ -270,14 +275,14 @@ if (typeof jQuery === 'undefined') {
     var $btn = $(e.target);
     if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn');
     Plugin.call($btn, 'toggle');
-    e.preventDefault();
+    if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault();
   }).on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
     $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type));
   });
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.3.4
+ * Bootstrap: carousel.js v3.3.5
  * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -305,7 +310,7 @@ if (typeof jQuery === 'undefined') {
     this.options.pause == 'hover' && !('ontouchstart' in document.documentElement) && this.$element.on('mouseenter.bs.carousel', $.proxy(this.pause, this)).on('mouseleave.bs.carousel', $.proxy(this.cycle, this));
   };
 
-  Carousel.VERSION = '3.3.4';
+  Carousel.VERSION = '3.3.5';
 
   Carousel.TRANSITION_DURATION = 600;
 
@@ -504,7 +509,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.3.4
+ * Bootstrap: collapse.js v3.3.5
  * http://getbootstrap.com/javascript/#collapse
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -532,7 +537,7 @@ if (typeof jQuery === 'undefined') {
     if (this.options.toggle) this.toggle();
   };
 
-  Collapse.VERSION = '3.3.4';
+  Collapse.VERSION = '3.3.5';
 
   Collapse.TRANSITION_DURATION = 350;
 
@@ -683,7 +688,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.3.4
+ * Bootstrap: dropdown.js v3.3.5
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -702,7 +707,42 @@ if (typeof jQuery === 'undefined') {
     $(element).on('click.bs.dropdown', this.toggle);
   };
 
-  Dropdown.VERSION = '3.3.4';
+  Dropdown.VERSION = '3.3.5';
+
+  function getParent($this) {
+    var selector = $this.attr('data-target');
+
+    if (!selector) {
+      selector = $this.attr('href');
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+      ;
+    }
+
+    var $parent = selector && $(selector);
+
+    return $parent && $parent.length ? $parent : $this.parent();
+  }
+
+  function clearMenus(e) {
+    if (e && e.which === 3) return;
+    $(backdrop).remove();
+    $(toggle).each(function () {
+      var $this = $(this);
+      var $parent = getParent($this);
+      var relatedTarget = { relatedTarget: this };
+
+      if (!$parent.hasClass('open')) return;
+
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return;
+
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget));
+
+      if (e.isDefaultPrevented()) return;
+
+      $this.attr('aria-expanded', 'false');
+      $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget);
+    });
+  }
 
   Dropdown.prototype.toggle = function (e) {
     var $this = $(this);
@@ -717,7 +757,7 @@ if (typeof jQuery === 'undefined') {
     if (!isActive) {
       if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
         // if mobile we use a backdrop because click events don't delegate
-        $('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click', clearMenus);
+        $(document.createElement('div')).addClass('dropdown-backdrop').insertAfter($(this)).on('click', clearMenus);
       }
 
       var relatedTarget = { relatedTarget: this };
@@ -752,7 +792,7 @@ if (typeof jQuery === 'undefined') {
     }
 
     var desc = ' li:not(.disabled):visible a';
-    var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc);
+    var $items = $parent.find('.dropdown-menu' + desc);
 
     if (!$items.length) return;
 
@@ -764,39 +804,6 @@ if (typeof jQuery === 'undefined') {
 
     $items.eq(index).trigger('focus');
   };
-
-  function clearMenus(e) {
-    if (e && e.which === 3) return;
-    $(backdrop).remove();
-    $(toggle).each(function () {
-      var $this = $(this);
-      var $parent = getParent($this);
-      var relatedTarget = { relatedTarget: this };
-
-      if (!$parent.hasClass('open')) return;
-
-      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget));
-
-      if (e.isDefaultPrevented()) return;
-
-      $this.attr('aria-expanded', 'false');
-      $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget);
-    });
-  }
-
-  function getParent($this) {
-    var selector = $this.attr('data-target');
-
-    if (!selector) {
-      selector = $this.attr('href');
-      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
-      ;
-    }
-
-    var $parent = selector && $(selector);
-
-    return $parent && $parent.length ? $parent : $this.parent();
-  }
 
   // DROPDOWN PLUGIN DEFINITION
   // ==========================
@@ -829,11 +836,11 @@ if (typeof jQuery === 'undefined') {
 
   $(document).on('click.bs.dropdown.data-api', clearMenus).on('click.bs.dropdown.data-api', '.dropdown form', function (e) {
     e.stopPropagation();
-  }).on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle).on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown).on('keydown.bs.dropdown.data-api', '[role="menu"]', Dropdown.prototype.keydown).on('keydown.bs.dropdown.data-api', '[role="listbox"]', Dropdown.prototype.keydown);
+  }).on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle).on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown).on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown);
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.3.4
+ * Bootstrap: modal.js v3.3.5
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -864,7 +871,7 @@ if (typeof jQuery === 'undefined') {
     }
   };
 
-  Modal.VERSION = '3.3.4';
+  Modal.VERSION = '3.3.5';
 
   Modal.TRANSITION_DURATION = 300;
   Modal.BACKDROP_TRANSITION_DURATION = 150;
@@ -920,7 +927,7 @@ if (typeof jQuery === 'undefined') {
         ;
       }
 
-      that.$element.addClass('in').attr('aria-hidden', false);
+      that.$element.addClass('in');
 
       that.enforceFocus();
 
@@ -949,7 +956,7 @@ if (typeof jQuery === 'undefined') {
 
     $(document).off('focusin.bs.modal');
 
-    this.$element.removeClass('in').attr('aria-hidden', true).off('click.dismiss.bs.modal').off('mouseup.dismiss.bs.modal');
+    this.$element.removeClass('in').off('click.dismiss.bs.modal').off('mouseup.dismiss.bs.modal');
 
     this.$dialog.off('mousedown.dismiss.bs.modal');
 
@@ -1006,7 +1013,7 @@ if (typeof jQuery === 'undefined') {
     if (this.isShown && this.options.backdrop) {
       var doAnimate = $.support.transition && animate;
 
-      this.$backdrop = $('<div class="modal-backdrop ' + animate + '" />').appendTo(this.$body);
+      this.$backdrop = $(document.createElement('div')).addClass('modal-backdrop ' + animate).appendTo(this.$body);
 
       this.$element.on('click.dismiss.bs.modal', $.proxy(function (e) {
         if (this.ignoreBackdropClick) {
@@ -1139,7 +1146,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.3.4
+ * Bootstrap: tooltip.js v3.3.5
  * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
@@ -1160,11 +1167,12 @@ if (typeof jQuery === 'undefined') {
     this.timeout = null;
     this.hoverState = null;
     this.$element = null;
+    this.inState = null;
 
     this.init('tooltip', element, options);
   };
 
-  Tooltip.VERSION = '3.3.4';
+  Tooltip.VERSION = '3.3.5';
 
   Tooltip.TRANSITION_DURATION = 150;
 
@@ -1189,7 +1197,8 @@ if (typeof jQuery === 'undefined') {
     this.type = type;
     this.$element = $(element);
     this.options = this.getOptions(options);
-    this.$viewport = this.options.viewport && $(this.options.viewport.selector || this.options.viewport);
+    this.$viewport = this.options.viewport && $($.isFunction(this.options.viewport) ? this.options.viewport.call(this, this.$element) : this.options.viewport.selector || this.options.viewport);
+    this.inState = { click: false, hover: false, focus: false };
 
     if (this.$element[0] instanceof document.constructor && !this.options.selector) {
       throw new Error('`selector` option must be specified when initializing ' + this.type + ' on the window.document object!');
@@ -1245,14 +1254,18 @@ if (typeof jQuery === 'undefined') {
   Tooltip.prototype.enter = function (obj) {
     var self = obj instanceof this.constructor ? obj : $(obj.currentTarget).data('bs.' + this.type);
 
-    if (self && self.$tip && self.$tip.is(':visible')) {
-      self.hoverState = 'in';
-      return;
-    }
-
     if (!self) {
       self = new this.constructor(obj.currentTarget, this.getDelegateOptions());
       $(obj.currentTarget).data('bs.' + this.type, self);
+    }
+
+    if (obj instanceof $.Event) {
+      self.inState[obj.type == 'focusin' ? 'focus' : 'hover'] = true;
+    }
+
+    if (self.tip().hasClass('in') || self.hoverState == 'in') {
+      self.hoverState = 'in';
+      return;
     }
 
     clearTimeout(self.timeout);
@@ -1266,6 +1279,14 @@ if (typeof jQuery === 'undefined') {
     }, self.options.delay.show);
   };
 
+  Tooltip.prototype.isInStateTrue = function () {
+    for (var key in this.inState) {
+      if (this.inState[key]) return true;
+    }
+
+    return false;
+  };
+
   Tooltip.prototype.leave = function (obj) {
     var self = obj instanceof this.constructor ? obj : $(obj.currentTarget).data('bs.' + this.type);
 
@@ -1273,6 +1294,12 @@ if (typeof jQuery === 'undefined') {
       self = new this.constructor(obj.currentTarget, this.getDelegateOptions());
       $(obj.currentTarget).data('bs.' + this.type, self);
     }
+
+    if (obj instanceof $.Event) {
+      self.inState[obj.type == 'focusout' ? 'focus' : 'hover'] = false;
+    }
+
+    if (self.isInStateTrue()) return;
 
     clearTimeout(self.timeout);
 
@@ -1314,6 +1341,7 @@ if (typeof jQuery === 'undefined') {
       $tip.detach().css({ top: 0, left: 0, display: 'block' }).addClass(placement).data('bs.' + this.type, this);
 
       this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element);
+      this.$element.trigger('inserted.bs.' + this.type);
 
       var pos = this.getPosition();
       var actualWidth = $tip[0].offsetWidth;
@@ -1321,10 +1349,9 @@ if (typeof jQuery === 'undefined') {
 
       if (autoPlace) {
         var orgPlacement = placement;
-        var $container = this.options.container ? $(this.options.container) : this.$element.parent();
-        var containerDim = this.getPosition($container);
+        var viewportDim = this.getPosition(this.$viewport);
 
-        placement = placement == 'bottom' && pos.bottom + actualHeight > containerDim.bottom ? 'top' : placement == 'top' && pos.top - actualHeight < containerDim.top ? 'bottom' : placement == 'right' && pos.right + actualWidth > containerDim.width ? 'left' : placement == 'left' && pos.left - actualWidth < containerDim.left ? 'right' : placement;
+        placement = placement == 'bottom' && pos.bottom + actualHeight > viewportDim.bottom ? 'top' : placement == 'top' && pos.top - actualHeight < viewportDim.top ? 'bottom' : placement == 'right' && pos.right + actualWidth > viewportDim.width ? 'left' : placement == 'left' && pos.left - actualWidth < viewportDim.left ? 'right' : placement;
 
         $tip.removeClass(orgPlacement).addClass(placement);
       }
@@ -1358,8 +1385,8 @@ if (typeof jQuery === 'undefined') {
     if (isNaN(marginTop)) marginTop = 0;
     if (isNaN(marginLeft)) marginLeft = 0;
 
-    offset.top = offset.top + marginTop;
-    offset.left = offset.left + marginLeft;
+    offset.top += marginTop;
+    offset.left += marginLeft;
 
     // $.fn.offset doesn't round pixel values
     // so we use setOffset directly with our own function B-0
@@ -1487,7 +1514,7 @@ if (typeof jQuery === 'undefined') {
       if (leftEdgeOffset < viewportDimensions.left) {
         // left overflow
         delta.left = viewportDimensions.left - leftEdgeOffset;
-      } else if (rightEdgeOffset > viewportDimensions.width) {
+      } else if (rightEdgeOffset > viewportDimensions.right) {
         // right overflow
         delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset;
       }
@@ -1512,7 +1539,13 @@ if (typeof jQuery === 'undefined') {
   };
 
   Tooltip.prototype.tip = function () {
-    return this.$tip = this.$tip || $(this.options.template);
+    if (!this.$tip) {
+      this.$tip = $(this.options.template);
+      if (this.$tip.length != 1) {
+        throw new Error(this.type + ' `template` option must consist of exactly 1 top-level element!');
+      }
+    }
+    return this.$tip;
   };
 
   Tooltip.prototype.arrow = function () {
@@ -1541,7 +1574,12 @@ if (typeof jQuery === 'undefined') {
       }
     }
 
-    self.tip().hasClass('in') ? self.leave(self) : self.enter(self);
+    if (e) {
+      self.inState.click = !self.inState.click;
+      if (self.isInStateTrue()) self.enter(self);else self.leave(self);
+    } else {
+      self.tip().hasClass('in') ? self.leave(self) : self.enter(self);
+    }
   };
 
   Tooltip.prototype.destroy = function () {
@@ -1549,6 +1587,12 @@ if (typeof jQuery === 'undefined') {
     clearTimeout(this.timeout);
     this.hide(function () {
       that.$element.off('.' + that.type).removeData('bs.' + that.type);
+      if (that.$tip) {
+        that.$tip.detach();
+      }
+      that.$tip = null;
+      that.$arrow = null;
+      that.$viewport = null;
     });
   };
 
@@ -1582,7 +1626,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.3.4
+ * Bootstrap: popover.js v3.3.5
  * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -1601,7 +1645,7 @@ if (typeof jQuery === 'undefined') {
 
   if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js');
 
-  Popover.VERSION = '3.3.4';
+  Popover.VERSION = '3.3.5';
 
   Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
     placement: 'right',
@@ -1682,7 +1726,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.4
+ * Bootstrap: scrollspy.js v3.3.5
  * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -1710,7 +1754,7 @@ if (typeof jQuery === 'undefined') {
     this.process();
   }
 
-  ScrollSpy.VERSION = '3.3.4';
+  ScrollSpy.VERSION = '3.3.5';
 
   ScrollSpy.DEFAULTS = {
     offset: 10
@@ -1834,7 +1878,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.3.4
+ * Bootstrap: tab.js v3.3.5
  * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -1848,10 +1892,13 @@ if (typeof jQuery === 'undefined') {
   // ====================
 
   var Tab = function Tab(element) {
-    this.element = $(element);
+    // jscs:disable requireDollarBeforejQueryAssignment
+    this.element = $(element)
+    // jscs:enable requireDollarBeforejQueryAssignment
+    ;
   };
 
-  Tab.VERSION = '3.3.4';
+  Tab.VERSION = '3.3.5';
 
   Tab.TRANSITION_DURATION = 150;
 
@@ -1962,7 +2009,7 @@ if (typeof jQuery === 'undefined') {
 })(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.3.4
+ * Bootstrap: affix.js v3.3.5
  * http://getbootstrap.com/javascript/#affix
  * ========================================================================
  * Copyright 2011-2015 Twitter, Inc.
@@ -1988,7 +2035,7 @@ if (typeof jQuery === 'undefined') {
     this.checkPosition();
   };
 
-  Affix.VERSION = '3.3.4';
+  Affix.VERSION = '3.3.5';
 
   Affix.RESET = 'affix affix-top affix-bottom';
 
@@ -2038,7 +2085,7 @@ if (typeof jQuery === 'undefined') {
     var offset = this.options.offset;
     var offsetTop = offset.top;
     var offsetBottom = offset.bottom;
-    var scrollHeight = $(document.body).height();
+    var scrollHeight = Math.max($(document).height(), $(document.body).height());
 
     if (typeof offset != 'object') offsetBottom = offsetTop = offset;
     if (typeof offsetTop == 'function') offsetTop = offset.top(this.$element);
@@ -2565,5 +2612,529 @@ if (typeof jQuery === 'undefined') {
 
   $.fn.combobox.Constructor = Combobox;
 })(window.jQuery);
+
+(function ($, undefined) {
+
+  /**
+   * Unobtrusive scripting adapter for jQuery
+   * https://github.com/rails/jquery-ujs
+   *
+   * Requires jQuery 1.8.0 or later.
+   *
+   * Released under the MIT license
+   *
+   */
+
+  // Cut down on the number of issues from people inadvertently including jquery_ujs twice
+  // by detecting and raising an error when it happens.
+  if ($.rails !== undefined) {
+    $.error('jquery-ujs has already been loaded!');
+  }
+
+  // Shorthand to make it a little easier to call public rails functions from within rails.js
+  var rails;
+  var $document = $(document);
+
+  $.rails = rails = {
+    // Link elements bound by jquery-ujs
+    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with], a[data-disable]',
+
+    // Button elements bound by jquery-ujs
+    buttonClickSelector: 'button[data-remote]:not(form button), button[data-confirm]:not(form button)',
+
+    // Select elements bound by jquery-ujs
+    inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
+
+    // Form elements bound by jquery-ujs
+    formSubmitSelector: 'form',
+
+    // Form input elements bound by jquery-ujs
+    formInputClickSelector: 'form input[type=submit], form input[type=image], form button[type=submit], form button:not([type]), input[type=submit][form], input[type=image][form], button[type=submit][form], button[form]:not([type])',
+
+    // Form input elements disabled during form submission
+    disableSelector: 'input[data-disable-with]:enabled, button[data-disable-with]:enabled, textarea[data-disable-with]:enabled, input[data-disable]:enabled, button[data-disable]:enabled, textarea[data-disable]:enabled',
+
+    // Form input elements re-enabled after form submission
+    enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled, input[data-disable]:disabled, button[data-disable]:disabled, textarea[data-disable]:disabled',
+
+    // Form required input elements
+    requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
+
+    // Form file input elements
+    fileInputSelector: 'input[type=file]',
+
+    // Link onClick disable selector with possible reenable after remote submission
+    linkDisableSelector: 'a[data-disable-with], a[data-disable]',
+
+    // Button onClick disable selector with possible reenable after remote submission
+    buttonDisableSelector: 'button[data-remote][data-disable-with], button[data-remote][data-disable]',
+
+    // Make sure that every Ajax request sends the CSRF token
+    CSRFProtection: function CSRFProtection(xhr) {
+      var token = $('meta[name="csrf-token"]').attr('content');
+      if (token) xhr.setRequestHeader('X-CSRF-Token', token);
+    },
+
+    // making sure that all forms have actual up-to-date token(cached forms contain old one)
+    refreshCSRFTokens: function refreshCSRFTokens() {
+      var csrfToken = $('meta[name=csrf-token]').attr('content');
+      var csrfParam = $('meta[name=csrf-param]').attr('content');
+      $('form input[name="' + csrfParam + '"]').val(csrfToken);
+    },
+
+    // Triggers an event on an element and returns false if the event result is false
+    fire: function fire(obj, name, data) {
+      var event = $.Event(name);
+      obj.trigger(event, data);
+      return event.result !== false;
+    },
+
+    // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
+    confirm: (function (_confirm) {
+      function confirm(_x) {
+        return _confirm.apply(this, arguments);
+      }
+
+      confirm.toString = function () {
+        return _confirm.toString();
+      };
+
+      return confirm;
+    })(function (message) {
+      return confirm(message);
+    }),
+
+    // Default ajax function, may be overridden with custom function in $.rails.ajax
+    ajax: function ajax(options) {
+      return $.ajax(options);
+    },
+
+    // Default way to get an element's href. May be overridden at $.rails.href.
+    href: function href(element) {
+      return element[0].href;
+    },
+
+    // Submits "remote" forms and links with ajax
+    handleRemote: function handleRemote(element) {
+      var method, url, data, withCredentials, dataType, options;
+
+      if (rails.fire(element, 'ajax:before')) {
+        withCredentials = element.data('with-credentials') || null;
+        dataType = element.data('type') || $.ajaxSettings && $.ajaxSettings.dataType;
+
+        if (element.is('form')) {
+          method = element.attr('method');
+          url = element.attr('action');
+          data = element.serializeArray();
+          // memoized value from clicked submit button
+          var button = element.data('ujs:submit-button');
+          if (button) {
+            data.push(button);
+            element.data('ujs:submit-button', null);
+          }
+        } else if (element.is(rails.inputChangeSelector)) {
+          method = element.data('method');
+          url = element.data('url');
+          data = element.serialize();
+          if (element.data('params')) data = data + '&' + element.data('params');
+        } else if (element.is(rails.buttonClickSelector)) {
+          method = element.data('method') || 'get';
+          url = element.data('url');
+          data = element.serialize();
+          if (element.data('params')) data = data + '&' + element.data('params');
+        } else {
+          method = element.data('method');
+          url = rails.href(element);
+          data = element.data('params') || null;
+        }
+
+        options = {
+          type: method || 'GET', data: data, dataType: dataType,
+          // stopping the "ajax:beforeSend" event will cancel the ajax request
+          beforeSend: function beforeSend(xhr, settings) {
+            if (settings.dataType === undefined) {
+              xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
+            }
+            if (rails.fire(element, 'ajax:beforeSend', [xhr, settings])) {
+              element.trigger('ajax:send', xhr);
+            } else {
+              return false;
+            }
+          },
+          success: function success(data, status, xhr) {
+            element.trigger('ajax:success', [data, status, xhr]);
+          },
+          complete: function complete(xhr, status) {
+            element.trigger('ajax:complete', [xhr, status]);
+          },
+          error: function error(xhr, status, _error) {
+            element.trigger('ajax:error', [xhr, status, _error]);
+          },
+          crossDomain: rails.isCrossDomain(url)
+        };
+
+        // There is no withCredentials for IE6-8 when
+        // "Enable native XMLHTTP support" is disabled
+        if (withCredentials) {
+          options.xhrFields = {
+            withCredentials: withCredentials
+          };
+        }
+
+        // Only pass url to `ajax` options if not blank
+        if (url) {
+          options.url = url;
+        }
+
+        return rails.ajax(options);
+      } else {
+        return false;
+      }
+    },
+
+    // Determines if the request is a cross domain request.
+    isCrossDomain: function isCrossDomain(url) {
+      var originAnchor = document.createElement('a');
+      originAnchor.href = location.href;
+      var urlAnchor = document.createElement('a');
+
+      try {
+        urlAnchor.href = url;
+        // This is a workaround to a IE bug.
+        urlAnchor.href = urlAnchor.href;
+
+        // Make sure that the browser parses the URL and that the protocols and hosts match.
+        return !urlAnchor.protocol || !urlAnchor.host || originAnchor.protocol + '//' + originAnchor.host !== urlAnchor.protocol + '//' + urlAnchor.host;
+      } catch (e) {
+        // If there is an error parsing the URL, assume it is crossDomain.
+        return true;
+      }
+    },
+
+    // Handles "data-method" on links such as:
+    // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
+    handleMethod: function handleMethod(link) {
+      var href = rails.href(link),
+          method = link.data('method'),
+          target = link.attr('target'),
+          csrfToken = $('meta[name=csrf-token]').attr('content'),
+          csrfParam = $('meta[name=csrf-param]').attr('content'),
+          form = $('<form method="post" action="' + href + '"></form>'),
+          metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
+
+      if (csrfParam !== undefined && csrfToken !== undefined && !rails.isCrossDomain(href)) {
+        metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
+      }
+
+      if (target) {
+        form.attr('target', target);
+      }
+
+      form.hide().append(metadataInput).appendTo('body');
+      form.submit();
+    },
+
+    // Helper function that returns form elements that match the specified CSS selector
+    // If form is actually a "form" element this will return associated elements outside the from that have
+    // the html form attribute set
+    formElements: function formElements(form, selector) {
+      return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector);
+    },
+
+    /* Disables form elements:
+      - Caches element value in 'ujs:enable-with' data store
+      - Replaces element text with value of 'data-disable-with' attribute
+      - Sets disabled property to true
+    */
+    disableFormElements: function disableFormElements(form) {
+      rails.formElements(form, rails.disableSelector).each(function () {
+        rails.disableFormElement($(this));
+      });
+    },
+
+    disableFormElement: function disableFormElement(element) {
+      var method, replacement;
+
+      method = element.is('button') ? 'html' : 'val';
+      replacement = element.data('disable-with');
+
+      element.data('ujs:enable-with', element[method]());
+      if (replacement !== undefined) {
+        element[method](replacement);
+      }
+
+      element.prop('disabled', true);
+    },
+
+    /* Re-enables disabled form elements:
+      - Replaces element text with cached value from 'ujs:enable-with' data store (created in `disableFormElements`)
+      - Sets disabled property to false
+    */
+    enableFormElements: function enableFormElements(form) {
+      rails.formElements(form, rails.enableSelector).each(function () {
+        rails.enableFormElement($(this));
+      });
+    },
+
+    enableFormElement: function enableFormElement(element) {
+      var method = element.is('button') ? 'html' : 'val';
+      if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
+      element.prop('disabled', false);
+    },
+
+    /* For 'data-confirm' attribute:
+       - Fires `confirm` event
+       - Shows the confirmation dialog
+       - Fires the `confirm:complete` event
+        Returns `true` if no function stops the chain and user chose yes; `false` otherwise.
+       Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog.
+       Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
+       return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
+    */
+    allowAction: function allowAction(element) {
+      var message = element.data('confirm'),
+          answer = false,
+          callback;
+      if (!message) {
+        return true;
+      }
+
+      if (rails.fire(element, 'confirm')) {
+        answer = rails.confirm(message);
+        callback = rails.fire(element, 'confirm:complete', [answer]);
+      }
+      return answer && callback;
+    },
+
+    // Helper function which checks for blank inputs in a form that match the specified CSS selector
+    blankInputs: function blankInputs(form, specifiedSelector, nonBlank) {
+      var inputs = $(),
+          input,
+          valueToCheck,
+          selector = specifiedSelector || 'input,textarea',
+          allInputs = form.find(selector);
+
+      allInputs.each(function () {
+        input = $(this);
+        valueToCheck = input.is('input[type=checkbox],input[type=radio]') ? input.is(':checked') : input.val();
+        // If nonBlank and valueToCheck are both truthy, or nonBlank and valueToCheck are both falsey
+        if (!valueToCheck === !nonBlank) {
+
+          // Don't count unchecked required radio if other radio with same name is checked
+          if (input.is('input[type=radio]') && allInputs.filter('input[type=radio]:checked[name="' + input.attr('name') + '"]').length) {
+            return true; // Skip to next input
+          }
+
+          inputs = inputs.add(input);
+        }
+      });
+      return inputs.length ? inputs : false;
+    },
+
+    // Helper function which checks for non-blank inputs in a form that match the specified CSS selector
+    nonBlankInputs: function nonBlankInputs(form, specifiedSelector) {
+      return rails.blankInputs(form, specifiedSelector, true); // true specifies nonBlank
+    },
+
+    // Helper function, needed to provide consistent behavior in IE
+    stopEverything: function stopEverything(e) {
+      $(e.target).trigger('ujs:everythingStopped');
+      e.stopImmediatePropagation();
+      return false;
+    },
+
+    //  replace element's html with the 'data-disable-with' after storing original html
+    //  and prevent clicking on it
+    disableElement: function disableElement(element) {
+      var replacement = element.data('disable-with');
+
+      element.data('ujs:enable-with', element.html()); // store enabled state
+      if (replacement !== undefined) {
+        element.html(replacement);
+      }
+
+      element.bind('click.railsDisable', function (e) {
+        // prevent further clicking
+        return rails.stopEverything(e);
+      });
+    },
+
+    // restore element to its original state which was disabled by 'disableElement' above
+    enableElement: function enableElement(element) {
+      if (element.data('ujs:enable-with') !== undefined) {
+        element.html(element.data('ujs:enable-with')); // set to old enabled state
+        element.removeData('ujs:enable-with'); // clean up cache
+      }
+      element.unbind('click.railsDisable'); // enable element
+    }
+  };
+
+  if (rails.fire($document, 'rails:attachBindings')) {
+
+    $.ajaxPrefilter(function (options, originalOptions, xhr) {
+      if (!options.crossDomain) {
+        rails.CSRFProtection(xhr);
+      }
+    });
+
+    // This event works the same as the load event, except that it fires every
+    // time the page is loaded.
+    //
+    // See https://github.com/rails/jquery-ujs/issues/357
+    // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
+    $(window).on('pageshow.rails', function () {
+      $($.rails.enableSelector).each(function () {
+        var element = $(this);
+
+        if (element.data('ujs:enable-with')) {
+          $.rails.enableFormElement(element);
+        }
+      });
+
+      $($.rails.linkDisableSelector).each(function () {
+        var element = $(this);
+
+        if (element.data('ujs:enable-with')) {
+          $.rails.enableElement(element);
+        }
+      });
+    });
+
+    $document.delegate(rails.linkDisableSelector, 'ajax:complete', function () {
+      rails.enableElement($(this));
+    });
+
+    $document.delegate(rails.buttonDisableSelector, 'ajax:complete', function () {
+      rails.enableFormElement($(this));
+    });
+
+    $document.delegate(rails.linkClickSelector, 'click.rails', function (e) {
+      var link = $(this),
+          method = link.data('method'),
+          data = link.data('params'),
+          metaClick = e.metaKey || e.ctrlKey;
+      if (!rails.allowAction(link)) return rails.stopEverything(e);
+
+      if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
+
+      if (link.data('remote') !== undefined) {
+        if (metaClick && (!method || method === 'GET') && !data) {
+          return true;
+        }
+
+        var handleRemote = rails.handleRemote(link);
+        // response from rails.handleRemote() will either be false or a deferred object promise.
+        if (handleRemote === false) {
+          rails.enableElement(link);
+        } else {
+          handleRemote.fail(function () {
+            rails.enableElement(link);
+          });
+        }
+        return false;
+      } else if (method) {
+        rails.handleMethod(link);
+        return false;
+      }
+    });
+
+    $document.delegate(rails.buttonClickSelector, 'click.rails', function (e) {
+      var button = $(this);
+
+      if (!rails.allowAction(button)) return rails.stopEverything(e);
+
+      if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
+
+      var handleRemote = rails.handleRemote(button);
+      // response from rails.handleRemote() will either be false or a deferred object promise.
+      if (handleRemote === false) {
+        rails.enableFormElement(button);
+      } else {
+        handleRemote.fail(function () {
+          rails.enableFormElement(button);
+        });
+      }
+      return false;
+    });
+
+    $document.delegate(rails.inputChangeSelector, 'change.rails', function (e) {
+      var link = $(this);
+      if (!rails.allowAction(link)) return rails.stopEverything(e);
+
+      rails.handleRemote(link);
+      return false;
+    });
+
+    $document.delegate(rails.formSubmitSelector, 'submit.rails', function (e) {
+      var form = $(this),
+          remote = form.data('remote') !== undefined,
+          blankRequiredInputs,
+          nonBlankFileInputs;
+
+      if (!rails.allowAction(form)) return rails.stopEverything(e);
+
+      // skip other logic when required values are missing or file upload is present
+      if (form.attr('novalidate') == undefined) {
+        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector);
+        if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
+          return rails.stopEverything(e);
+        }
+      }
+
+      if (remote) {
+        nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
+        if (nonBlankFileInputs) {
+          // slight timeout so that the submit button gets properly serialized
+          // (make it easy for event handler to serialize form without disabled values)
+          setTimeout(function () {
+            rails.disableFormElements(form);
+          }, 13);
+          var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
+
+          // re-enable form elements if event bindings return false (canceling normal form submission)
+          if (!aborted) {
+            setTimeout(function () {
+              rails.enableFormElements(form);
+            }, 13);
+          }
+
+          return aborted;
+        }
+
+        rails.handleRemote(form);
+        return false;
+      } else {
+        // slight timeout so that the submit button gets properly serialized
+        setTimeout(function () {
+          rails.disableFormElements(form);
+        }, 13);
+      }
+    });
+
+    $document.delegate(rails.formInputClickSelector, 'click.rails', function (event) {
+      var button = $(this);
+
+      if (!rails.allowAction(button)) return rails.stopEverything(event);
+
+      // register the pressed submit button
+      var name = button.attr('name'),
+          data = name ? { name: name, value: button.val() } : null;
+
+      button.closest('form').data('ujs:submit-button', data);
+    });
+
+    $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function (event) {
+      if (this == event.target) rails.disableFormElements($(this));
+    });
+
+    $document.delegate(rails.formSubmitSelector, 'ajax:complete.rails', function (event) {
+      if (this == event.target) rails.enableFormElements($(this));
+    });
+
+    $(function () {
+      rails.refreshCSRFTokens();
+    });
+  }
+})(jQuery);
 // don't move modals dom position
 //# sourceMappingURL=all.js.map

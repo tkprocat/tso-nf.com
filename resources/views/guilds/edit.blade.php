@@ -23,14 +23,14 @@ Edit Profile
                         <div class="form-group" for="name">
                             <label for="name" class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-10">
-                                <input type="text" id="name" value="{{ old('name', $guild->name) }}" class="form-control" placeholder="Guild name">
+                                <input type="text" name="name" value="{{ old('name', $guild->name) }}" class="form-control" placeholder="Guild name">
                             </div>
                         </div>
 
                         <div class="form-group" for="tag">
                             <label for="tag" class="col-sm-2 control-label">Tag</label>
                             <div class="col-sm-2">
-                                <input type="text" id="name" value="{{ old('tag', $guild->tag) }}" class="form-control" placeholder="Guild tag">
+                                <input type="text" name="tag" value="{{ old('tag', $guild->tag) }}" class="form-control" placeholder="Guild tag">
                             </div>
                         </div>
 

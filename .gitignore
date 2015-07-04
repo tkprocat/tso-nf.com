@@ -6,6 +6,7 @@ composer.phar
 composer.lock
 .env.*.php
 .env.php
+.env
 .DS_Store
 Thumbs.db
 phpunit.phar
@@ -16,4 +17,5 @@ Vagrantfile
 /.vagrant/
 /.ssh/
 /.homestead/
+/resources/assets/bower/
 _ide_helper.php

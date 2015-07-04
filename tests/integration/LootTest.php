@@ -30,8 +30,8 @@ class LootTest extends TestCase
     /** @test */
     public function can_get_loot_index_with_adventure_name()
     {
-        $this->call('GET', '/loot/adventure/Epic+-+The+Black+Knights');
-        $this->assertResponseOk();
+        $adventure = $this->addTheBlackKnightsAdventure();
+        $this->visit('/loot/adventure/'.urlencode($adventure->name));
     }
 
     /** @test */
@@ -47,7 +47,7 @@ class LootTest extends TestCase
     public function can_get_adventure_loots_from_json_api()
     {
         //Add an adventure so we have something to reply.
-        $adventure = $this->add_the_black_knights_adventure();
+        $adventure = $this->addTheBlackKnightsAdventure();
         $json = json_encode($adventure->loot->toArray());
 
         //Test with GET
@@ -203,7 +203,7 @@ class LootTest extends TestCase
     }
 
 
-    protected function add_the_black_knights_adventure()
+    protected function addTheBlackKnightsAdventure()
     {
         $data = array(
             'name' => 'The Black Knights',

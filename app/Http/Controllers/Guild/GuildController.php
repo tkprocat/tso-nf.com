@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Redirect;
 use LootTracker\Http\Requests\CreateGuildRequest;
 use LootTracker\Http\Requests\UpdateGuildRequest;
 use LootTracker\Repositories\Guild\GuildInterface;
+use LootTracker\Repositories\Guild\UserAlreadyInAGuildException;
 use LootTracker\Repositories\User\UserInterface;
 
 class GuildController extends Controller
@@ -63,13 +64,9 @@ class GuildController extends Controller
     public function show($id)
     {
         $guild = $this->guild->byId($id);
-
-        //Check if the current user is a guild admin for the selected guild.
-        $isGuildAdmin = $guild->isGuildAdmin($this->user->getUser()) || $this->user->isAdmin();
-
         $admins = $this->guild->getAdmins($id);
         $members = $this->guild->getMembers($id);
-        return view('guilds.show', compact('isGuildAdmin', 'guild', 'admins', 'members', 'guild_access_admins'));
+        return view('guilds.show', compact('guild', 'admins', 'members'));
     }
 
     /**
@@ -104,7 +101,7 @@ class GuildController extends Controller
 
         $this->guild->update($request->all(), $id);
 
-        return Redirect::to('guilds')->with(array('success' => 'Guild updated successfully.'));
+        return Redirect::to('guilds/'.$id)->with(array('success' => 'Guild updated successfully.'));
     }
 
     /**
@@ -118,7 +115,7 @@ class GuildController extends Controller
         //Check if the user has permission to do this action.
         $user = $this->user->getUser();
         if (!($this->user->isAdmin() || ($user->can('admin-guild-members') && $this->isUserInGuild($guild_id, $user->id)))) {
-            return Redirect::back()->with(array('errors' => 'You do not have sufficient permissions.'));
+            return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
         //Check if the guild exists.
@@ -126,7 +123,7 @@ class GuildController extends Controller
 
         //Delete the guild
         $this->guild->delete($guild_id);
-        return Redirect::to('/guilds')->with(array('success' => 'Guild deleted successfully.'));
+        return Redirect::to('/guilds')->with(array('success' => 'Guild disbanded.'));
     }
 
     public function addMember($guild_id, $user_id)
@@ -139,11 +136,15 @@ class GuildController extends Controller
 
         //Check if the user has permission to do this action.
         if (!($this->user->isAdmin() || ($this->user->getUser()->can('admin-guild-members') && $this->isUserInGuild($guild_id, $user_id)))) {
-            return Redirect::back()->with(array('errors' => 'You do not have sufficient permissions.'));
+            return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
-        $this->guild->addMember($guild_id, $user->id);
-        return Redirect::back();
+        try {
+            $this->guild->addMember($guild_id, $user->id);
+        } catch(UserAlreadyInAGuildException $ex) {
+            return Redirect::back()->withErrors($ex->getMessage());
+        }
+        return Redirect::back()->with(array('success' => 'User added to guild.'));
     }
 
     public function removeMember($guild_id, $user_id)
@@ -153,12 +154,12 @@ class GuildController extends Controller
 
         //Check if the user has permission to do this action.
         if (!($this->user->isAdmin() || ($this->user->getUser()->can('can-admin-guild-members') && $this->isUserInGuild($guild_id, $user_id)))) {
-            return Redirect::back()->with(array('errors' => 'You do not have sufficient permissions.'));
+            return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
         //Check the person is in the guild.
-        if ($user->guild_id !== $guild_id) {
-            return Redirect::back()->with(array('errors' => 'That user is not a member of the guild.'));
+        if (intval($user->guild_id) !== intval($guild_id)) {
+            return Redirect::back()->withErrors('That user is not a member of the guild.');
         }
 
         $this->guild->removeMember($guild_id, $user->id);
@@ -174,25 +175,40 @@ class GuildController extends Controller
         $this->getGuildFromId($guild_id, 'Guild not found.');
 
         //Check the person is in the guild already.
-        if ($user->guild_id !== $guild_id) {
-            return Redirect::back()->with(array('errors' => 'That user is not a member of the guild.'));
+        if (intval($user->guild_id) !== intval($guild_id)) {
+            return Redirect::back()->withErrors('That user is not a member of the guild.');
         }
 
         //Check if the user has permission to do this action.
         if (!($this->user->isAdmin() || ($this->user->getUser()->can('admin-guild-members') && $this->isUserInGuild($guild_id, $user_id)))) {
-            return Redirect::back()->with(array('errors' => 'You do not have sufficient permissions.'));
+            return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
-        $this->guild->promoteMember($guild_id, $user_id);
+        $this->guild->promoteMember($user_id);
 
         return Redirect::back()->with(array('success' => 'Member promoted.'));
     }
 
     public function demoteMember($guild_id, $user_id)
     {
+        //Check that the user we're trying to promote exists.
+        $user = $this->getUserFromId($user_id, 'Guild member not found.');
 
-        $this->guild->demoteMember($guild_id, $user_id);
-        return Redirect::back();
+        //Check if the guild exists.
+        $this->getGuildFromId($guild_id, 'Guild not found.');
+
+        //Check the person is in the guild already.
+        if (intval($user->guild_id) !== intval($guild_id)) {
+            return Redirect::back()->withErrors('That user is not a member of the guild.');
+        }
+
+        //Check if the user has permission to do this action.
+        if (!($this->user->isAdmin() || ($this->user->getUser()->can('admin-guild-members') && $this->isUserInGuild($guild_id, $user_id)))) {
+            return Redirect::back()->withErrors('You do not have sufficient permissions.');
+        }
+
+        $this->guild->demoteMember($user_id);
+        return Redirect::back()->with(array('success' => 'Member demoted.'));
     }
 
     private function isUserInGuild($guild_id, $user_id)
@@ -217,9 +233,9 @@ class GuildController extends Controller
             return $this->guild->byId($guild_id);
         } catch (ModelNotFoundException $ex) {
             if ($redirect_to !== '')
-                return Redirect::to($redirect_to)->with(array('errors' => $message));
+                return Redirect::to($redirect_to)->withErrors($message);
             else
-                return Redirect::back()->with(array('errors' => $message));
+                return Redirect::back()->withErrors($message);
         }
     }
 
@@ -236,9 +252,9 @@ class GuildController extends Controller
             return $this->user->byId($user_id);
         } catch (ModelNotFoundException $ex) {
             if ($redirect_to !== '')
-                return Redirect::to($redirect_to)->with(array('errors' => $message));
+                return Redirect::to($redirect_to)->withErrors($message);
             else
-                return Redirect::back()->with(array('errors' => $message));
+                return Redirect::back()->withErrors($message);
         }
     }
 }
