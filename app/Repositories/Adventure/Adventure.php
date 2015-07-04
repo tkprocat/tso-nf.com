@@ -8,7 +8,7 @@ class Adventure extends Model
 
     public function loot()
     {
-        return $this->hasMany('\LootTracker\Repositories\Adventure\AdventureLoot')->orderBy('slot')->orderBy('type')->orderBy('amount');
+        return $this->hasMany('\LootTracker\Repositories\Adventure\AdventureLoot')->select(array('slot','type','amount'))->orderBy('slot')->orderBy('type')->orderBy('amount');
     }
 
     public function played()
