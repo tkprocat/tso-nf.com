@@ -125,6 +125,21 @@ class GuildTest extends TestCase
     }
 
     /** @test */
+    public function canKickMember()
+    {
+        $user2 = $this->user->byUsername('user2');
+        $this->guild->addMember(1, $user2->id);
+
+        //Check the user is added to the guild
+        $this->seeInDatabase('users', array('id' => $user2->id, 'guild_id' => '1'));
+
+        //Kick the user again and check it gets cleaned up.
+        $this->visit('guilds/1/kick/'.$user2->id)
+            ->see('Guild member kicked.')
+            ->seeInDatabase('users', array('id' => $user2->id, 'guild_id' => '0'));
+    }
+
+    /** @test */
     public function canGetAdminsForGuild()
     {
         $guild1 = $this->guild->byTag('TG');
@@ -141,7 +156,7 @@ class GuildTest extends TestCase
     }
 
     /** @test */
-    public function canDeleteGuild()
+    public function canDisbandGuild()
     {
         //Test the button is there.
         $this->visit('/guilds/1')
@@ -149,8 +164,9 @@ class GuildTest extends TestCase
             ->click('Disband guild');
 
         //Test that we can actually disband the guild.
-        $this->call('DELETE', 'guilds/1');
-        $this->assertRedirectedTo('/guilds', array('success' => 'Guild disbanded.'));
+        $this->delete('guilds/1');
+
+        $this->notSeeInDatabase('users', array('guild_id' => '1'));
     }
 
     /** @test */

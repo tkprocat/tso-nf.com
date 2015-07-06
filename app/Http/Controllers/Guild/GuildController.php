@@ -1,7 +1,7 @@
 <?php namespace LootTracker\Http\Controllers;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Redirect;
+use Redirect;
 use LootTracker\Http\Requests\CreateGuildRequest;
 use LootTracker\Http\Requests\UpdateGuildRequest;
 use LootTracker\Repositories\Guild\GuildInterface;
@@ -153,7 +153,7 @@ class GuildController extends Controller
         $user = $this->getUserFromId($user_id, 'Guild member not found.');
 
         //Check if the user has permission to do this action.
-        if (!($this->user->isAdmin() || ($this->user->getUser()->can('can-admin-guild-members') && $this->isUserInGuild($guild_id, $user_id)))) {
+        if (!($this->user->isAdmin() || ($this->user->getUser()->can('admin-guild-members') && $this->isUserInGuild($guild_id, $user_id)))) {
             return Redirect::back()->with(array('error' => 'You do not have sufficient permissions.'));
         }
 
@@ -162,8 +162,8 @@ class GuildController extends Controller
             return Redirect::back()->with(array('error' => 'That user is not a member of the guild.'));
         }
 
-        $this->guild->removeMember($guild_id, $user->id);
-        return Redirect::back();
+        $this->guild->removeMember($user->id);
+        return Redirect::back()->with(array('success' => 'Guild member kicked.'));
     }
 
     public function promoteMember($guild_id, $user_id)

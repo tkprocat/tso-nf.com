@@ -163,11 +163,11 @@ class EloquentGuildRepository implements GuildInterface
         $guild = $this->byId($guild_id);
 
         foreach ($this->getMembers($guild->id) as $member) {
-            $this->removeMember($guild->id, $member->id);
+            $this->removeMember($member->id);
         }
 
         foreach ($this->getAdmins($guild->id) as $admin) {
-            $this->removeMember($guild->id, $admin->id);
+            $this->removeMember($admin->id);
         }
 
         $guild->delete($guild_id);
