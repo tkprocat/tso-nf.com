@@ -5,6 +5,8 @@ use LootTracker\Repositories\User\Role;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
+    protected $baseUrl = 'http://localhost';
+
     protected $user;
 
     /**
@@ -17,8 +19,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $app = require __DIR__ . '/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-
-        $this->baseUrl = env('TEST_URL', 'http://localhost');
 
         return $app;
     }
