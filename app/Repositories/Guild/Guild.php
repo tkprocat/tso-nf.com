@@ -19,7 +19,8 @@ class Guild extends Model
             ->join('role_user', 'users.id', '=', 'role_user.user_id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
             ->where('roles.id', $role->id)
-            ->where('guild_id', $this->id)->get();
+            ->where('guild_id', $this->id)
+            ->orderBy('users.username')->get();
     }
 
     public function isGuildAdmin($member)
@@ -29,6 +30,6 @@ class Guild extends Model
 
     public function members()
     {
-        return $this->hasMany('LootTracker\Repositories\User\User')->get();
+        return $this->hasMany('LootTracker\Repositories\User\User')->orderBy('username')->get();
     }
 }
