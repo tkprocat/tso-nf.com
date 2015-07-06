@@ -124,10 +124,9 @@ class LootController extends Controller
     }
 
     /**
-     * @param bool $popup_mode
      * @return \Illuminate\View\View
      */
-    public function create($popup_mode = false)
+    public function create()
     {
         $adventures = $this->adventure->all();
         if (old('adventure_id')) {
@@ -136,19 +135,19 @@ class LootController extends Controller
 
             $loot = array();
             for ($slot = 1; $slot <= 20; $slot++) {
-                $loot_types = array();
+                $lootTypes = array();
                 if ($adventure->loot()->slot($slot)->count() > 0)
-                    $loot_types[0] = "Please select loot.";
-                foreach ($adventure->loot()->slot($slot) as $lootslot) {
-                    $loot_types[$lootslot->id] = $lootslot->type . ' - '.$lootslot->amount;
+                    $lootTypes[0] = "Please select loot.";
+                foreach ($adventure->loot()->slot($slot) as $lootSlot) {
+                    $lootTypes[$lootSlot->id] = $lootSlot->type . ' - '.$lootSlot->amount;
                 }
-                if (!empty($loot_types))
-                    $loot[$slot] = $loot_types;
+                if (!empty($lootTypes))
+                    $loot[$slot] = $lootTypes;
             }
 
-            return view('loot.create', compact('adventures', 'loot', 'popup_mode'));
+            return view('loot.create', compact('adventures', 'loot'));
         } else {
-            return view('loot.create', compact('adventures', 'popup_mode'));
+            return view('loot.create', compact('adventures'));
         }
     }
 

@@ -12,14 +12,7 @@
     <script type="text/javascript" src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 </head>
 <body>
-@if (App::environment() == 'staging')
-    <div class="alert alert-warning" role="alert">This is a testing site, pleas don't register your actually loot here
-        and
-        expect it to stick!
-    </div>
-@endif
 <div class="container">
-    @if ((!isset($popup_mode)) || (isset($popup_mode) && !$popup_mode))
         <div class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
@@ -32,13 +25,11 @@
                 </div>
                 <div class="navbar-collapse collapse navbar-responsive-collapse">
                     <ul class="nav navbar-nav">
-                        <li {!! (Request::segment(1)===
-                        'blog' ? 'class="active"' : '') !!}>
+                        <li {!! (Request::segment(1)==='blog' ? 'class="active"' : '') !!}>
                         <a href="{{ URL::to('blog') }}">Blog</a>
                         </li>
                         @if (Auth::check())
-                            <li {!! ((Request::segment(1)=== 'stats') ? 'class="dropdown active"' : 'class="dropdown"')
-                            !!}>
+                            <li {!! ((Request::segment(1)=== 'stats') ? 'class="dropdown active"' : 'class="dropdown"') !!}>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
@@ -58,8 +49,7 @@
                                 </li>
                             </ul>
                             </li>
-                            <li {!! ((Request::segment(1)=== 'loot') ? 'class="dropdown active"' : 'class="dropdown"')
-                            !!}>
+                            <li {!! ((Request::segment(1)=== 'loot') ? 'class="dropdown active"' : 'class="dropdown"') !!}>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Loot<span
                                         class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
@@ -100,7 +90,6 @@
                 </div>
             </div>
         </div>
-    @endif
     @include('layouts/notifications')
 
     @yield('content')
