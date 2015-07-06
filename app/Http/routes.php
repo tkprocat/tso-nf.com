@@ -69,13 +69,13 @@ Route::group(array('middleware' => ['auth'], 'permission' => ['see-loot']), func
     Route::get('stats/global/getTop10BestAdventuresForLootTypeByAvgDrop/{type}',
         array('as' => 'stats', 'uses' => 'GlobalStatsController@getTop10BestAdventuresForLootTypeByAvgDrop'));
     Route::get('stats/global', 'GlobalStatsController@index');
-    Route::get('stats/global/{adventurename}', 'GlobalStatsController@show');
     Route::get('stats/global/submissionrate',
         array('as' => 'stats', 'uses' => 'GlobalStatsController@showSubmissionRate'));
     Route::get('stats/global/newuserrate',
         array('as' => 'stats', 'uses' => 'GlobalStatsController@showNewUserRate'));
     Route::get('stats/global/getPlayedCountForLast30Days/{adventure}',
         array('as' => 'stats', 'uses' => 'GlobalStatsController@getPlayedCountForLast30Days'));
+    Route::get('stats/global/{adventurename}', 'GlobalStatsController@show');
 });
 
 //Personal stats

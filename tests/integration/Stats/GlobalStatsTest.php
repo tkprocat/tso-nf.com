@@ -35,6 +35,13 @@ class GlobalStatsTest extends TestCase
         $this->assertJson($response->getContent());
     }
 
+    /** @test */
+    public function canSeeSignupRates()
+    {
+        $this->visit('stats/global/newuserrate')
+             ->see('Amount of new users per weeek in the last 10 weeks');
+    }
+
     public function tearDown()
     {
         parent::tearDown();
