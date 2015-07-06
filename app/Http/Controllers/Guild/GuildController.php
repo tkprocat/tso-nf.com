@@ -1,6 +1,7 @@
 <?php namespace LootTracker\Http\Controllers;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Input;
 use Redirect;
 use LootTracker\Http\Requests\CreateGuildRequest;
 use LootTracker\Http\Requests\UpdateGuildRequest;
@@ -145,6 +146,18 @@ class GuildController extends Controller
             return Redirect::back()->withErrors($ex->getMessage());
         }
         return Redirect::back()->with(array('success' => 'User added to guild.'));
+    }
+
+    public function addMemberPost($guild_id)
+    {
+        //Check that the user we're trying to add exists.
+        try {
+            $user = $this->user->byUsername(Input::get('username'));
+        } catch(ModelNotFoundException $ex)
+        {
+            return Redirect::back()->with(array('error' => 'User not found.'));
+        }
+        return $this->addMember($guild_id, $user->id);
     }
 
     public function removeMember($guild_id, $user_id)

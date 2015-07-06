@@ -50,6 +50,7 @@ Route::group(array('middleware' => ['auth'], 'role' => ['user', 'admin'], 'permi
         Route::get('guilds/{guild_id}/demote/{user_id}', 'GuildController@demoteMember')->where('guild_id', '[0-9]+')->where('user_id', '[0-9]+');
         Route::get('guilds/{guild_id}/add/{user_id}', 'GuildController@addMember')->where('guild_id', '[0-9]+')->where('user_id', '[0-9]+');
         Route::get('guilds/{guild_id}/kick/{user_id}', 'GuildController@removeMember')->where('guild_id', '[0-9]+')->where('user_id', '[0-9]+');
+        Route::post('guilds/{guild_id}/add', 'GuildController@addMemberPost')->where('guild_id', '[0-9]+');
     });
 });
 

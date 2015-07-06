@@ -49,10 +49,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">Add member</div>
     <div class="panel-body">
-        <form method="POST" action="https://tso-nf.com/guilds/addMember" accept-charset="UTF-8" class="form-inline">
+        <form method="POST" action="/guilds/{{ $guild->id }}/add" accept-charset="UTF-8" class="form-inline">
             <input name="_token" type="hidden" value="{{ csrf_token() }}">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Username">
+                <input type="text" name="username" class="form-control" placeholder="Username">
                 <input type="hidden" name="guild_id" value="{{ $guild->id }}">
                 <input type="submit" value="Add" class="btn btn-primary">
             </div>
