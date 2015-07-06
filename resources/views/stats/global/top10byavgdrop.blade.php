@@ -31,7 +31,7 @@
     $('[name="loottype_avgdrop"]').change(function () {
         $.ajax({
             type: 'GET',
-            url: "{{ URL::to('/stats/getTop10BestAdventuresForLootTypeByAvgDrop') }}/"+$('[name="loottype_avgdrop"] option:selected').text(),
+            url: "{{ URL::to('/stats/global/getTop10BestAdventuresForLootTypeByAvgDrop') }}/"+$('[name="loottype_avgdrop"] option:selected').text(),
             statusCode: {
                 401: function () {
                     self.location = "/login";
