@@ -50,9 +50,7 @@
 <script>
     $(document).ready(function() {
         $('#adventure_id').combobox();
-        if ($('#adventure_id option:selected').val() == "")
-            $('[id*="container"]').hide();
-        else
+        if ($('#adventure_id option:selected').val() != "")
             highlightNonSelectedFields();
     });
 

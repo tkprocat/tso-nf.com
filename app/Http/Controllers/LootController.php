@@ -162,14 +162,6 @@ class LootController extends Controller
     }
 
     /**
-     * @return \Illuminate\View\View
-     */
-    public function createPopup()
-    {
-        return $this->create(true);
-    }
-
-    /**
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store()
