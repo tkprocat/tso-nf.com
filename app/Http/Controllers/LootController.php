@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Validator;
 use App;
@@ -119,7 +120,7 @@ class LootController extends Controller
             $this->loot->update($data);
             return Redirect::to('loot')->with(array('success' => 'Loot updated successfully.'));
         } else {
-            return redirect('loot/'.$user_adventure_id.'/edit')->withInput()->withErrors($v->errors());
+            return Redirect::to('loot/'.$user_adventure_id.'/edit')->withInput()->withErrors($v->errors());
         }
     }
 
@@ -174,42 +175,24 @@ class LootController extends Controller
             $this->loot->create($data);
             return Redirect::to('loot/create')->with(array('success' => 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>'));
         } else {
-            return redirect('loot/create')->withInput()->withErrors($v->errors());
+            return Redirect::to('loot/create')->withInput()->withErrors($v->errors());
         }
     }
 
     /**
-     * @param Request $request
      * @param $id
      * @return mixed
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        if (!$this->user->check()) {
-            App::abort(403, 'You are not authorized.');
-        }
-
-        $data = Input::all();
-
-        if (is_numeric($id)) {
-            //TODO: Make the repository handle the deletion.
-            $userAdventure = $this->loot->byId($id)->first();
-            //Check if the userid deleting matches the userid on the record.
-
-            if (($this->user->getUser()->id === $userAdventure->User->id) || ($this->user->isAdmin())) {
-                $this->loot->delete($id);
-                if ($request->ajax()) {
-                    return $id;
-                }
-                return redirect()->back()->with(array('success' => 'Loot deleted.'));
-            } else {
-                App::abort(403, 'You are not authorized.');
-            }
+        //Check that the loot exists.
+        $loot = $this->getLootById($id, 'Loot not found.');
+        if (($this->user->getUser()->id === $loot->User->id) || ($this->user->isAdmin())) {
+            $this->loot->delete($id);
+            return Redirect::back()->with(array('success' => 'Loot deleted.'));
         } else {
-            return \Response::json(array('status' => 'error', 'message' => 'Missing ID!'));
+            return Redirect::back()->with(array('error' => 'You do not have sufficient permissions.'));
         }
-
-        return \Response::json(array('status' => 'ok'));
     }
 
     /**
@@ -223,6 +206,9 @@ class LootController extends Controller
     }
 
 
+    /**
+     * @return array
+     */
     public function rules() {
         //Check what slots the given adventure has and add those to the rules.
         $adventureRepo = App::make('LootTracker\Repositories\Adventure\AdventureInterface');
@@ -235,5 +221,24 @@ class LootController extends Controller
         }
 
         return $rules;
+    }
+
+    /**
+     * @param $loot_id
+     * @param string $message
+     * @param string $redirect_to
+     * @return mixed
+     */
+    private function getLootById($loot_id, $message, $redirect_to = '')
+    {
+        //Get the loot or return an error.
+        try {
+            return $this->loot->byId($loot_id);
+        } catch (ModelNotFoundException $ex) {
+            if ($redirect_to !== '')
+                return Redirect::to($redirect_to)->with(array('error' => $message));
+            else
+                return Redirect::back()->with(array('error' => $message));
+        }
     }
 }
