@@ -11,6 +11,6 @@
         @endforeach
         </select>
     @else
-        <select name="slot{{ $partial_id }}" class="form-control" style="width: 200px"></select>
+        <select name="slot{{ $partial_id }}" id="slot{{ $partial_id }}" class="form-control" style="width: 200px"></select>
     @endif
 </div>
