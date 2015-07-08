@@ -59,7 +59,6 @@
         </form>
     </div>
 </div>
-@endif
-
 <a href="/guilds/{{ $guild->id }}" data-method="delete" rel="nofollow" class="btn btn-danger" data-confirm="Are you sure you want to disband the guild?">Disband guild</a>
+@endif
 @stop
