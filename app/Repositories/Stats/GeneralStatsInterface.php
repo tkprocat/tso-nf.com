@@ -1,5 +1,4 @@
-<?php
-namespace LootTracker\Repositories\Stats;
+<?php namespace LootTracker\Repositories\Stats;
 
 use Carbon\Carbon;
 

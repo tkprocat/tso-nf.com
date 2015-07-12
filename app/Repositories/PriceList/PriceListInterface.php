@@ -1,6 +1,4 @@
-<?php
-namespace LootTracker\Repositories\PriceList;
-
+<?php namespace LootTracker\Repositories\PriceList;
 
 interface PriceListInterface
 {

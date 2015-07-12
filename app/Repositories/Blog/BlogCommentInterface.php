@@ -1,6 +1,4 @@
-<?php
-
-namespace LootTracker\Repositories\Blog;
+<?php namespace LootTracker\Repositories\Blog;
 
 interface BlogCommentInterface
 {

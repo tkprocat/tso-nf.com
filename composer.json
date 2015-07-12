@@ -18,7 +18,8 @@
 		"phpspec/phpspec": "~2.1",
         "mockery/mockery": "0.9.*",
         "symfony/psr-http-message-bridge": "^0.1.0",
-        "fzaninotto/faker": "~1.4"
+        "fzaninotto/faker": "~1.4",
+	  	"doctrine/dbal": "~2.5"
 	},
 	"autoload": {
 		"classmap": [

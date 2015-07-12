@@ -5,9 +5,12 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
+/**
+ * Class User
+ * @package LootTracker\Repositories\User
+ */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
 

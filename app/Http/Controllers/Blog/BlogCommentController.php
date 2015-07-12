@@ -130,7 +130,7 @@ class BlogCommentController extends Controller
      *
      * @param  int $comment_id
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|void
      */
     public function destroy($comment_id)
     {

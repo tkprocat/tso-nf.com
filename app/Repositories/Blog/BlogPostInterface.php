@@ -1,5 +1,4 @@
-<?php
-namespace LootTracker\Repositories\Blog;
+<?php namespace LootTracker\Repositories\Blog;
 
 interface BlogPostInterface
 {
@@ -11,11 +10,9 @@ interface BlogPostInterface
 
     public function all();
 
-    public function findPage($page, $limit);
-
     public function findSlug($slug);
 
     public function byId($id);
 
     public function findComments($id);
-} 
+}

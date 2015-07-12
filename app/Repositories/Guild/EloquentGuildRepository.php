@@ -1,16 +1,19 @@
-<?php
-namespace LootTracker\Repositories\Guild;
+<?php namespace LootTracker\Repositories\Guild;
 
-use Auth;
-use Entrust;
 use Exception;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 use LootTracker\Repositories\User\Role;
 use LootTracker\Repositories\User\UserInterface;
 
+/**
+ * Class EloquentGuildRepository
+ * @package LootTracker\Repositories\Guild
+ */
 class EloquentGuildRepository implements GuildInterface
 {
+
+    /**
+     * @var UserInterface
+     */
     protected $user;
 
     /**
@@ -53,11 +56,13 @@ class EloquentGuildRepository implements GuildInterface
 
         //Attach roles to the user creating the guild.
         $user = $this->user->byId($user_id);
-        //check if the user has the role before addding them.
-        if (!$user->hasRole('guild_admin'))
-          $user->roles()->attach($this->getAdminRole());
-        if (!$user->hasRole('guild_member'))
-          $user->roles()->attach($this->getMemberRole());
+        //check if the user has the role before adding them.
+        if (!$user->hasRole('guild_admin')) {
+            $user->roles()->attach($this->getAdminRole());
+        }
+        if (!$user->hasRole('guild_member')) {
+            $user->roles()->attach($this->getMemberRole());
+        }
 
         //Add the user to the guild.
         $this->addMember($guild->id, $user->id);
@@ -129,8 +134,9 @@ class EloquentGuildRepository implements GuildInterface
         //Check if the user is unguilded before adding him to another.
         if ($user->guild_id == 0) {
             //Check if we have a rank for the guild otherwise create it.
-            if (!$user->hasRole('guild_member'))
+            if (!$user->hasRole('guild_member')) {
                 $user->roles()->attach($this->getMemberRole());
+            }
             $user->guild_id = $guild_id;
             $user->save();
         } else {
@@ -223,5 +229,8 @@ class EloquentGuildRepository implements GuildInterface
         return Role::whereName('guild_admin')->first();
     }
 }
-
+/**
+ * Class UserAlreadyInAGuildException
+ * @package LootTracker\Repositories\Guild
+ */
 class UserAlreadyInAGuildException extends Exception {}

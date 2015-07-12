@@ -1,5 +1,4 @@
-<?php
-namespace LootTracker\Repositories\Loot;
+<?php namespace LootTracker\Repositories\Loot;
 
 interface LootInterface
 {

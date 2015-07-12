@@ -1,7 +1,5 @@
 <?php namespace LootTracker\Events;
 
-abstract class Event {
-
-	//
-
+abstract class Event
+{
 }

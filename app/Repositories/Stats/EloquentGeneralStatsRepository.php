@@ -5,8 +5,18 @@ use Carbon\Carbon;
 use LootTracker\Repositories\Loot\UserAdventure;
 use LootTracker\Repositories\User\User;
 
+/**
+ * Class EloquentGeneralStatsRepository
+ * @package LootTracker\Repositories\Stats
+ */
 class EloquentGeneralStatsRepository implements GeneralStatsInterface
 {
+
+    /**
+     * @param Carbon $date
+     *
+     * @return mixed
+     */
     public function getSubmissionsForWeek(Carbon $date)
     {
         $startOfWeek = clone $date->startOfWeek();
@@ -18,6 +28,12 @@ class EloquentGeneralStatsRepository implements GeneralStatsInterface
             ->count();
     }
 
+
+    /**
+     * @param Carbon $date
+     *
+     * @return mixed
+     */
     public function getNewUsersForWeek(Carbon $date)
     {
         $startOfWeek = clone $date->startOfWeek();
@@ -26,11 +42,19 @@ class EloquentGeneralStatsRepository implements GeneralStatsInterface
         return User::where('created_at', '>=', $startOfWeek)->where('created_at', '<=', $endOfWeek)->get()->count();
     }
 
+
+    /**
+     * @return array|static[]
+     */
     public function getLootTypes()
     {
         return DB::table('adventure_loot')->select('Type')->distinct()->orderBy('Type')->get();
     }
 
+
+    /**
+     * @return array
+     */
     public function getLast10Weeks()
     {
         $date = Carbon::now();
@@ -42,6 +66,10 @@ class EloquentGeneralStatsRepository implements GeneralStatsInterface
         return $weeks;
     }
 
+
+    /**
+     * @return array
+     */
     public function getLast30Days()
     {
         $date = Carbon::now();

@@ -1,21 +1,39 @@
-<?php
-namespace LootTracker\Repositories\Stats;
+<?php namespace LootTracker\Repositories\Stats;
 
 use Carbon\Carbon;
 use DB;
-use LootTracker\Repositories\Adventure\Adventure;
 use LootTracker\Repositories\Loot\LootInterface;
 use LootTracker\Repositories\Loot\UserAdventure;
 
+/**
+ * Class EloquentGuildStatsRepository
+ * @package LootTracker\Repositories\Stats
+ */
 class EloquentGuildStatsRepository implements GuildStatsInterface
 {
+
+    /**
+     * @var LootInterface
+     */
     protected $loot;
 
+
+    /**
+     * @param LootInterface $loot
+     */
     public function __construct(LootInterface $loot)
     {
         $this->loot = $loot;
     }
 
+
+    /**
+     * @param        $guild_id
+     * @param Carbon $date
+     * @param        $adventure_id
+     *
+     * @return mixed
+     */
     public function getPlayedCountPerDayForAdventure($guild_id, Carbon $date, $adventure_id)
     {
         $startOfDay = clone $date->startOfDay();
@@ -27,6 +45,13 @@ class EloquentGuildStatsRepository implements GuildStatsInterface
             ->count();
     }
 
+
+    /**
+     * @param     $guild_id
+     * @param int $adventure_id
+     *
+     * @return int
+     */
     public function getPlayedCount($guild_id, $adventure_id = 0)
     {
         $query = DB::table('user_adventure')
@@ -40,6 +65,13 @@ class EloquentGuildStatsRepository implements GuildStatsInterface
         return $query->count();
     }
 
+
+    /**
+     * @param     $guild_id
+     * @param int $adventure_id
+     *
+     * @return array
+     */
     public function getLootDropCount($guild_id, $adventure_id = 0)
     {
         $query = DB::table('adventure_loot')
@@ -61,6 +93,13 @@ class EloquentGuildStatsRepository implements GuildStatsInterface
         return $query->lists('dropped', 'id');
     }
 
+
+    /**
+     * @param     $guild_id
+     * @param int $adventure_id
+     *
+     * @return array|static[]
+     */
     public function getAdventuresWithPlayedAndLoot($guild_id, $adventure_id = 0)
     {
         $query = DB::table('adventure')

@@ -1,5 +1,4 @@
-<?php
-namespace LootTracker\Repositories\Guild;
+<?php namespace LootTracker\Repositories\Guild;
 
 interface GuildInterface
 {

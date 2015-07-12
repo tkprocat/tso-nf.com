@@ -1,13 +1,17 @@
-<?php
-namespace LootTracker\Repositories\Loot;
+<?php namespace LootTracker\Repositories\Loot;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use LootTracker\Repositories\Adventure\Adventure;
 
+/**
+ * Class EloquentLootRepository
+ * @package LootTracker\Repositories\Loot
+ */
 class EloquentLootRepository implements LootInterface
 {
+
     /**
      * @return mixed
      */
@@ -16,21 +20,24 @@ class EloquentLootRepository implements LootInterface
         return UserAdventure::all();
     }
 
+
     /**
-     * @param $itemsPerPage
+     * @param int    $itemsPerPage
      * @param string $adventure_name
-     * @param int $user_id
+     * @param int    $user_id
+     *
      * @return mixed
      */
     public function paginate($itemsPerPage, $adventure_name = '', $user_id = 0)
     {
         if ($adventure_name != '') {
             $adventureRepo = App::make('LootTracker\Repositories\Adventure\AdventureInterface');
-            $adventure = $adventureRepo->byName(urldecode($adventure_name));
+            $adventure     = $adventureRepo->byName(urldecode($adventure_name));
             //Check if we have the adventure
             if ($adventure != null) {
-                return UserAdventure::where('adventure_id', $adventure->id)->orderBy('created_at',
-                    'desc')->paginate($itemsPerPage);
+                return UserAdventure::where('adventure_id', $adventure->id)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate($itemsPerPage);
             } else {
                 return UserAdventure::orderBy('created_at', 'desc')->paginate($itemsPerPage);
             } //Return all if we can't find it.
@@ -41,8 +48,10 @@ class EloquentLootRepository implements LootInterface
         }
     }
 
+
     /**
      * @param $id
+     *
      * @return \Illuminate\Database\Eloquent\Collection|Model|static
      */
     public function byId($id)
@@ -50,32 +59,38 @@ class EloquentLootRepository implements LootInterface
         return UserAdventure::findOrFail($id);
     }
 
+
     /**
      * @param $data
      */
     public function create($data)
     {
-        $adventure_id = $data['adventure_id'];
-        $useradventure = new UserAdventure();
-        $useradventure->user_id = $data['user_id'];
-        $useradventure->adventure_id = $adventure_id;
-        $useradventure->save();
+        $adventure_id                = $data['adventure_id'];
+        $userAdventure               = new UserAdventure();
+        $userAdventure->user_id      = $data['user_id'];
+        $userAdventure->adventure_id = $adventure_id;
+        $userAdventure->save();
 
         for ($i = 1; $i <= 20; $i++) {
-            if (isset($data['slot' . $i]) && $data['slot' . $i] != 0) {
-                $useradventureloot = new UserAdventureLoot();
-                $useradventureloot->user_adventure_id = $useradventure->id;
-                $useradventureloot->adventure_loot_id = $data['slot' . $i];
-                $useradventureloot->save();
+            if (isset( $data['slot' . $i] ) && $data['slot' . $i] != 0) {
+                $userAdventureLoot                    = new UserAdventureLoot();
+                $userAdventureLoot->user_adventure_id = $userAdventure->id;
+                $userAdventureLoot->adventure_loot_id = $data['slot' . $i];
+                $userAdventureLoot->save();
             }
         }
     }
 
+
+    /**
+     * @param $id
+     */
     public function delete($id)
     {
         $userAdventure = $this->byId($id);
         $userAdventure->delete();
     }
+
 
     /**
      * @param $data
@@ -84,28 +99,30 @@ class EloquentLootRepository implements LootInterface
     {
         DB::beginTransaction();
 
-        $adventure_id = $data['adventure_id'];
-        $user_adventure = $this->byId($data['user_adventure_id']);
-        $user_adventure->adventure_id = $adventure_id;
-        $user_adventure->update();
+        $adventure_id                = $data['adventure_id'];
+        $userAdventure               = $this->byId($data['user_adventure_id']);
+        $userAdventure->adventure_id = $adventure_id;
+        $userAdventure->update();
 
         //This is ugly, but a lot easier since the amount of slots could have changed too.
-        UserAdventureLoot::where('user_adventure_id', $user_adventure->id)->delete();
+        UserAdventureLoot::where('user_adventure_id', $userAdventure->id)->delete();
 
         for ($i = 1; $i <= 20; $i++) {
-            if (isset($data['slot' . $i]) && $data['slot' . $i] != 0) {
-                $user_adventure_loot = new UserAdventureLoot();
-                $user_adventure_loot->user_adventure_id = $user_adventure->id;
-                $user_adventure_loot->adventure_loot_id = $data['slot' . $i];
-                $user_adventure_loot->save();
+            if (isset( $data['slot' . $i] ) && $data['slot' . $i] != 0) {
+                $userAdventureLoot                    = new UserAdventureLoot();
+                $userAdventureLoot->user_adventure_id = $userAdventure->id;
+                $userAdventureLoot->adventure_loot_id = $data['slot' . $i];
+                $userAdventureLoot->save();
             }
         }
 
         DB::commit();
     }
 
+
     /**
      * @param $id
+     *
      * @return mixed
      */
     public function findAllAdventuresForUser($id)
@@ -113,8 +130,10 @@ class EloquentLootRepository implements LootInterface
         return UserAdventure::where('user_id', $id)->firstOrFail();
     }
 
+
     /**
      * @param $id
+     *
      * @return array|static[]
      */
     public function findAllLootForUserAdventure($id)
@@ -122,35 +141,40 @@ class EloquentLootRepository implements LootInterface
         return DB::table('user_adventure_loot')
             ->join('adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
             ->where('user_adventure_loot.user_adventure_id', '=', $id)
-            ->orderBy('adventure_loot.slot')
-            ->get();
+            ->orderBy('adventure_loot.slot')->get();
     }
+
 
     /**
      * @return array|static[]
      */
     public function findAllPlayedAdventures()
     {
-        return DB::table('adventure')
-            ->join('user_adventure', 'adventure.id', '=', 'user_adventure.adventure_id')
-            ->select(array('adventure.*', \DB::raw('COUNT(*) as played')))
-            ->groupBy('adventure.id')->orderBy('name')->get();
+        return DB::table('adventure')->join('user_adventure', 'adventure.id', '=', 'user_adventure.adventure_id')
+            ->select(['adventure.*', DB::raw('COUNT(*) as played')])
+            ->groupBy('adventure.id')
+            ->orderBy('name')
+            ->get();
     }
+
 
     /**
      * @return \Illuminate\Database\Query\Builder|static
      */
     public function getAllAdventuresWithPlayedAndLoot()
     {
-        return Adventure::with(array('played', 'loot'))->orderBy('name');
+        return Adventure::with(['played', 'loot'])->orderBy('name');
     }
 
+
     /**
+     * @param $adventure_id
+     *
      * @return \Illuminate\Database\Query\Builder|static
      */
     public function getAdventureWithPlayedAndLoot($adventure_id)
     {
-        return Adventure::with(array('played', 'loot'))->where('id', $adventure_id)->orderBy('name');
+        return Adventure::with(['played', 'loot'])->where('id', $adventure_id)->orderBy('name');
     }
 
 
@@ -162,49 +186,65 @@ class EloquentLootRepository implements LootInterface
         return UserAdventure::with('loot');
     }
 
+
     /**
      * @return array
      */
     public function getLootDropCount()
     {
-        return DB::table('adventure_loot')
-            ->leftJoin('user_adventure_loot', 'user_adventure_loot.adventure_loot_id', '=', 'adventure_loot.id')
-            ->select(array(
-                'adventure_loot.*',
-                \DB::raw('COUNT(' . \DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')
-            ))
-            ->groupBy('adventure_loot.id')
-            ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount')->lists('dropped', 'id');
+        return DB::table('adventure_loot')->leftJoin(
+            'user_adventure_loot',
+            'user_adventure_loot.adventure_loot_id',
+            '=',
+            'adventure_loot.id'
+        )
+        ->select(['adventure_loot.*', DB::raw('COUNT(' . \DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')])
+        ->groupBy('adventure_loot.id')
+            ->orderBy('adventure_id')
+            ->orderBy('slot')
+            ->orderBy('type')
+            ->orderBy('amount')
+            ->lists('dropped', 'id');
     }
 
+
     /**
+     * @param $adventure_id
+     *
      * @return array
      */
     public function getLootDropCountForAdventure($adventure_id)
     {
-        return DB::table('adventure_loot')
-            ->leftJoin('user_adventure_loot', 'user_adventure_loot.adventure_loot_id', '=', 'adventure_loot.id')
-            ->select(array(
-                'adventure_loot.*',
-                \DB::raw('COUNT(' . \DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')
-            ))
-            ->where('adventure_id', $adventure_id)
+        return DB::table('adventure_loot')->leftJoin(
+            'user_adventure_loot',
+            'user_adventure_loot.adventure_loot_id',
+            '=',
+            'adventure_loot.id'
+        )
+        ->select(['adventure_loot.*', DB::raw('COUNT(' . DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')])
+        ->where('adventure_id', $adventure_id)
             ->groupBy('adventure_loot.id')
-            ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount')->lists('dropped', 'id');
+            ->orderBy('adventure_id')
+            ->orderBy('slot')
+            ->orderBy('type')
+            ->orderBy('amount')
+            ->lists('dropped', 'id');
     }
+
 
     /**
      * @param $user_id
      * @param $from
      * @param $to
+     *
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to)
     {
-        $query = UserAdventure::with(array('loot'))->where('user_id', $user_id);
+        $query = UserAdventure::with(['loot'])->where('user_id', $user_id);
 
-        if (($from != '') && ($to != '')) {
-            $query->whereBetween('user_adventure.created_at', array($from, $to));
+        if (( $from != '' ) && ( $to != '' )) {
+            $query->whereBetween('user_adventure.created_at', [$from, $to]);
         }
 
         return $query;

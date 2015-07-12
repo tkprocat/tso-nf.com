@@ -1,7 +1,17 @@
 <?php namespace LootTracker\Repositories\Adventure;
 
+/**
+ * Class EloquentAdventureRepository
+ * @package LootTracker\Repositories\Adventure
+ */
 class EloquentAdventureRepository implements AdventureInterface
 {
+
+    /**
+     * @param bool|false $onlyActives
+     *
+     * @return mixed
+     */
     public function all($onlyActives = false)
     {
         if ($onlyActives) {
@@ -13,22 +23,43 @@ class EloquentAdventureRepository implements AdventureInterface
         return $adventures;
     }
 
+
+    /**
+     * @param $adventure_id
+     *
+     * @return mixed
+     */
     public function byId($adventure_id)
     {
         return Adventure::findOrFail($adventure_id);
     }
 
+
+    /**
+     * @param $name
+     *
+     * @return mixed
+     */
     public function byName($name)
     {
         return Adventure::whereName($name)->firstOrFail();
     }
 
+
+    /**
+     * @return mixed
+     */
     public function findAdventuresWithLoot()
     {
         return Adventure::where('disabled', '0')->orderBy('Name')->with('loot')->get();
     }
 
 
+    /**
+     * @param $data
+     *
+     * @return Adventure
+     */
     public function create($data)
     {
         $adventure = new Adventure();
@@ -51,6 +82,12 @@ class EloquentAdventureRepository implements AdventureInterface
         return $adventure;
     }
 
+
+    /**
+     * @param $adventure_id
+     *
+     * @return mixed
+     */
     public function findAllLootForAdventure($adventure_id)
     {
         $adventure = Adventure::findOrFail($adventure_id);
@@ -58,11 +95,21 @@ class EloquentAdventureRepository implements AdventureInterface
         return $adventure->loot();
     }
 
+
+    /**
+     * @return mixed
+     */
     public function findAllDifferentLootTypes()
     {
         return AdventureLoot::distinct('type')->orderBy('type')->lists('type');
     }
 
+
+    /**
+     * @param $adventure_id
+     *
+     * @return mixed
+     */
     public function findAdventureWithLoot($adventure_id)
     {
         return Adventure::where('id', $adventure_id)->with('loot')->get();

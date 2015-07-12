@@ -12,7 +12,7 @@ class PriceListItem extends Model
         return $this->hasMany('LootTracker\Repositories\PriceList\PriceListItemPrice', 'pricelist_item_id');
     }
 
-    public function current_price()
+    public function currentPrice()
     {
         return PriceListItemPrice::where('pricelist_item_id', $this->id)->orderBy('id', 'desc')->firstOrFail();
     }

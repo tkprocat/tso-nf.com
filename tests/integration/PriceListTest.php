@@ -19,21 +19,21 @@ class PriceListTest extends TestCase
     }
 
     /** @test */
-    public function can_see_price_index_page()
+    public function canSeePriceIndexPage()
     {
         $this->call('GET', '/prices');
         $this->assertResponseOk();
     }
 
     /** @test */
-    public function can_get_item_list()
+    public function canGetItemList()
     {
         $items = $this->priceList->getAllItems();
         $this->assertCount(1, $items); // One item added by seeder
     }
 
     /** @test */
-    public function can_get_price_for_item_by_id()
+    public function canGetPriceForItemById()
     {
         $item = $this->priceList->byId(1);
         $this->assertNotNull($item);
@@ -43,17 +43,15 @@ class PriceListTest extends TestCase
     }
 
     /** @test */
-    public function can_change_price_for_item()
+    public function canChangePriceForItem()
     {
         //update the prices for item 1
         $this->priceListAdmin->updatePriceForItem(1, 0.00004, 0.00005, 0.00006);
 
         //Get the item again and see if the price has been updated.
         $item = $this->priceList->byId(1);
-        $item_price = $item->current_price();
+        $item_price = $item->currentPrice();
         $this->assertCount(2, $this->priceListAdmin->findAllPriceChangesForItemById(1));
-        //var_dump($this->priceListAdmin->getAllPriceChangesForItemById(1));
-        //var_dump($item_price);
         $this->assertNotNull($item_price);
         $this->assertEquals(0.00004, $item_price->min_price, 'Failure in comparing min_price after price update!');
         $this->assertEquals(0.00005, $item_price->avg_price, 'Failure in comparing avg_price after price update!');

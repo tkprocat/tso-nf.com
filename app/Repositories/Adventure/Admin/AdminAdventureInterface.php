@@ -1,6 +1,4 @@
-<?php
-namespace LootTracker\Repositories\Adventure\Admin;
-
+<?php namespace LootTracker\Repositories\Adventure\Admin;
 
 interface AdminAdventureInterface
 {

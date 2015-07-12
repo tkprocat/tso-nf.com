@@ -1,19 +1,29 @@
-<?php
-namespace LootTracker\Repositories\PriceList;
+<?php namespace LootTracker\Repositories\PriceList;
 
-use Illuminate\Database\Eloquent\Model;
-
+/**
+ * Class EloquentPriceListRepository
+ * @package LootTracker\Repositories\PriceList
+ */
 class EloquentPriceListRepository implements PriceListInterface
 {
+
+    /**
+     * @return mixed
+     */
     public function getAllItems()
     {
         $priceItems = PriceListItem::orderBy('Name')->get();
         return $priceItems;
     }
 
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public function byId($id)
     {
         return PriceListItem::findOrFail($id);
     }
 }
-

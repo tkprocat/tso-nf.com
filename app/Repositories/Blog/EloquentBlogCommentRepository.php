@@ -1,14 +1,26 @@
 <?php namespace LootTracker\Repositories\Blog;
 
-use Illuminate\Database\Eloquent\Model;
-
+/**
+ * Class EloquentBlogCommentRepository
+ * @package LootTracker\Repositories\Blog
+ */
 class EloquentBlogCommentRepository implements BlogCommentInterface
 {
+
+    /**
+     * @param $blogPostId
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function findCommentsForPost($blogPostId)
     {
         return BlogComment::where('post_id', $blogPostId)->get();
     }
 
+
+    /**
+     * @param $data
+     */
     public function create($data)
     {
         $blogComment = new BlogComment();
@@ -18,6 +30,13 @@ class EloquentBlogCommentRepository implements BlogCommentInterface
         $blogComment->save();
     }
 
+
+    /**
+     * @param $id
+     * @param $data
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function update($id, $data)
     {
         $blogComment = $this->byId($id);
@@ -27,12 +46,24 @@ class EloquentBlogCommentRepository implements BlogCommentInterface
         return $blogComment;
     }
 
+
+    /**
+     * @param $id
+     *
+     * @throws \Exception
+     */
     public function delete($id)
     {
         $comment = $this->byId($id);
         $comment->delete();
     }
 
+
+    /**
+     * @param $id
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function byId($id)
     {
         return BlogComment::findOrFail($id);

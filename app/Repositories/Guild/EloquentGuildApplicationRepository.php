@@ -8,20 +8,31 @@ use Illuminate\Support\Facades\Session;
 use LootTracker\Repositories\User\Role;
 use LootTracker\Repositories\User\UserInterface;
 
+/**
+ * Class EloquentGuildApplicationRepository
+ * @package LootTracker\Repositories\Guild
+ */
 class EloquentGuildApplicationRepository implements GuildApplicationInterface
 {
-    protected $user;
 
     /**
-     * @param GuildFormValidator $validator
-     * @param UserInterface $user
+     * @var UserInterface
+     */
+    protected $user;
+
+
+    /**
+     * @param UserInterface      $user
      */
     public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }
 
+
     /**
+     * @param $guild_id
+     *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function all($guild_id)
@@ -29,8 +40,10 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return GuildApplication::whereGuildId($guild_id)->get();
     }
 
+
     /**
      * @param $itemsPerPage
+     *
      * @return mixed
      */
     public function paginate($itemsPerPage)
@@ -38,26 +51,30 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return Guild::orderBy('name')->paginate($itemsPerPage);
     }
 
+
     /**
      * @param $data
      * @param $user_id
+     *
      * @return Guild
      */
     public function create($data, $user_id)
     {
         //Create the guild
-        $guild = new Guild;
-        $guild->tag = e($data['tag']);
+        $guild       = new Guild;
+        $guild->tag  = e($data['tag']);
         $guild->name = e($data['name']);
         $guild->save();
 
         //Attach roles to the user creating the guild.
         $user = $this->user->byId($user_id);
-        //check if the user has the role before addding them.
-        if (!$user->hasRole('guild_admin'))
-          $user->roles()->attach($this->getAdminRole());
-        if (!$user->hasRole('guild_member'))
-          $user->roles()->attach($this->getMemberRole());
+        //check if the user has the role before adding them.
+        if (!$user->hasRole('guild_admin')) {
+            $user->roles()->attach($this->getAdminRole());
+        }
+        if (!$user->hasRole('guild_member')) {
+            $user->roles()->attach($this->getMemberRole());
+        }
 
         //Add the user to the guild.
         $this->addMember($guild->id, $user->id);
@@ -68,20 +85,23 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return $guild;
     }
 
+
     /**
      * @param $data
      * @param $id
      */
     public function update($data, $id)
     {
-        $guild = $this->byId($id);
+        $guild          = $this->byId($id);
         $guild->user_id = e($data['name']);
-        $guild->title = e($data['tag']);
+        $guild->title   = e($data['tag']);
         $guild->update();
     }
 
+
     /**
      * @param $id
+     *
      * @return mixed
      */
     public function byId($id)
@@ -89,8 +109,10 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return Guild::findOrFail($id);
     }
 
+
     /**
      * @param $guild_tag
+     *
      * @return mixed
      */
     public function byTag($guild_tag)
@@ -98,9 +120,11 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return Guild::whereTag($guild_tag)->firstOrFail();
     }
 
+
     /**
      * @param $guild_id
      * @param $user_id
+     *
      * @return mixed
      */
     public function demoteMember($guild_id, $user_id)
@@ -112,7 +136,7 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         }
 
         //Check if the user has permission to do this action.
-        if (!(Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members'))) {
+        if ( ! ( Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members') )) {
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
@@ -126,9 +150,11 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return Redirect::to('guilds/' . $guild_id);
     }
 
+
     /**
      * @param $guild_id
      * @param $user_id
+     *
      * @return mixed
      */
     public function promoteMember($guild_id, $user_id)
@@ -140,7 +166,7 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         }
 
         //Check if the user has permission to do this action.
-        if (!(Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members'))) {
+        if (!( Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members'))) {
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
@@ -154,11 +180,13 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return Redirect::to('guilds/' . $guild_id);
     }
 
+
     /**
      * Assign a user membership to a guild.
      *
      * @param $guild_id
      * @param $user_id
+     *
      * @return mixed
      */
     public function addMember($guild_id, $user_id)
@@ -170,7 +198,7 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
 
         //Check if the user has permission to do this action.
         $user = $this->user->byId(Auth::user()->id);
-        if (!($user->hasRole('admin') || $user->can('admin-guild-members'))) {
+        if ( ! ( $user->hasRole('admin') || $user->can('admin-guild-members') )) {
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
@@ -178,18 +206,23 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         //Check if the user is unguilded before adding him to another.
         if ($user->guild_id == 0) {
             //Check if we have a rank for the guild otherwise create it.
-            if (!$user->hasRole('guild_member'))
+            if ( ! $user->hasRole('guild_member')) {
                 $user->roles()->attach($this->getMemberRole());
+            }
             $user->guild_id = $guild_id;
             $user->save();
         } else {
             Session::put('error', 'User is already in a guild.');
         }
+
+        return null;
     }
+
 
     /**
      * @param $guild_id
      * @param $user_id
+     *
      * @return mixed
      */
     public function removeMember($guild_id, $user_id)
@@ -200,7 +233,7 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         }
 
         //Check if the user has permission to do this action.
-        if (!(Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members'))) {
+        if ( ! ( Entrust::hasRole('admin') || Entrust::can('can_admin_guild_members') )) {
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
@@ -212,16 +245,21 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         //Remove the guild reference
         $user->guild_id = 0;
         $user->save();
+
+        return null;
     }
 
+
     /**
-     * @param $id
+     * @param $guild_id
+     *
+     * @return mixed
      */
     public function delete($guild_id)
     {
         $guild = $this->byId($guild_id);
         //Check if the user has permission to do this action.
-        if (!(Entrust::hasRole('admin') || Entrust::can('can_admin_guild'))) {
+        if ( ! ( Entrust::hasRole('admin') || Entrust::can('can_admin_guild') )) {
             return Redirect::back()->withErrors('You do not have sufficient permissions.');
         }
 
@@ -234,10 +272,14 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         }
 
         $guild->delete($guild_id);
+
+        return null;
     }
+
 
     /**
      * @param $guild_id
+     *
      * @return mixed
      */
     public function getMembers($guild_id)
@@ -247,8 +289,10 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return $guild->members();
     }
 
+
     /**
      * @param $guild_id
+     *
      * @return mixed
      */
     public function getAdmins($guild_id)
@@ -258,17 +302,19 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
         return $guild->admins();
     }
 
+
     /**
      * @param $guild_id
      * @param $user_id
      */
     public function addGuildApplication($guild_id, $user_id)
     {
-        GuildApplication::create(array(
+        GuildApplication::create([
             'guild_id' => $guild_id,
-            'user_id' => $user_id,
-        ));
+            'user_id'  => $user_id,
+        ]);
     }
+
 
     /**
      * @return mixed
@@ -277,6 +323,7 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
     {
         return Role::whereName('guild_member')->first();
     }
+
 
     /**
      * @return mixed
