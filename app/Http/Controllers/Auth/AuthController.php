@@ -13,6 +13,10 @@ use LootTracker\Http\Controllers\Controller;
 use LootTracker\Repositories\User\Role;
 use LootTracker\Repositories\User\User;
 
+/**
+ * Class AuthController
+ * @package LootTracker\Http\Controllers\Auth
+ */
 class AuthController extends Controller
 {
     /**
@@ -114,7 +118,8 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $this->throwValidationException(
-                $request, $validator
+                $request,
+                $validator
             );
         }
 
@@ -134,6 +139,10 @@ class AuthController extends Controller
         }
     }
 
+
+    /**
+     * @param User $user
+     */
     private function sendEmail(User $user)
     {
         $data = array(
@@ -147,6 +156,10 @@ class AuthController extends Controller
         });
     }
 
+
+    /**
+     * @return $this
+     */
     public function getResend()
     {
         $user = Auth::user();
@@ -160,6 +173,13 @@ class AuthController extends Controller
         }
     }
 
+
+    /**
+     * @param               $code
+     * @param UserInterface $user
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function getActivate($code, UserInterface $user)
     {
         try {
@@ -172,9 +192,10 @@ class AuthController extends Controller
             Session::flash('message', trans('auth.successActivated'));
             return redirect('blog');
 
-        } catch(ModelNotFoundException $ex) {
+        } catch (ModelNotFoundException $ex) {
             Session::flash('message', trans('auth.unsuccessful'));
             return redirect('blog');
         }
     }
 }
+

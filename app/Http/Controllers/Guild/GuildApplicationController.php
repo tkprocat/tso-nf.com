@@ -27,7 +27,7 @@ class GuildApplicationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index($id)
     {
@@ -40,7 +40,7 @@ class GuildApplicationController extends Controller
      * Show the form for creating a new resource.
      *
      * @param $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function create($id)
     {

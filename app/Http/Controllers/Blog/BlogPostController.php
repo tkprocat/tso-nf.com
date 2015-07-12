@@ -8,17 +8,34 @@ use LootTracker\Http\Requests\BlogPostRequest;
 use LootTracker\Repositories\Blog\BlogPostInterface;
 use LootTracker\Repositories\User\UserInterface;
 
+/**
+ * Class BlogPostController
+ * @package LootTracker\Http\Controllers
+ */
 class BlogPostController extends Controller
 {
 
+    /**
+     * @var BlogPostInterface
+     */
     protected $blogPostRepo;
-    protected $user;
 
-    function __construct(BlogPostInterface $blogPostRepo, UserInterface $user)
+    /**
+     * @var UserInterface
+     */
+    protected $userRepo;
+
+
+    /**
+     * @param BlogPostInterface $blogPostRepo
+     * @param UserInterface     $user
+     */
+    public function __construct(BlogPostInterface $blogPostRepo, UserInterface $user)
     {
         $this->blogPostRepo = $blogPostRepo;
-        $this->user = $user;
+        $this->userRepo     = $user;
     }
+
 
     /**
      * Display a listing of the resource.
@@ -27,9 +44,9 @@ class BlogPostController extends Controller
      */
     public function index()
     {
-        $page = \Input::get('page', 1);
+        $page              = \Input::get('page', 1);
         $blogsPostsPerPage = 10;
-        $blogs = new Paginator($this->blogPostRepo->all(), $blogsPostsPerPage, $page);
+        $blogs             = new Paginator($this->blogPostRepo->all(), $blogsPostsPerPage, $page);
 
         return view('blog.post.index')->with('blogs', $blogs);
 
@@ -51,13 +68,14 @@ class BlogPostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param BlogPostRequest $request
+     *
      * @return Response
      */
     public function store(BlogPostRequest $request)
     {
         $this->blogPostRepo->create($request);
 
-        return redirect('blog')->with('success', 'Post created successfully.');
+        return Redirect::to('blog')->with('success', 'Post created successfully.');
     }
 
 
@@ -65,19 +83,20 @@ class BlogPostController extends Controller
      * Display the specified resource.
      *
      * @param $slug
+     *
      * @internal param int $id
      * @return Response
      */
     public function show($slug)
     {
         try {
-            $post = $this->blogPostRepo->findSlug($slug);
+            $post     = $this->blogPostRepo->findSlug($slug);
             $comments = $this->blogPostRepo->findComments($post->id);
         } catch (ModelNotFoundException $ex) {
-            return redirect('blog')->withError('Blog post not found!');
+            return Redirect::to('blog')->withError('Blog post not found!');
         }
 
-        return view('blog.post.show')->with(array('post' => $post, 'comments' => $comments));
+        return view('blog.post.show')->with(['post' => $post, 'comments' => $comments]);
     }
 
 
@@ -85,6 +104,7 @@ class BlogPostController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return Response
      */
     public function edit($id)
@@ -92,7 +112,7 @@ class BlogPostController extends Controller
         try {
             $blog = $this->blogPostRepo->byId($id);
         } catch (ModelNotFoundException $ex) {
-            return redirect('blog')->withError('Post not found!');
+            return Redirect::to('blog')->withError('Post not found!');
         }
 
         return view('blog.post.edit')->with('blog', $blog);
@@ -101,6 +121,9 @@ class BlogPostController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param BlogPostRequest $request
+     * @param int             $id
      *
      * @return Response
      */
@@ -116,6 +139,7 @@ class BlogPostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return Response
      */
     public function destroy($id)

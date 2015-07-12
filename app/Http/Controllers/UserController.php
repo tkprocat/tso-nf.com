@@ -4,15 +4,22 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use LootTracker\Http\Requests;
 use LootTracker\Repositories\User\UserInterface;
 
+/**
+ * Class UserController
+ * @package LootTracker\Http\Controllers
+ */
 class UserController extends Controller
 {
 
+    /**
+     * @var UserInterface
+     */
     protected $user;
 
     /**
      * @param UserInterface $user
      */
-    function __construct(UserInterface $user)
+    public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }
@@ -41,7 +48,6 @@ class UserController extends Controller
             return redirect()->back()->withErrors('User not found.');
         }
         return view('users.show', compact('user'));
-
     }
 
     /**

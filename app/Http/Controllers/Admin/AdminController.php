@@ -3,13 +3,29 @@
 use LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface;
 use LootTracker\Repositories\User\UserInterface;
 
+/**
+ * Class AdminController
+ * @package LootTracker\Http\Controllers
+ */
 class AdminController extends Controller
 {
 
+    /**
+     * @var AdminAdventureInterface
+     */
     protected $adminAdventure;
+
+    /**
+     * @var UserInterface
+     */
     protected $user;
 
-    function __construct(AdminAdventureInterface $adminAdventure, UserInterface $user)
+
+    /**
+     * @param AdminAdventureInterface $adminAdventure
+     * @param UserInterface           $user
+     */
+    public function __construct(AdminAdventureInterface $adminAdventure, UserInterface $user)
     {
         $this->adminAdventure = $adminAdventure;
         $this->user = $user;
@@ -19,7 +35,7 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -27,75 +43,5 @@ class AdminController extends Controller
         $registeredAdventures = $this->adminAdventure->all()->count();
 
         return view('admin.index', compact('userCount', 'registeredAdventures'));
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store()
-    {
-        //
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function update($id)
-    {
-        //
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

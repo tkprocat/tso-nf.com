@@ -6,12 +6,28 @@ use LootTracker\Http\Requests\AdventureRequest;
 use LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface;
 use LootTracker\Repositories\User\UserInterface;
 
+/**
+ * Class AdminAdventureController
+ * @package LootTracker\Http\Controllers
+ */
 class AdminAdventureController extends Controller
 {
 
+    /**
+     * @var AdminAdventureInterface
+     */
     protected $adminAdventureRepo;
+
+    /**
+     * @var UserInterface
+     */
     protected $userRepo;
 
+
+    /**
+     * @param AdminAdventureInterface $adminAdventure
+     * @param UserInterface           $user
+     */
     public function __construct(AdminAdventureInterface $adminAdventure, UserInterface $user)
     {
         $this->adminAdventureRepo = $adminAdventure;
@@ -21,7 +37,7 @@ class AdminAdventureController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -34,7 +50,7 @@ class AdminAdventureController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -46,7 +62,7 @@ class AdminAdventureController extends Controller
      * Store a newly created resource in storage.
      *
      * @param AdventureRequest $request
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function store(AdventureRequest $request)
     {
@@ -61,7 +77,7 @@ class AdminAdventureController extends Controller
      * Display the specified resource.
      *
      * @param $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function show($id)
     {
@@ -75,7 +91,7 @@ class AdminAdventureController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
@@ -93,7 +109,7 @@ class AdminAdventureController extends Controller
      *
      * @param AdventureRequest $request
      * @param $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function update(AdventureRequest $request, $id)
     {

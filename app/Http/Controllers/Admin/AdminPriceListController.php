@@ -1,6 +1,5 @@
 <?php namespace LootTracker\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use LootTracker\Http\Requests\PriceItemRequest;
 use LootTracker\Http\Requests\UpdatePriceRequest;
@@ -21,7 +20,7 @@ class AdminPriceListController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -34,7 +33,7 @@ class AdminPriceListController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -46,7 +45,7 @@ class AdminPriceListController extends Controller
      * Store a newly created resource in storage.
      *
      * @param PriceItemRequest $request
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function store(PriceItemRequest $request)
     {
@@ -59,7 +58,7 @@ class AdminPriceListController extends Controller
      * Display the specified resource.
      *
      * @param $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function show($id)
     {
@@ -74,7 +73,7 @@ class AdminPriceListController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
@@ -91,7 +90,9 @@ class AdminPriceListController extends Controller
      * Update the specified resource in storage.
      *
      * @param PriceItemRequest $request
-     * @return Response
+     * @param int              $id
+     *
+     * @return \Illuminate\View\View
      */
     public function update(PriceItemRequest $request, $id)
     {
@@ -105,7 +106,7 @@ class AdminPriceListController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function destroy($id)
     {
@@ -118,7 +119,9 @@ class AdminPriceListController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @param $id
+     *
+     * @return \Illuminate\View\View
      */
     public function createNewPrice($id)
     {
@@ -131,12 +134,19 @@ class AdminPriceListController extends Controller
      * Store a newly created resource in storage.
      *
      * @param UpdatePriceRequest $request
-     * @return Response
+     * @param int                $item_id
+     *
+     * @return \Illuminate\View\View
      */
     public function storeNewPrice(UpdatePriceRequest $request, $item_id)
     {
         $data = $request->all();
-        $this->adminPriceListRepo->updatePriceForItem($item_id, $data['min_price'], $data['avg_price'], $data['max_price']);
+        $this->adminPriceListRepo->updatePriceForItem(
+            $item_id,
+            $data['min_price'],
+            $data['avg_price'],
+            $data['max_price']
+        );
         return Redirect::to('admin/prices')->with('success', 'New price registered');
     }
 }
