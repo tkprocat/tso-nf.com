@@ -1,8 +1,7 @@
-<?php
-namespace LootTracker\Repositories\Stats;
+<?php namespace LootTracker\Repositories\Stats;
 
-use Carbon\Carbon;
 use DB;
+use Carbon\Carbon;
 use LootTracker\Repositories\Loot\UserAdventure;
 use LootTracker\Repositories\User\User;
 
@@ -13,8 +12,10 @@ class EloquentGeneralStatsRepository implements GeneralStatsInterface
         $startOfWeek = clone $date->startOfWeek();
         $endOfWeek = $date->endOfWeek();
 
-        return UserAdventure::where('created_at', '>=', $startOfWeek)->where('created_at', '<=',
-            $endOfWeek)->get()->count();
+        return UserAdventure::where('created_at', '>=', $startOfWeek)
+            ->where('created_at', '<=', $endOfWeek)
+            ->get()
+            ->count();
     }
 
     public function getNewUsersForWeek(Carbon $date)
@@ -34,8 +35,7 @@ class EloquentGeneralStatsRepository implements GeneralStatsInterface
     {
         $date = Carbon::now();
         $weeks = [];
-        for ($i = 1; $i <= 10; $i++)
-        {
+        for ($i = 1; $i <= 10; $i++) {
             $weeks[] =  $date->weekOfYear;
             $date = $date->subWeek();
         }
@@ -46,9 +46,8 @@ class EloquentGeneralStatsRepository implements GeneralStatsInterface
     {
         $date = Carbon::now();
         $days = [];
-        for ($i = 1; $i <= 30; $i++)
-        {
-            $days[] =  $date->day;
+        for ($i = 1; $i <= 30; $i++) {
+            $days[] = $date->day.'-'.$date->month;
             $date = $date->subDay();
         }
         return $days;
