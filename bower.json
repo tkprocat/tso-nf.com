@@ -19,6 +19,7 @@
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
     "jquery-ujs": "~1.0.4",
-    "bootstrap-combobox": "~1.1.6"
+    "bootstrap-combobox": "~1.1.6",
+    "bootstrap-submenu": "~1.2.13"
   }
 }

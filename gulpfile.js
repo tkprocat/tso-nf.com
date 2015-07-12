@@ -12,9 +12,14 @@ var gulp = require('gulp');
  */
 
 elixir(function(mix) {
-    mix.less(['all.less'],'./resources/assets/css').styles(['/css/all.css', '/bower/jquery-ui/themes/ui-darkness/jquery-ui.css',
-        '/bower/jquery-ui/themes/ui-darkness/theme.css', '/bower/bootstrap-combobox/css/bootstrap-combobox.css',
-        '/bower/tinymce/skins/lightgray/skin.min.css'], './public/css', './resources/assets/');
+    mix.less(['all.less'],'./resources/assets/css');
+    mix.styles(['/css/all.css',
+                '/bower/jquery-ui/themes/ui-darkness/jquery-ui.css',
+                '/bower/jquery-ui/themes/ui-darkness/theme.css',
+                '/bower/bootstrap-combobox/css/bootstrap-combobox.css',
+                '/bower/bootstrap-submenu/dist/css/bootstrap-submenu.min.css',
+                '/bower/tinymce/skins/lightgray/skin.min.css'],
+               './public/css', './resources/assets/');
 });
 
 //Dashboard css for admin section
@@ -23,9 +28,13 @@ elixir(function(mix) {
 });
 
 elixir(function(mix) {
-    mix.scripts(['bower/bootstrap/dist/js/bootstrap.js', 'bower/bootstrap-combobox/js/bootstrap-combobox.js', 'bower/jquery-ujs/src/rails.js'],
-         './public/js', './resources/assets/');
+    mix.scripts(['bower/bootstrap/dist/js/bootstrap.js',
+                 'bower/bootstrap-combobox/js/bootstrap-combobox.js',
+                 'bower/jquery-ujs/src/rails.js',
+                 '/bower/bootstrap-submenu/dist/js/bootstrap-submenu.js',],
+                './public/js', './resources/assets/');
 })
+
 
 //TinyMCE
 elixir(function(mix) {

@@ -12,6 +12,7 @@ use LootTracker\Repositories\PriceList\Admin\EloquentAdminPriceListRepository;
 use LootTracker\Repositories\PriceList\EloquentPriceListRepository;
 use LootTracker\Repositories\Stats\EloquentGeneralStatsRepository;
 use LootTracker\Repositories\Stats\EloquentGlobalStatsRepository;
+use LootTracker\Repositories\Stats\EloquentGuildStatsRepository;
 use LootTracker\Repositories\Stats\EloquentPersonalStatsRepository;
 use LootTracker\Repositories\User\EloquentUserRepository;
 
@@ -120,6 +121,12 @@ class AppServiceProvider extends ServiceProvider {
 
         $this->app->bind('LootTracker\Repositories\Stats\GlobalStatsInterface', function () {
             return new EloquentGlobalStatsRepository(
+                $this->app->make('LootTracker\Repositories\Loot\LootInterface')
+            );
+        });
+
+        $this->app->bind('LootTracker\Repositories\Stats\GuildStatsInterface', function () {
+            return new EloquentGuildStatsRepository(
                 $this->app->make('LootTracker\Repositories\Loot\LootInterface')
             );
         });

@@ -31,7 +31,7 @@ class GuildApplicationController extends Controller
      */
     public function index($id)
     {
-        $applications = $this->guildRepo->all($id);
+        $applications = $this->guildApplicationRepo->all($id);
 
         return view('applications.index')->with('applications', $applications);
     }

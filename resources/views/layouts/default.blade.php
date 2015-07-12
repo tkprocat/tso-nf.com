@@ -32,20 +32,38 @@
                             <li {!! ((Request::segment(1)=== 'stats') ? 'class="dropdown active"' : 'class="dropdown"') !!}>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stats<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ URL::to('stats/global') }}">Global</a>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="0" data-toggle="dropdown">Global</a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ URL::to('stats/global') }}">Overall</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ URL::to('stats/global/top10bydrop') }}">Top 10 (Drop)</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ URL::to('stats/global/submissionrate') }}">Submission rate</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ URL::to('stats/global/newuserrate') }}">Signup rate</a>
+                                        </li>
+                                    </ul>
                                 </li>
+                                @if(Auth::user()->guild_id > 0)
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="0" data-toggle="dropdown">Guild</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="{{ URL::to('stats/guild') }}">Overall</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ URL::to('stats/guild/submissionrate') }}">Submission rate</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                @endif
                                 <li>
                                     <a href="{{ URL::to('stats/personal') }}">Personal</a>
-                                </li>
-                                <li>
-                                    <a href="{{ URL::to('stats/global/top10bydrop') }}">Top 10 (Drop)</a>
-                                </li>
-                                <li>
-                                    <a href="{{ URL::to('stats/global/submissionrate') }}">Submission rate</a>
-                                </li>
-                                <li>
-                                    <a href="{{ URL::to('stats/global/newuserrate') }}">Signup rate</a>
                                 </li>
                             </ul>
                             </li>
@@ -90,6 +108,9 @@
                 </div>
             </div>
         </div>
+        <script>
+            $('.dropdown-submenu > a').submenupicker();
+        </script>
     @include('layouts/notifications')
 
     @yield('content')
