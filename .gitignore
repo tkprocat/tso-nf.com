@@ -19,6 +19,7 @@ Vagrantfile
 /.homestead/
 /resources/assets/bower/
 _ide_helper.php
+.phpstorm.meta.php
 /public/js/
 /public/css/
 /public/tinymce/
