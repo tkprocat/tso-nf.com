@@ -20,7 +20,7 @@ class EloquentPriceListRepository implements PriceListInterface
     /**
      * @param $id
      *
-     * @return mixed
+     * @return \LootTracker\Repositories\PriceList\PriceListItem
      */
     public function byId($id)
     {
