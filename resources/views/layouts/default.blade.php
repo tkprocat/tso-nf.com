@@ -79,13 +79,13 @@
                                 </li>
                             </ul>
                             </li>
-                            <li {{ (Request::is('users') ? 'class="active"' : '') }}>
+                            <li {!! (Request::is('users') ? 'class="active"' : '') !!}>
                                 <a href="{{ URL::to('users') }}">Users</a>
                             </li>
-                            <li {{ ((Request::segment(1) === 'guilds') ? 'class="active"' : '') }}>
+                            <li {!! ((Request::segment(1) === 'guilds') ? 'class="active"' : '')  !!}>
                                 <a href="{{ URL::to('guilds') }}">Guilds</a>
                             </li>
-                            <li {{ (Request::is('users/' . Auth::user()->username) ? 'class="active"' : '') }}>
+                            <li {!! (Request::is('users/' . Auth::user()->username) ? 'class="active"' : '') !!}>
                                 <a href="{{ URL::to('users') .'/'. Auth::user()->username .'/edit'}}">{{ Auth::user()->username }}</a>
                             </li>
                             @if (Entrust::hasRole('admin'))
@@ -97,10 +97,10 @@
                                 <a href="{{ URL::to('auth/logout') }}">Logout</a>
                             </li>
                         @else
-                            <li {{ (Request::is('auth/login') ? 'class="active"' : '') }}>
+                            <li {!! (Request::is('auth/login') ? 'class="active"' : '') !!}>
                                 <a href="{{ URL::to('auth/login') }}">Login</a>
                             </li>
-                            <li {{ (Request::is('auth/register') ? 'class="active"' : '') }}>
+                            <li {!! (Request::is('auth/register') ? 'class="active"' : '') !!}>
                                 <a href="{{ URL::to('auth/register') }}">Sign up</a>
                             </li>
                         @endif
