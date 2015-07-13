@@ -1,14 +1,21 @@
-<?php
+<?php namespace LootTracker\Test;
+
+use App;
+use \LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface;
 
 class AdminAdventureTest extends TestCase
 {
-    protected $adventure;
+
+    /**
+     * @var $adventureRepo \LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface
+     */
+    protected $adventureRepo;
 
     public function setUp()
     {
         parent::setUp();
         $this->loginAsAdmin();
-        $this->adventure = App::make('LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface');
+        $this->adventureRepo = App::make(AdminAdventureInterface::class);
     }
 
     /** @test */
@@ -20,11 +27,11 @@ class AdminAdventureTest extends TestCase
 //        $this->adventure->validator->updateRules($newAdventure);
 //        $this->assertTrue($this->adventure->validator->with($newAdventure)->passes());
 
-        $newAdventure = $this->adventure->create($newAdventure);
+        $newAdventure = $this->adventureRepo->create($newAdventure);
         $this->assertNotNull($newAdventure, 'Something went wrong with saving the adventure!');
 
         //Test that they got added correctly.
-        $this->assertCount(2, $this->adventure->all(), "Adventure haven't been added!");
+        $this->assertCount(2, $this->adventureRepo->all(), "Adventure haven't been added!");
         $this->assertCount(32, $newAdventure->loot);
 
         //Check that we can load the create page.
@@ -32,7 +39,7 @@ class AdminAdventureTest extends TestCase
         $this->assertResponseOk();
 
         //Get the adventure and check the loot has been added.
-        $adventure = $this->adventure->findAdventureById($newAdventure->id);
+        $adventure = $this->adventureRepo->findAdventureById($newAdventure->id);
         $this->assertNotNull($adventure);
         //Somewhat redundant, but atleast we're now sure all loot items got saved.
         $this->assertCount(32, $adventure->loot);

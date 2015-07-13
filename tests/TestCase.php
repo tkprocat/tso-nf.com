@@ -1,13 +1,21 @@
-<?php
+<?php namespace LootTracker\Test;
 
-use Illuminate\Support\Facades\App;
-use LootTracker\Repositories\User\Role;
+use App;
+use LootTracker\Console\Kernel;
+use LootTracker\Repositories\User\UserInterface;
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase
+class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
+
+    /**
+     * @var string
+     */
     protected $baseUrl = 'http://localhost';
 
-    protected $user;
+    /**
+     * @var $userRepo \LootTracker\Repositories\User\UserInterface
+     */
+    protected $userRepo;
 
     /**
      * Creates the application.
@@ -18,7 +26,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         $app = require __DIR__ . '/../bootstrap/app.php';
 
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+        $app->make(Kernel::class)->bootstrap();
 
         return $app;
     }
@@ -26,24 +34,15 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->user = App::make(LootTracker\Repositories\User\UserInterface::class);
+        $this->userRepo = App::make(UserInterface::class);
         $this->artisan('migrate');
         $this->artisan('db:seed');
-
-//        $user1 = $this->user->byUsername('user1');
-//        $user2 = $this->user->byUsername('user2');
-//        $admin = $this->user->byUsername('admin');
-//        $userRole = Role::whereName('user')->first();
-//        $adminRole = Role::whereName('admin')->first();
-//        $user1->attachRole($userRole);
-//        $user2->attachRole($userRole);
-//        $admin->attachRole($userRole);
-//        $admin->attachRole($adminRole);
     }
 
     public function tearDown()
     {
-        $this->artisan('migrate:rollback');
+        parent::tearDown();
+        //$this->artisan('migrate:rollback');
     }
 
     /**
@@ -53,7 +52,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function login($username = 'user1')
     {
         //Log in
-        $user = $this->user->byUsername($username);
+        $user = $this->userRepo->byUsername($username);
         $this->be($user);
 
         return $user;
@@ -65,10 +64,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function loginAsAdmin()
     {
         //Log in
-        $user = $this->user->byUsername('admin');
+        $user = $this->userRepo->byUsername('admin');
         $this->be($user);
 
         return $user;
     }
-
 }

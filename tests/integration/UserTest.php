@@ -1,4 +1,4 @@
-<?php
+<?php namespace LootTracker\Test;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -23,7 +23,7 @@ class UserTest extends TestCase
     {
         $this->login();
 
-        $user = $this->user->getUser();
+        $user = $this->userRepo->getUser();
         $this->visit('users/'.$user->username);
     }
 
@@ -31,26 +31,26 @@ class UserTest extends TestCase
     public function checkPermissionsIsSetCorrectly()
     {
         //Log in admin and check permissions.
-        $user = $this->user->byUsername('admin');
-        $this->user->login($user);
+        $user = $this->userRepo->byUsername('admin');
+        $this->userRepo->login($user);
 
-        $this->assertTrue($this->user->getUser()->hasRole('admin'), 'Admin does not have admin access!');
-        $this->assertTrue($this->user->getUser()->hasRole('user'), 'Admin does not have users access!');
-
-        //Log in admin and check permissions.
-        $user = $this->user->byUsername('user1');
-        $this->user->login($user);
-
-        $this->assertFalse($this->user->getUser()->can('admin-blog'), 'User1 can admin blogs!');
-        $this->assertFalse($this->user->getUser()->hasRole('admin'), 'User1 has admin access!');
-        $this->assertTrue($this->user->getUser()->hasRole('user'), 'User1 does not have users access!');
+        $this->assertTrue($this->userRepo->getUser()->hasRole('admin'), 'Admin does not have admin access!');
+        $this->assertTrue($this->userRepo->getUser()->hasRole('user'), 'Admin does not have users access!');
 
         //Log in admin and check permissions.
-        $user = $this->user->byUsername('user2');
-        $this->user->login($user);
+        $user = $this->userRepo->byUsername('user1');
+        $this->userRepo->login($user);
 
-        $this->assertFalse($this->user->getUser()->hasRole('admin'), 'User2 has admin access!');
-        $this->assertTrue($this->user->getUser()->hasRole('user'), 'User2 does not have users access!');
+        $this->assertFalse($this->userRepo->getUser()->can('admin-blog'), 'User1 can admin blogs!');
+        $this->assertFalse($this->userRepo->getUser()->hasRole('admin'), 'User1 has admin access!');
+        $this->assertTrue($this->userRepo->getUser()->hasRole('user'), 'User1 does not have users access!');
+
+        //Log in admin and check permissions.
+        $user = $this->userRepo->byUsername('user2');
+        $this->userRepo->login($user);
+
+        $this->assertFalse($this->userRepo->getUser()->hasRole('admin'), 'User2 has admin access!');
+        $this->assertTrue($this->userRepo->getUser()->hasRole('user'), 'User2 does not have users access!');
     }
 
     public function tearDown()
@@ -58,4 +58,3 @@ class UserTest extends TestCase
         parent::tearDown();
     }
 }
-

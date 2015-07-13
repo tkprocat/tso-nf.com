@@ -1,21 +1,30 @@
-<?php
+<?php namespace LootTracker\Test;
 
-use Mockery as m;
+use App;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use \LootTracker\Repositories\PriceList\Admin\AdminPriceListInterface;
+use \LootTracker\Repositories\PriceList\PriceListInterface;
 
 class PriceListTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected $priceList;
-    protected $priceListAdmin;
+    /**
+     * @var $priceListRepo \LootTracker\Repositories\PriceList\PriceListInterface
+     */
+    protected $priceListRepo;
+
+    /**
+     * @var $priceListAdminRepo \LootTracker\Repositories\PriceList\Admin\AdminPriceListInterface
+     */
+    protected $priceListAdminRepo;
 
     public function setUp()
     {
         parent::setUp();
         $this->login();
-        $this->priceList = App::make('LootTracker\Repositories\PriceList\PriceListInterface');
-        $this->priceListAdmin = App::make('LootTracker\Repositories\PriceList\Admin\AdminPriceListInterface');
+        $this->priceListRepo = App::make(PriceListInterface::class);
+        $this->priceListAdminRepo = App::make(AdminPriceListInterface::class);
     }
 
     /** @test */
@@ -28,14 +37,14 @@ class PriceListTest extends TestCase
     /** @test */
     public function canGetItemList()
     {
-        $items = $this->priceList->getAllItems();
+        $items = $this->priceListRepo->getAllItems();
         $this->assertCount(1, $items); // One item added by seeder
     }
 
     /** @test */
     public function canGetPriceForItemById()
     {
-        $item = $this->priceList->byId(1);
+        $item = $this->priceListRepo->byId(1);
         $this->assertNotNull($item);
         $this->assertEquals(0.00001, $item->price()->first()->min_price, 'Failure in comparing min_price!');
         $this->assertEquals(0.00002, $item->price()->first()->avg_price, 'Failure in comparing avg_price!');
@@ -46,12 +55,12 @@ class PriceListTest extends TestCase
     public function canChangePriceForItem()
     {
         //update the prices for item 1
-        $this->priceListAdmin->updatePriceForItem(1, 0.00004, 0.00005, 0.00006);
+        $this->priceListAdminRepo->updatePriceForItem(1, 0.00004, 0.00005, 0.00006);
 
         //Get the item again and see if the price has been updated.
-        $item = $this->priceList->byId(1);
+        $item = $this->priceListRepo->byId(1);
         $item_price = $item->currentPrice();
-        $this->assertCount(2, $this->priceListAdmin->findAllPriceChangesForItemById(1));
+        $this->assertCount(2, $this->priceListAdminRepo->findAllPriceChangesForItemById(1));
         $this->assertNotNull($item_price);
         $this->assertEquals(0.00004, $item_price->min_price, 'Failure in comparing min_price after price update!');
         $this->assertEquals(0.00005, $item_price->avg_price, 'Failure in comparing avg_price after price update!');
@@ -60,7 +69,6 @@ class PriceListTest extends TestCase
 
     public function tearDown()
     {
-        m::close();
         parent::tearDown();
     }
 }

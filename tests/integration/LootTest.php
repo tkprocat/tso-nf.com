@@ -1,9 +1,9 @@
-<?php
+<?php namespace LootTracker\Test;
 
 use Illuminate\Support\Facades\App;
-use LootTracker\Repositories\Adventure\AdventureLoot;
-use LootTracker\Repositories\Loot\UserAdventure;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use LootTracker\Repositories\Adventure\AdventureInterface;
+use LootTracker\Repositories\Loot\LootInterface;
 
 class LootTest extends TestCase
 {
@@ -16,8 +16,8 @@ class LootTest extends TestCase
     {
         parent::setUp();
         $this->login();
-        $this->adventure = App::make('LootTracker\Repositories\Adventure\AdventureInterface');
-        $this->loot = App::make('LootTracker\Repositories\Loot\LootInterface');
+        $this->adventure = App::make(AdventureInterface::class);
+        $this->loot = App::make(LootInterface::class);
     }
 
     /** @test */
@@ -37,7 +37,7 @@ class LootTest extends TestCase
     /** @test */
     public function checkLatestLootForPlayer()
     {
-        $username = $this->user->getUser()->username;
+        $username = $this->userRepo->getUser()->username;
 
         $this->visit('/loot/'.$username);
     }
@@ -85,7 +85,9 @@ class LootTest extends TestCase
             'slot8' => '27'
         );
         $this->call('POST', '/loot', $data);
-        $this->assertRedirectedTo('/loot/create', array('success' => 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>'));
+        $this->assertRedirectedTo('/loot/create', [
+            'success' => 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>'
+        ]);
 
         $user_adventure = $this->loot->byId(1)->first();
         $this->assertNotNull($user_adventure);
@@ -135,8 +137,8 @@ class LootTest extends TestCase
     /** @test */
     public function failsIfEditingAnotherUsersLoot()
     {
-        $user = $this->user->byUsername('user2');
-        $this->user->login($user);
+        $user = $this->userRepo->byUsername('user2');
+        $this->userRepo->login($user);
 
         //Check that we get an error.
         $this->call('GET', '/loot/1/edit');
@@ -176,8 +178,9 @@ class LootTest extends TestCase
     }
 
     /** @test */
-    public function canGetLatestLootForASingleAdventure() {
-        $user = $this->user->getUser();
+    public function canGetLatestLootForASingleAdventure()
+    {
+        $user = $this->userRepo->getUser();
         $this->visit('/loot/'.$user->username.'/Bandit+Nest');
     }
 
@@ -243,4 +246,3 @@ class LootTest extends TestCase
         parent::tearDown();
     }
 }
-

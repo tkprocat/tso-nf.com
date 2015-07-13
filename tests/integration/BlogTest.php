@@ -1,21 +1,36 @@
-<?php
+<?php namespace LootTracker\Test;
 
+use App;
+use Faker\Factory as Faker;
 use Illuminate\Support\Str;
+use \LootTracker\Repositories\Blog\BlogCommentInterface;
+use \LootTracker\Repositories\Blog\BlogPostInterface;
 
 class BlogTest extends TestCase
 {
-    protected $fake;
-    protected $blogCommentRepository;
-    protected $blogPostRepository;
+
+    /**
+     * @var $faker \Faker\Factory
+     */
+    protected $faker;
+
+    /**
+     * @var $blogCommentRepo \LootTracker\Repositories\Blog\BlogCommentInterface
+     */
+    protected $blogCommentRepo;
+
+    /**
+     * @var $blogPostRepo \LootTracker\Repositories\Blog\BlogPostInterface
+     */
+    protected $blogPostRepo;
 
     public function setUp()
     {
         parent::setUp();
-        $this->fake = Faker\Factory::create();
-        $this->blogCommentRepository = App::make('LootTracker\Repositories\Blog\BlogCommentInterface');
-        $this->blogPostRepository = App::make('LootTracker\Repositories\Blog\BlogPostInterface');
+        $this->faker = Faker::create();
+        $this->blogCommentRepo = App::make(BlogCommentInterface::class);
+        $this->blogPostRepo = App::make(BlogPostInterface::class);
     }
-
 
     /** @test */
     public function canLoadFrontPage()
@@ -38,7 +53,8 @@ class BlogTest extends TestCase
     public function canLoadCreateBlogPostAsGuest()
     {
         $this->visit('blog/create')
-            ->followRedirects('auth/login');
+            ->followRedirects()
+            ->seePageIs('auth/login');
     }
 
     /** @test */
@@ -100,13 +116,13 @@ class BlogTest extends TestCase
         //Log in
         $this->loginAsAdmin();
 
-        $title = $this->fake->sentence;
+        $title = $this->faker->sentence;
         $post = [
             'id' => 2,
             'title' => $title,
             'slug' => Str::slug($title),
-            'content' => $this->fake->text,
-            'user_id' => $this->user->getUser()->id
+            'content' => $this->faker->text,
+            'user_id' => $this->userRepo->getUser()->id
         ];
 
         $this->visit('blog')
@@ -116,7 +132,8 @@ class BlogTest extends TestCase
             ->press('Create')
             ->seePageIs('blog')
             ->see('Post created successfully')
-            ->seeInDatabase('posts', array('id' => $post['id'], 'title' => $post['title'], 'slug' => $post['slug'], 'content' => $post['content']));
+            ->seeInDatabase('posts', ['id' => $post['id'], 'title' => $post['title'],
+                                      'slug' => $post['slug'], 'content' => $post['content']]);
     }
 
     /** @test */
@@ -125,7 +142,7 @@ class BlogTest extends TestCase
         //Log in
         $this->loginAsAdmin();
         $this->visit('/blog/create')
-            ->type($this->fake->title, 'title')
+            ->type($this->faker->title, 'title')
             ->press('Create')
             ->onPage('blog/create')
             ->assertSessionHasErrors('content');
@@ -134,7 +151,7 @@ class BlogTest extends TestCase
     /** @test */
     public function canSeeDetailedBlogPost()
     {
-        $blog = $this->blogPostRepository->byId(1);
+        $blog = $this->blogPostRepo->byId(1);
         $this->visit('blog/' . $blog['slug'])
             ->see($blog['title'])
             ->see($blog['content']);
@@ -163,12 +180,12 @@ class BlogTest extends TestCase
             ->see('Edit blog');
 
         //Check we can save changes.
-        $title = $this->fake->sentence;
+        $title = $this->faker->sentence;
         $updatedPost = array(
             'title' => $title,
             'slug' => Str::slug($title),
-            'content' => $this->fake->text,
-            'user_id' => $this->user->getUser()->id
+            'content' => $this->faker->text,
+            'user_id' => $this->userRepo->getUser()->id
         );
         $this->visit('blog/' . $post['id'] . '/edit')
             ->type($updatedPost['title'], 'title')
@@ -176,7 +193,10 @@ class BlogTest extends TestCase
             ->press('Update')
             ->seePageIs('blog')
             ->see('Post updated successfully')
-            ->seeInDatabase('posts', array('id' => $post['id'], 'title' => $updatedPost['title'], 'slug' => $updatedPost['slug'], 'content' => $updatedPost['content']));
+            ->seeInDatabase('posts', ['id' => $post['id'],
+                'title' => $updatedPost['title'],
+                'slug' => $updatedPost['slug'],
+                'content' => $updatedPost['content']]);
     }
 
     /** @test */
@@ -207,7 +227,7 @@ class BlogTest extends TestCase
         $post = $this->createBlogPost();
 
         //check how many blog posts we have
-        $blogPostCount = $this->blogPostRepository->all()->count();
+        $blogPostCount = $this->blogPostRepo->all()->count();
 
         //It should have returned 2.
         $this->assertEquals($blogPostCount, 2);
@@ -216,7 +236,7 @@ class BlogTest extends TestCase
         $this->call('DELETE', '/blog/' . $post['id']);
 
         //It should be one now.
-        $blogPostCount = $this->blogPostRepository->all()->count();
+        $blogPostCount = $this->blogPostRepo->all()->count();
         $this->assertEquals(1, $blogPostCount);
     }
 
@@ -233,13 +253,13 @@ class BlogTest extends TestCase
         $comment = array(
             'id' => 2,
             'post_id' => $post['id'],
-            'user_id' => $this->user->getUser()->id,
-            'content' => $this->fake->text
+            'user_id' => $this->userRepo->getUser()->id,
+            'content' => $this->faker->text
         );
         $this->call('POST', '/blog/' . $post['id'] . '/comment', $comment);
 
         //check how many blog comments we have
-        $blogPostCount = $this->blogPostRepository->all()->count();
+        $blogPostCount = $this->blogPostRepo->all()->count();
 
         //It should have returned 2.
         $this->assertEquals(2, $blogPostCount);
@@ -264,7 +284,7 @@ class BlogTest extends TestCase
 
         //update the text
         $oldContent = $comment['content'];
-        $newContent = $this->fake->text;
+        $newContent = $this->faker->text;
 
         //Just to make sure nothing bad happens later.
         $this->assertNotEquals($oldContent, $newContent);
@@ -272,7 +292,7 @@ class BlogTest extends TestCase
         $comment['content'] = $newContent;
         $this->call('PUT', '/blog/comment/' . $comment['id'], $comment);
 
-        $comment = $this->blogCommentRepository->byId($comment['id']);
+        $comment = $this->blogCommentRepo->byId($comment['id']);
         $this->assertEquals($comment['content'], $newContent);
     }
 
@@ -289,7 +309,7 @@ class BlogTest extends TestCase
         $comment = $this->createBlogComment($post);
 
         //check how many blog comments we have
-        $blogCommentCount = $this->blogCommentRepository->findCommentsForPost($post['id'])->count();
+        $blogCommentCount = $this->blogCommentRepo->findCommentsForPost($post['id'])->count();
 
         //It should have returned 1.
         $this->assertEquals(1, $blogCommentCount);
@@ -298,21 +318,21 @@ class BlogTest extends TestCase
         $this->call('DELETE', '/blog/comment/' . $comment['id']);
 
         //It should now it should be zero.
-        $blogCommentCount = $this->blogPostRepository->byId($post['id'])->comments()->count();
+        $blogCommentCount = $this->blogPostRepo->byId($post['id'])->comments()->count();
         $this->assertEquals(0, $blogCommentCount);
     }
 
     protected function createBlogPost()
     {
-        $title = $this->fake->sentence;
-        $blog = array(
+        $title = $this->faker->sentence;
+        $blog = [
             'id' => 2,
             'title' => $title,
             'slug' => Str::slug($title),
-            'content' => $this->fake->text,
+            'content' => $this->faker->text,
             'user_id' => 1
-        );
-        $this->blogPostRepository->create($blog);
+        ];
+        $this->blogPostRepo->create($blog);
 
         return $blog;
     }
@@ -322,10 +342,10 @@ class BlogTest extends TestCase
         $comment = array(
             'id' => 2,
             'post_id' => $blogPost['id'],
-            'user_id' => $this->user->getUser()->id,
-            'content' => $this->fake->text
+            'user_id' => $this->userRepo->getUser()->id,
+            'content' => $this->faker->text
         );
-        $this->blogCommentRepository->create($comment);
+        $this->blogCommentRepo->create($comment);
 
         return $comment;
     }
@@ -335,4 +355,3 @@ class BlogTest extends TestCase
         parent::tearDown();
     }
 }
-

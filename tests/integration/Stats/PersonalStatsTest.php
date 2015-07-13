@@ -1,20 +1,31 @@
-<?php
+<?php namespace LootTracker\Test;
 
-use Laracasts\TestDummy\Factory;
+use App;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use \LootTracker\Repositories\Adventure\AdventureInterface;
+use \LootTracker\Repositories\Stats\PersonalStatsInterface;
+use \LootTracker\Repositories\Loot\LootInterface;
 
 class PersonalStatsTest extends TestCase
 {
     use DatabaseMigrations;
 
+    /**
+     * @var $statsRepo \LootTracker\Repositories\Stats\PersonalStatsInterface
+     */
     protected $statsRepo;
+
+    /**
+     * @var $lootRepo \LootTracker\Repositories\Loot\LootInterface
+     */
     protected $lootRepo;
+
     public function setUp()
     {
         parent::setUp();
         $this->login();
-        $this->statsRepo = App::make('LootTracker\Repositories\Stats\PersonalStatsInterface');
-        $this->lootRepo = App::make('LootTracker\Repositories\Loot\LootInterface');
+        $this->statsRepo = App::make(PersonalStatsInterface::class);
+        $this->lootRepo = App::make(LootInterface::class);
     }
 
     /** @test */
@@ -36,11 +47,13 @@ class PersonalStatsTest extends TestCase
 
         //Check amount of adventures played.
         $result = $this->statsRepo->getAdventuresForUserWithPlayed(2, '', '')->get();
-        $this->assertCount(2, $result, 'Wrong numbers of adventures returned from getAdventuresForUserWithPlayed when called without dates.');
+        $this->assertCount(2, $result, 'Wrong numbers of adventures returned from getAdventuresForUserWithPlayed '.
+            'when called without dates.');
 
         //Check amount of adventures played with dates.
         $result = $this->statsRepo->getAdventuresForUserWithPlayed(2, '2014-01-01', '2030-01-01')->get();
-        $this->assertCount(2, $result, 'Wrong numbers of adventures returned from getAdventuresForUserWithPlayed when called with dates.');
+        $this->assertCount(2, $result, 'Wrong numbers of adventures returned from getAdventuresForUserWithPlayed '.
+            'when called with dates.');
 
         $result = $this->statsRepo->getMostPlayedAdventureForUser(2);
         $this->assertEquals('Bandit Nest', $result['name'], 'Most played adventure mismatch.');
@@ -49,14 +62,14 @@ class PersonalStatsTest extends TestCase
         $result = $this->statsRepo->getLeastPlayedAdventureForUser(2);
         $this->assertEquals('The Black Knights', $result['name'], 'Least played adventure mismatch.');
         $this->assertEquals(1, $result['count'], 'Least played adventure count mismatch.');
-		
-		$adventures_played_this_week = $this->statsRepo->getAdventuresPlayedCountForUserThisWeek(2);
-		$this->assertEquals(3, $adventures_played_this_week, 'Mismatch in numbers of adventures played this week.');
-		
-		//This is a fairly week and lazy test...
-		$adventures_played_last_week = $this->statsRepo->getAdventuresPlayedCountForUserLastWeek(2);
-		$this->assertEquals(0, $adventures_played_last_week, 'Mismatch in numbers of adventures played last week.');
-	}
+
+        $adventures_played_this_week = $this->statsRepo->getAdventuresPlayedCountForUserThisWeek(2);
+        $this->assertEquals(3, $adventures_played_this_week, 'Mismatch in numbers of adventures played this week.');
+
+        //This is a fairly week and lazy test...
+        $adventures_played_last_week = $this->statsRepo->getAdventuresPlayedCountForUserLastWeek(2);
+        $this->assertEquals(0, $adventures_played_last_week, 'Mismatch in numbers of adventures played last week.');
+    }
 
     /** @test */
     public function checkAccumulatedLootForUser()
@@ -89,8 +102,8 @@ class PersonalStatsTest extends TestCase
         $this->lootRepo->create($data);
 
         //Add Black Knights
-		$adventureRepo = App::make('LootTracker\Repositories\Adventure\AdventureInterface');
-		   $data = array(
+        $adventureRepo = App::make(AdventureInterface::class);
+        $data = [
             'name' => 'The Black Knights',
             'slot1' => array(
                 array('type' => 'Exotic Wood Log', 'amount' => '1400'),
@@ -141,10 +154,10 @@ class PersonalStatsTest extends TestCase
                 array('type' => 'Titanium Ore', 'amount' => '2060'),
                 array('type' => 'Nothing', 'amount' => '1')
             ),
-        );
+        ];
         $black_knights = $adventureRepo->create($data);
-		
-		//Make a Black Knights
+
+        //Make a Black Knights
         $data = array(
             'adventure_id' => $black_knights->id,
             'user_id' => '2',

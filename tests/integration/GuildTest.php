@@ -1,17 +1,21 @@
-<?php
+<?php namespace LootTracker\Test;
 
-use Mockery as m;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App;
+use \LootTracker\Repositories\Guild\GuildInterface;
 
 class GuildTest extends TestCase
 {
+
+    /**
+     * @var $guild \LootTracker\Repositories\Guild\GuildInterface
+     */
     protected $guild;
 
     public function setUp()
     {
         parent::setUp();
         $this->login('user1');
-        $this->guild = App::make('LootTracker\Repositories\Guild\GuildInterface');
+        $this->guild = App::make(GuildInterface::class);
     }
 
     /** @test */
@@ -48,7 +52,7 @@ class GuildTest extends TestCase
         $this->assertNotNull($guild);
         $this->assertEquals($data['name'], $guild->name);
         $this->assertEquals($data['tag'], $guild->tag);
-        $this->assertEquals($this->user->getUser()->username, $guild->admins()[0]->username);
+        $this->assertEquals($this->userRepo->getUser()->username, $guild->admins()[0]->username);
     }
 
     /** @test */
@@ -77,16 +81,16 @@ class GuildTest extends TestCase
 
         $guild = $this->guild->byTag('DM');
         $this->assertNotNull($guild);
-        $this->assertEquals($this->user->getUser()->username, $guild->admins()[0]->username);
+        $this->assertEquals($this->userRepo->getUser()->username, $guild->admins()[0]->username);
     }
 
     /** @test */
     public function canJoinGuild()
     {
-        $user2 = $this->user->byUsername('user2');
+        $user2 = $this->userRepo->byUsername('user2');
         $this->guild->addMember(1, $user2->id);
-        $this->user = $this->user->byUsername('user2');
-        $this->assertEquals(1, $this->user->guild_id);
+        $this->userRepo = $this->userRepo->byUsername('user2');
+        $this->assertEquals(1, $this->userRepo->guild_id);
     }
 
     /** @test */
@@ -109,7 +113,7 @@ class GuildTest extends TestCase
             'name' => 'Guild 2',
             'tag' => 'G2'
         );
-        $this->guild->create($data, $this->user->getUser()->id);
+        $this->guild->create($data, $this->userRepo->getUser()->id);
 
         //Make sure all is right.
         $user = $this->login('user2');
@@ -120,14 +124,14 @@ class GuildTest extends TestCase
         $this->guild->addMember(2, $user->id);
 
         //Required since addMember changed the user information.
-        $user = $this->user->byUsername('user2');
+        $user = $this->userRepo->byUsername('user2');
         $this->assertEquals(1, $user->guild_id);
     }
 
     /** @test */
     public function canKickMember()
     {
-        $user2 = $this->user->byUsername('user2');
+        $user2 = $this->userRepo->byUsername('user2');
         $this->guild->addMember(1, $user2->id);
 
         //Check the user is added to the guild
@@ -173,7 +177,7 @@ class GuildTest extends TestCase
     public function canPromoteMember()
     {
         //Get the user id for user2
-        $user2 = $this->user->byUsername('user2');
+        $user2 = $this->userRepo->byUsername('user2');
 
         //Just to set the expected return page.
         $this->visit('/guilds/1');
@@ -188,7 +192,7 @@ class GuildTest extends TestCase
             ->seePageIs('/guilds/1')
             ->see('User added to guild.');
 
-        $user2 = $this->user->byUsername('user2');
+        $user2 = $this->userRepo->byUsername('user2');
 
         //Promote the user again.
         $this->visit('guilds/1/promote/'.$user2->id)
@@ -202,7 +206,7 @@ class GuildTest extends TestCase
     public function canDemoteMember()
     {
         //Get the user id for user2
-        $user2 = $this->user->byUsername('user2');
+        $user2 = $this->userRepo->byUsername('user2');
 
         //Just to set the expected return page.
         $this->visit('/guilds/1');
@@ -229,7 +233,7 @@ class GuildTest extends TestCase
     public function failsDemotingLastAdmin()
     {
         //Get the user id for user2
-        $user1 = $this->user->byUsername('user1');
+        $user1 = $this->userRepo->byUsername('user1');
 
         $this->visit('guilds/1');
 
@@ -249,17 +253,16 @@ class GuildTest extends TestCase
             'tag' => 'LM'
         );
 
-        $guild = $this->guild->create($data, $this->user->getUser()->id);
+        $guild = $this->guild->create($data, $this->userRepo->getUser()->id);
 
         //Relogin hack, since the previous method changes variables on the current user, we need to relogin.
-        $this->login($this->user->getUser()->username);
+        $this->login($this->userRepo->getUser()->username);
 
         return $guild;
     }
 
     public function tearDown()
     {
-        m::close();
         parent::tearDown();
     }
 }

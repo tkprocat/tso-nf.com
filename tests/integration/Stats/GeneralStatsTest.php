@@ -1,4 +1,4 @@
-<?php
+<?php namespace LootTracker\Test;
 
 use Laracasts\TestDummy\Factory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
