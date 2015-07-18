@@ -12,7 +12,7 @@ var gulp = require('gulp');
  */
 
 elixir(function(mix) {
-    mix.less(['all.less'],'./resources/assets/css');
+    mix.less(['all.less'],'./resources/assets/css/all.css');
     mix.styles(['/css/all.css',
                 '/bower/jquery-ui/themes/ui-darkness/jquery-ui.css',
                 '/bower/jquery-ui/themes/ui-darkness/theme.css',
