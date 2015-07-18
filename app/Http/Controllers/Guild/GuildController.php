@@ -1,6 +1,7 @@
 <?php namespace LootTracker\Http\Controllers;
 
 use Input;
+use LootTracker\Repositories\Guild\GuildApplicationInterface;
 use Redirect;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use LootTracker\Http\Requests\CreateGuildRequest;
@@ -98,11 +99,13 @@ class GuildController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $guild_id
+     * @param  int                      $guild_id
+     *
+     * @param GuildApplicationInterface $guildApplicationRepo
      *
      * @return \Illuminate\View\View
      */
-    public function edit($guild_id)
+    public function edit($guild_id, GuildApplicationInterface $guildApplicationRepo)
     {
         //Check if the guild exists.
         $guild = $this->getGuildFromId($guild_id, 'Guild not found.');
@@ -110,8 +113,9 @@ class GuildController extends Controller
         if (!$this->isUserGuildAdmin($guild_id)) {
             return Redirect::back()->with(['error' => 'You do not have sufficient permissions.']);
         }
+        $applications = $guildApplicationRepo->all($guild_id);
 
-        return view('guilds.edit')->with('guild', $guild);
+        return view('guilds.edit', compact('guild', 'applications'));
     }
 
 

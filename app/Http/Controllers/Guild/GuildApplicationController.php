@@ -1,15 +1,28 @@
 <?php namespace LootTracker\Http\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
+use Redirect;
+use Session;
+use LootTracker\Http\Requests\GuildApplicationRequest;
 use LootTracker\Repositories\Guild\GuildApplicationInterface;
 use LootTracker\Repositories\Guild\GuildInterface;
 use LootTracker\Repositories\User\UserInterface;
 
 class GuildApplicationController extends Controller
 {
+
+    /**
+     * @var GuildInterface
+     */
     protected $guildRepo;
+
+    /**
+     * @var UserInterface
+     */
     protected $userRepo;
+
+    /**
+     * @var GuildApplicationInterface
+     */
     protected $guildApplicationRepo;
 
     /**
@@ -24,157 +37,127 @@ class GuildApplicationController extends Controller
         $this->userRepo = $user;
     }
 
+
     /**
      * Display a listing of the resource.
      *
+     * @param $guild_id
+     *
      * @return \Illuminate\View\View
      */
-    public function index($id)
+    public function index($guild_id)
     {
-        $applications = $this->guildApplicationRepo->all($id);
+        $applications = $this->guildApplicationRepo->all($guild_id);
 
         return view('applications.index')->with('applications', $applications);
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
-     * @param $id
+     * @param $guild_id
+     *
      * @return \Illuminate\View\View
      */
-    public function create($id)
+    public function create($guild_id)
     {
-        $guild = $this->guildRepo->findId($id);
+        $guild = $this->guildRepo->byId($guild_id);
         if ($guild != null) {
-            return view('guildapplications.create')->with('guild', $guild);
+            return view('guilds.applications.create')->with('guild', $guild);
         } else {
             Session::flash('error', 'No such guild.');
             return Redirect::to('guilds');
         }
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @param GuildApplicationRequest $request
+     *
+     * @param                         $guild_id
+     *
+     * @return Redirect
      */
-    public function store()
+    public function store(GuildApplicationRequest $request, $guild_id)
     {
         $user = $this->userRepo->getUser();
-        //Check if the user is admin or fail
-        if (($user != null) && ($user->hasPermission('admin'))) {
-            // Form Processing
-            if ((Input::get('guild_id') > 0) && (is_numeric(Input::get('guild_id')))) {
-                $guild = $this->guildRepo->findId(Input::get('guild_id'));
-                //TODO move to repository
-                $this->guildRepo->addGuildApplication($guild->id, $user->id);
-
-                // Success!
-                Session::flash('success', 'Your application to join "' . $guild->name . '" has been sent.');
-                return Redirect::to('guilds');
-            } else {
-                Session::flash('error', 'Error in sending guild application, plrease try again.');
-                return Redirect::action('GuildApplicationController@create')
-                    ->withInput();
-            }
-        } else {
-            return Redirect::route('login');
-        }
+        $this->guildApplicationRepo->create($request->all(), $user->id, $guild_id);
+        return Redirect::to('/guilds')->with(array('success' => 'Your application have been registered.'));
     }
+
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     * @return Response
+     * @param $application_id
+     *
+     * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show($application_id)
     {
-        //
+        $application = $this->guildApplicationRepo->byId($application_id);
+        return view('guilds.applications.show', compact('application'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
         $guild = $this->guildApplicationRepo->byId($id);
-        if ($this->userRepo->can('admin-guild') === true) {
-            return view('guild.applications.edit')->with('guild', $guild);
-        } else {
-            Session::flash('error', 'Sorry, you do not have the necessary permissions to edit this guild.');
-            return Redirect::to('/');
-        }
+        return view('guild.applications.edit')->with('guild', $guild);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function update($id)
     {
-        $user = $this->userRepo->getUser();
-        //Check if the user is admin or fail
-        if (($user != null) && ($user->hasPermission('admin'))) {
-            if (!is_numeric($id)) {
-                App::abort(404);
-            }
-
-            $validator = GuildApplication::validate(Input::all());
-            if ($validator->passes()) {
-                $guild = GuildApplication::find($id);
-                $guild->update(array(
-                    'name' => Input::get('name'),
-                    'tag' => Input::get('tag'),
-                ));
-
-                // Success!
-                Session::flash('success', 'Guild "' . Input::get('name') . '" updated.');
-                return Redirect::to('guilds');
-            } else {
-                Session::flash('error', 'Error updating the guild information.');
-                return Redirect::action('UserController@edit', array($id))
-                    ->withInput()
-                    ->withErrors($validator->getMessageBag());
-            }
-        } else {
-            return Redirect::route('login');
-        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function destroy($id)
     {
-        $user = $this->userRepo->getUser();
-        //Check if the user is admin or fail
-        if (($user != null) && ($user->hasPermission('admin'))) {
-            if (!is_numeric($id)) {
-                // @codeCoverageIgnoreStart
-                return App::abort(404);
-                // @codeCoverageIgnoreEnd
-            }
+        $this->guildApplicationRepo->delete($id);
+    }
 
-            $guild = GuildApplication::find($id);
-            if (($guild != null) && ($guild->delete()))
-            {
-                Session::flash('success', 'Guild deleted.');
-                return Redirect::to('/guilds');
-            } else {
-                Session::flash('error', 'Unable to delete guild.');
-                return Redirect::to('/guilds');
-            }
-        } else {
-            return Redirect::route('login');
-        }
+    /**
+     * Approves an user to the guild and removes the application.
+     *
+     * @param  int $id
+     * @return \Illuminate\View\View
+     */
+    public function approve($id)
+    {
+        $application = $this->guildApplicationRepo->byId($id);
+        $this->guildApplicationRepo->approve($id);
+        return Redirect::to('guilds/'.$application->guild->id.'/edit')->with(['success' => 'Member accepted to the guild.']);
+    }
+
+    /**
+     * Declines the application and removes it.
+     *
+     * @param  int $id
+     * @return \Illuminate\View\View
+     */
+    public function decline($id)
+    {
+        $application = $this->guildApplicationRepo->byId($id);
+        $this->guildApplicationRepo->decline($id);
+        return Redirect::to('guilds/'.$application->guild->id.'/edit')->with(['success' => 'Application declined.']);
     }
 }

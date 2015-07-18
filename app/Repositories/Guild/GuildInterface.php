@@ -23,6 +23,4 @@ interface GuildInterface
     public function getMembers($guild_id);
 
     public function getAdmins($guild_id);
-
-    public function addGuildApplication($guild_id, $user_id);
 }

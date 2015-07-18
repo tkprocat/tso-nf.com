@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind('LootTracker\Repositories\Guild\GuildApplicationInterface', function () {
             return new EloquentGuildApplicationRepository(
-                $this->app->make('LootTracker\Repositories\User\UserInterface')
+                $this->app->make('LootTracker\Repositories\Guild\GuildInterface')
             );
         });
 

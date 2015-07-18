@@ -202,18 +202,6 @@ class EloquentGuildRepository implements GuildInterface
     }
 
     /**
-     * @param $guild_id
-     * @param $user_id
-     */
-    public function addGuildApplication($guild_id, $user_id)
-    {
-        GuildApplication::create(array(
-            'guild_id' => $guild_id,
-            'user_id' => $user_id,
-        ));
-    }
-
-    /**
      * @return mixed
      */
     protected function getMemberRole()

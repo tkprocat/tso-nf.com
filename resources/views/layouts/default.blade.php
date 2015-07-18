@@ -68,16 +68,16 @@
                             </ul>
                             </li>
                             <li {!! ((Request::segment(1)=== 'loot') ? 'class="dropdown active"' : 'class="dropdown"') !!}>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Loot<span
-                                        class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ URL::to('loot/create') }}">Add loot</a>
-                                </li>
-                                <li>
-                                    <a href="{{ URL::to('loot') }}">Latest</a>
-                                </li>
-                            </ul>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Loot<span
+                                            class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{ URL::to('loot/create') }}">Add loot</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ URL::to('loot') }}">Latest</a>
+                                    </li>
+                                </ul>
                             </li>
                             <li {!! (Request::is('users') ? 'class="active"' : '') !!}>
                                 <a href="{{ URL::to('users') }}">Users</a>
@@ -85,6 +85,21 @@
                             <li {!! ((Request::segment(1) === 'guilds') ? 'class="active"' : '')  !!}>
                                 <a href="{{ URL::to('guilds') }}">Guilds</a>
                             </li>
+                            @if (Auth::user()->guild_id > 0)
+                            <li {!! ((Request::segment(1) . '/'. Request::segment(2) === 'guilds/'.Auth::user()->guild_id) ? 'class="dropdown active"' : 'class="dropdown"') !!}>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->guild->tag }}<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{ URL::to('guilds/'.Auth::user()->guild_id) }}">My guild</a>
+                                    </li>
+                                    @if (Auth::user()->can('admin-guild'))
+                                    <li>
+                                        <a href="{{ URL::to('guilds/'.Auth::user()->guild_id.'/edit') }}">Settings</a>
+                                    </li>
+                                    @endif
+                                </ul>
+                            </li>
+                            @endif
                             <li {!! (Request::is('users/' . Auth::user()->username) ? 'class="active"' : '') !!}>
                                 <a href="{{ URL::to('users') .'/'. Auth::user()->username .'/edit'}}">{{ Auth::user()->username }}</a>
                             </li>

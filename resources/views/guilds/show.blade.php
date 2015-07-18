@@ -44,21 +44,4 @@
     @endforeach
     </tbody>
 </table>
-
-@if (Entrust::hasRole('admin') || (Entrust::can('admin-guild')))
-<div class="panel panel-default">
-    <div class="panel-heading">Add member</div>
-    <div class="panel-body">
-        <form method="POST" action="/guilds/{{ $guild->id }}/add" accept-charset="UTF-8" class="form-inline">
-            <input name="_token" type="hidden" value="{{ csrf_token() }}">
-            <div class="form-group">
-                <input type="text" name="username" class="form-control" placeholder="Username">
-                <input type="hidden" name="guild_id" value="{{ $guild->id }}">
-                <input type="submit" value="Add" class="btn btn-primary">
-            </div>
-        </form>
-    </div>
-</div>
-<a href="/guilds/{{ $guild->id }}" data-method="delete" rel="nofollow" class="btn btn-danger" data-confirm="Are you sure you want to disband the guild?">Disband guild</a>
-@endif
 @stop

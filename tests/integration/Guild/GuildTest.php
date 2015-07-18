@@ -2,6 +2,7 @@
 
 use App;
 use \LootTracker\Repositories\Guild\GuildInterface;
+use LootTracker\Repositories\User\Role;
 
 class GuildTest extends TestCase
 {
@@ -11,11 +12,24 @@ class GuildTest extends TestCase
      */
     protected $guild;
 
+    /**
+     * @var \LootTracker\Repositories\User\Role
+     */
+    protected $memberRole;
+
+    /**
+     * @var \LootTracker\Repositories\User\Role
+     */
+    protected $adminRole;
+
     public function setUp()
     {
         parent::setUp();
         $this->login('user1');
         $this->guild = App::make(GuildInterface::class);
+
+        $this->memberRole = Role::whereName('guild_member')->first();
+        $this->adminRole = Role::whereName('guild_admin')->first();
     }
 
     /** @test */
@@ -140,7 +154,9 @@ class GuildTest extends TestCase
         //Kick the user again and check it gets cleaned up.
         $this->visit('guilds/1/kick/'.$user2->id)
             ->see('Guild member kicked.')
-            ->seeInDatabase('users', array('id' => $user2->id, 'guild_id' => '0'));
+            ->seeInDatabase('users', array('id' => $user2->id, 'guild_id' => '0'))
+            ->notSeeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->memberRole->id])
+            ->notSeeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->adminRole->id]);
     }
 
     /** @test */
@@ -163,7 +179,7 @@ class GuildTest extends TestCase
     public function canDisbandGuild()
     {
         //Test the button is there.
-        $this->visit('/guilds/1')
+        $this->visit('/guilds/1/edit')
             ->see('Tester&#039;s Guild')
             ->click('Disband guild');
 
@@ -214,19 +230,24 @@ class GuildTest extends TestCase
         //Add the user
         $this->visit('guilds/1/add/'.$user2->id)
             ->seePageIs('/guilds/1')
-            ->see('User added to guild.');
+            ->see('User added to guild.')
+            ->seeInDatabase('users', ['id' => $user2->id, 'guild_id' => '1'])
+            ->seeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->memberRole->id])
+            ->notSeeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->adminRole->id]);
 
         //Promote the user.
         $this->visit('guilds/1/promote/'.$user2->id)
             ->seePageIs('/guilds/1')
-            ->see('Member promoted.');
+            ->see('Member promoted.')
+            ->seeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->memberRole->id])
+            ->seeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->adminRole->id]);
 
         //Demote the user again.
         $this->visit('guilds/1/demote/'.$user2->id)
             ->seePageIs('/guilds/1')
-            ->see('Member demoted.');
-
-        $this->assertFalse($user2->hasRole('guild_admin'));
+            ->see('Member demoted.')
+            ->seeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->memberRole->id])
+            ->notSeeInDatabase('role_user', ['user_id' => $user2->id, 'role_id' => $this->adminRole->id]);
     }
 
     /** @test */
@@ -240,9 +261,9 @@ class GuildTest extends TestCase
         //Demote the user again.
         $this->visit('guilds/1/demote/'.$user1->id)
             ->seePageIs('/guilds/1')
-            ->see('You can not demote the last admin in the guild, either promote a new one or disband the guild.');
-
-        $this->assertTrue($user1->hasRole('guild_admin'));
+            ->see('You can not demote the last admin in the guild, either promote a new one or disband the guild.')
+            ->seeInDatabase('role_user', ['user_id' => $user1->id, 'role_id' => $this->memberRole->id])
+            ->seeInDatabase('role_user', ['user_id' => $user1->id, 'role_id' => $this->adminRole->id]);
     }
 
     protected function createLMGuild()

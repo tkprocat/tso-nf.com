@@ -1,25 +1,33 @@
 @extends('layouts.default')
-
-{{-- Web site Title --}}
-@section('title')
-@parent
-Register
-@stop
-
-{{-- Content --}}
 @section('content')
-<div class="row">
-    <div class="col-md-4 col-md-offset-4">
-        {{ Form::open(array('action' => 'GuildApplicationController@store')) }}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Application to join guild {{ $guild->name }}</div>
+                <div class="panel-body">
+                    @include('errors.list')
+                    <form method="POST" action="/guilds/{{ $guild->id }}/applications" accept-charset="UTF-8" class="form-horizontal">
+                        {!! csrf_field() !!}
 
-        <h2>Join guild {{ $guild->name }}</h2>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="message">Message</label>
+                            <div class="col-md-10">
+                                <textarea name="message" class="form-control" placeholder="Write a short message to the guild admins.">{{ old('message') }}</textarea>
+                            </div>
+                        </div>
 
-        {{ Form::hidden('guild_id', $guild->id) }}
-
-        <div style="text-align: center">{{ Form::submit('Send application', array('class' => 'btn btn-primary')) }}
+                        <div class="form-group">
+                            <div class="col-md-5 col-md-offset-5">
+                                <button type="submit" class="btn btn-primary">
+                                    Apply
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        {{ Form::close() }}
     </div>
 </div>
 @stop

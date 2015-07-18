@@ -42,7 +42,6 @@ Route::group(['middleware' => ['auth'], 'permission' => ['admin-blog']], functio
 Route::group(['middleware' => ['auth'], 'role' => ['user', 'admin'], 'permission' => ''], function () {
     //Guilds
     Route::resource('guilds', 'GuildController');
-    Route::resource('guildapplications', 'GuildApplicationController');
 
     Route::group(['middleware' => ['auth'], 'role' => ['admin'], 'permission' => 'admin-guild'], function () {
         Route::get('guilds/{guild_id}/promote/{user_id}', 'GuildController@promoteMember')->where('guild_id',
@@ -57,7 +56,17 @@ Route::group(['middleware' => ['auth'], 'role' => ['user', 'admin'], 'permission
         Route::get('guilds/{guild_id}/kick/{user_id}', 'GuildController@removeMember')->where('guild_id',
             '[0-9]+')->where('user_id', '[0-9]+');
         Route::post('guilds/{guild_id}/add', 'GuildController@addMemberPost')->where('guild_id', '[0-9]+');
+
+        Route::resource('guilds/{id}/applications', 'GuildApplicationController');
+        Route::get('guilds/{guild_id}/applications/{application_id}/approve', 'GuildApplicationController@approve');
+        Route::get('guilds/{guild_id}/applications/{application_id}/decline', 'GuildApplicationController@decline');
     });
+});
+
+//Guild applications
+Route::group(['middleware' => ['auth'], 'role' => ['user']], function () {
+    Route::get('guilds/{guild_id}/applications/create', 'GuildApplicationController@create');
+    Route::post('guilds/{guild_id}/applications/', 'GuildApplicationController@store');
 });
 
 //General stats
@@ -90,8 +99,10 @@ Route::group(['middleware' => ['auth'], 'role' => ['guild_member']], function ()
     Route::get('stats/guild', 'GuildStatsController@index');
     Route::get('stats/guild/submissionrate', ['as' => 'stats', 'uses' => 'GuildStatsController@showSubmissionRate']);
     Route::get('stats/guild/newuserrate', ['as' => 'stats', 'uses' => 'GuildStatsController@showNewUserRate']);
-    Route::get('stats/guild/getPlayedCountForLast30Days/{adventure}',
-        'GuildStatsController@getPlayedCountForLast30Days');
+    Route::get(
+        'stats/guild/getPlayedCountForLast30Days/{adventure}',
+        'GuildStatsController@getPlayedCountForLast30Days'
+    );
 
     Route::get('stats/guild/adventure/{adventurename}', 'GuildStatsController@show');
 });
@@ -100,15 +111,17 @@ Route::group(['middleware' => ['auth'], 'role' => ['guild_member']], function ()
 Route::group(['middleware' => ['auth'], 'permission' => ['see-loot']], function () {
     Route::get('stats/personal/{username?}', 'PersonalStatsController@getPersonalStats');
 
-    Route::get('stats/personal/accumulatedloot/{username}/{datefrom}/{dateto}',
-        'PersonalStatsController@getAccumulatedLootBetween')->where('datefrom',
-        '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$')->where('dateto',
-        '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$');
+    Route::get(
+        'stats/personal/accumulatedloot/{username}/{datefrom}/{dateto}',
+        'PersonalStatsController@getAccumulatedLootBetween'
+    )->where('datefrom', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$')
+     ->where('dateto', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$');
 
-    Route::get('stats/personal/adventuresplayed/{username}/{datefrom}/{dateto}',
-        'PersonalStatsController@getAdventuresPlayedBetween')->where('datefrom',
-        '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$')->where('dateto',
-        '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$');
+    Route::get(
+        'stats/personal/adventuresplayed/{username}/{datefrom}/{dateto}',
+        'PersonalStatsController@getAdventuresPlayedBetween'
+    )->where('datefrom', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$')
+     ->where('dateto', '^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$');
 });
 
 //Users

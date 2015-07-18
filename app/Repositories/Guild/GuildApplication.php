@@ -1,5 +1,8 @@
 <?php namespace LootTracker\Repositories\Guild;
 
+use LootTracker\Repositories\Guild\Guild;
+use LootTracker\Repositories\User\User;
+
 /**
  * Class GuildApplication
  * @package LootTracker\Repositories\Guild
@@ -19,10 +22,18 @@ class GuildApplication extends \Eloquent
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function members()
+    public function user()
     {
-        return $this->hasMany('User', 'id', 'user_id');
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function guild()
+    {
+        return $this->belongsTo(Guild::class);
     }
 }
