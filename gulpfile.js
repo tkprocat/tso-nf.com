@@ -31,9 +31,10 @@ elixir(function(mix) {
     mix.scripts(['bower/bootstrap/dist/js/bootstrap.js',
                  'bower/bootstrap-combobox/js/bootstrap-combobox.js',
                  'bower/jquery-ujs/src/rails.js',
-                 '/bower/bootstrap-submenu/dist/js/bootstrap-submenu.js',],
+                 'js/bootstrap-ujs.js',
+                 '/bower/bootstrap-submenu/dist/js/bootstrap-submenu.js'],
                 './public/js', './resources/assets/');
-})
+});
 
 
 //TinyMCE
