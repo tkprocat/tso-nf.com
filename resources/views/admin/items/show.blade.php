@@ -31,11 +31,9 @@
                                 <table class="table table-striped table-hover sortable" id="adventures">
                                     <thead>
                                     <tr>
-                                        <th>Min.</th>
-                                        <th>Avg.</th>
-                                        <th>Max.</th>
-                                        <th>Created at</th>
-                                        <th>Created by</th>
+                                        <th>Slot</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -44,8 +42,6 @@
                                             <td>{{ $historyItem->min_price }}</td>
                                             <td>{{ $historyItem->avg_price }}</td>
                                             <td>{{ $historyItem->max_price }}</td>
-                                            <td>{{ $historyItem->created_at }}</td>
-                                            <td>{{ $historyItem->user->username }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

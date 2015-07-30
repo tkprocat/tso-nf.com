@@ -1,6 +1,5 @@
 <?php namespace LootTracker\Repositories\Guild;
 
-use LootTracker\Repositories\Guild\Guild;
 use LootTracker\Repositories\User\User;
 
 /**

@@ -2,6 +2,8 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-param" content="_token" />
     <title>tso-nf.com Loot Tracker</title>
     <link rel="stylesheet" href="/css/all.css">
     <link rel="stylesheet" href="/css/dashboard.css">
@@ -33,6 +35,8 @@
 </nav>
 <div class="container-fluid">
     <div class="row">
+        @include('layouts/notifications')
+
         @yield('content')
     </div>
 </div>

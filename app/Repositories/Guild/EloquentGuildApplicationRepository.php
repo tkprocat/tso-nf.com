@@ -12,8 +12,11 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
      */
     protected $guildRepo;
 
+
     /**
      * EloquentGuildApplicationRepository constructor.
+     *
+     * @param GuildInterface $guildInterface
      */
     public function __construct(GuildInterface $guildInterface)
     {
@@ -35,6 +38,7 @@ class EloquentGuildApplicationRepository implements GuildApplicationInterface
     /**
      * @param $data
      * @param $user_id
+     * @param $guild_id
      *
      * @return GuildApplication
      */

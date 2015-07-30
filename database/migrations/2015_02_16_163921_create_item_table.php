@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePricelistItemTable extends Migration {
+class CreateItemTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,13 @@ class CreatePricelistItemTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('pricelist_item', function(Blueprint $table)
+		Schema::create('items', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('name');
+			$table->string('category');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 
@@ -27,7 +29,7 @@ class CreatePricelistItemTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('pricelist_item');
+		Schema::drop('items');
 	}
 
 }

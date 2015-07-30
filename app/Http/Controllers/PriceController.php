@@ -1,16 +1,16 @@
 <?php namespace LootTracker\Http\Controllers;
 
-use LootTracker\Repositories\PriceList\PriceListInterface;
+use LootTracker\Repositories\Item\ItemInterface;
 
 class PriceController extends Controller
 {
 
-    protected $priceList;
+    protected $itemRepo;
 
 
-    public function __construct(PriceListInterface $priceList)
+    public function __construct(ItemInterface $itemRepo)
     {
-        $this->priceList = $priceList;
+        $this->itemRepo = $itemRepo;
     }
 
 
@@ -22,7 +22,7 @@ class PriceController extends Controller
     public function index()
     {
 
-        $items = $this->priceList->getAllItems();
+        $items = $this->itemRepo->all();
 
         return view('prices.index')->with('items', $items);
     }
@@ -53,11 +53,11 @@ class PriceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  int $item_id
      *
      * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show($item_id)
     {
         //
     }
@@ -66,11 +66,11 @@ class PriceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param  int $item_id
      *
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit($item_id)
     {
         //
     }
@@ -79,11 +79,11 @@ class PriceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
+     * @param  int $item_id
      *
      * @return \Illuminate\View\View
      */
-    public function update($id)
+    public function update($item_id)
     {
         //
     }
@@ -92,11 +92,11 @@ class PriceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  int $item_id
      *
      * @return \Illuminate\View\View
      */
-    public function destroy($id)
+    public function destroy($item_id)
     {
         //
     }

@@ -7,14 +7,17 @@ use LootTracker\Repositories\Blog\EloquentBlogCommentRepository;
 use LootTracker\Repositories\Blog\EloquentBlogPostRepository;
 use LootTracker\Repositories\Guild\EloquentGuildApplicationRepository;
 use LootTracker\Repositories\Guild\EloquentGuildRepository;
+use LootTracker\Repositories\Item\Admin\EloquentAdminItemRepository;
+use LootTracker\Repositories\Item\EloquentItemRepository;
 use LootTracker\Repositories\Loot\EloquentLootRepository;
-use LootTracker\Repositories\PriceList\Admin\EloquentAdminPriceListRepository;
-use LootTracker\Repositories\PriceList\EloquentPriceListRepository;
+use LootTracker\Repositories\Price\Admin\AdminPriceInterface;
+use LootTracker\Repositories\Price\Admin\EloquentAdminPriceRepository;
 use LootTracker\Repositories\Stats\EloquentGeneralStatsRepository;
 use LootTracker\Repositories\Stats\EloquentGlobalStatsRepository;
 use LootTracker\Repositories\Stats\EloquentGuildStatsRepository;
 use LootTracker\Repositories\Stats\EloquentPersonalStatsRepository;
 use LootTracker\Repositories\User\EloquentUserRepository;
+use LootTracker\Repositories\User\UserInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -70,6 +73,18 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        //--------------- Items ----------------
+
+        $this->app->bind('LootTracker\Repositories\Item\ItemInterface', function () {
+            return new EloquentItemRepository();
+        });
+
+        //--------------- Admin Items ----------------
+
+        $this->app->bind('LootTracker\Repositories\Item\Admin\AdminItemInterface', function () {
+            return new EloquentAdminItemRepository($this->app->make(AdminPriceInterface::class),
+                $this->app->make(UserInterface::class));
+        });
         //--------------- Loot ----------------
 
         $this->app->bind('LootTracker\Repositories\Loot\LootInterface', function () {
@@ -88,16 +103,10 @@ class AppServiceProvider extends ServiceProvider
             return new EloquentAdventureRepository();
         });
 
-        //--------------- Prices ----------------
-
-        $this->app->bind('LootTracker\Repositories\PriceList\PriceListInterface', function () {
-            return new EloquentPriceListRepository();
-        });
-
         //--------------- Admin Prices ----------------
 
-        $this->app->bind('LootTracker\Repositories\PriceList\Admin\AdminPriceListInterface', function () {
-            return new EloquentAdminPriceListRepository();
+        $this->app->bind('LootTracker\Repositories\Price\Admin\AdminPriceInterface', function () {
+            return new EloquentAdminPriceRepository();
         });
 
         //--------------- Stats ----------------

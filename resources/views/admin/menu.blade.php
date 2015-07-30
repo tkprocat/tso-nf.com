@@ -24,16 +24,22 @@
             <li><a href="/admin/adventures/create">- Add new adventure</a></li>
         @endif
 
+        @if ($active == 'Items')
+            <li class="active"><a href="/admin/items">Items <span class="sr-only">(current)</span></a></li>
+        @else
+            <li><a href="/admin/items">Items</a></li>
+        @endif
+
+        @if ($active == 'Add item')
+            <li class="active"><a href="/admin/items/create">- Add new item<span class="sr-only">(current)</span></a></li>
+        @else
+            <li><a href="/admin/items/create">- Add new item</a></li>
+        @endif
+
         @if ($active == 'Prices')
             <li class="active"><a href="/admin/prices">Prices <span class="sr-only">(current)</span></a></li>
         @else
             <li><a href="/admin/prices">Prices</a></li>
-        @endif
-
-        @if ($active == 'Add prices')
-            <li class="active"><a href="/admin/prices/create">- Add new item<span class="sr-only">(current)</span></a></li>
-        @else
-            <li><a href="/admin/prices/create">- Add new item</a></li>
         @endif
     </ul>
 </div>

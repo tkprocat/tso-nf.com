@@ -2,10 +2,11 @@
 
 use Illuminate\Support\Facades\Auth;
 
-class PriceItemRequest extends Request
+class ItemRequest extends Request
 {
     protected $rules = array(
-        'name' => 'required|string'
+        'name' => 'required|string',
+        'category' => 'required|string'
     );
 
     public function rules()
@@ -17,11 +18,6 @@ class PriceItemRequest extends Request
     {
         //Fail if the use are not logged in.
         if (!Auth::check()) {
-            return false;
-        }
-
-        //Check if the user is an admin.
-        if (!Auth::user()->hasRole('admin')) {
             return false;
         }
 

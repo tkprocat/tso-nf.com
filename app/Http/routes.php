@@ -137,9 +137,14 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-prices']], functio
 
 //Admin prices
 Route::group(['middleware' => ['auth'], 'permission' => ['edit-prices'], 'role' => ['admin']], function () {
-    Route::resource('admin/prices', 'AdminPriceListController');
-    Route::get('admin/prices/{id}/newprice', 'AdminPriceListController@createNewPrice');
-    Route::post('admin/prices/newprice/{id}', 'AdminPriceListController@storeNewPrice');
+    Route::resource('admin/prices', 'AdminPriceController');
+    Route::get('admin/prices/{id}/newprice', 'AdminPriceController@createNewPrice');
+    Route::post('admin/prices/newprice/{id}', 'AdminPriceController@storeNewPrice');
+});
+
+//Admin items
+Route::group(['middleware' => ['auth'], 'permission' => ['edit-prices', 'edit-items'], 'role' => ['admin', 'prices_admin']], function () {
+    Route::resource('admin/items', 'AdminItemController');
 });
 
 Route::group(['middleware' => ['auth'], 'role' => ['admin']], function () {

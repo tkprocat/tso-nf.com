@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePricelistItemPriceTable extends Migration {
+class CreatePriceTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,13 @@ class CreatePricelistItemPriceTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('pricelist_item_price', function(Blueprint $table)
+		Schema::create('prices', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('pricelist_item_id')->unsigned();
-			$table->foreign('pricelist_item_id')->references('id')->on('pricelist_item')->onDelete('cascade');
+			$table->integer('item_id')->unsigned();
+			$table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+			$table->integer('user_id')->unsigned();
+			$table->foreign('user_id')->references('id')->on('users');
 			$table->double('min_price');
 			$table->double('avg_price');
 			$table->double('max_price');
@@ -31,7 +33,7 @@ class CreatePricelistItemPriceTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('pricelist_item_price');
+		Schema::drop('prices');
 	}
 
 }

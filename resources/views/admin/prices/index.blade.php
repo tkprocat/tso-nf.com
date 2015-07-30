@@ -11,6 +11,7 @@
                     <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Type</th>
                         <th>Min. price</th>
                         <th>Avg. price</th>
                         <th>Max. price</th>
@@ -21,17 +22,11 @@
                     @foreach($items as $item)
                         <tr>
                             <td><a href="{{ url("/admin/prices/$item->id") }}">{{ $item->name }}</a></td>
-                            <td>{{ $item->current_price()->min_price }}</td>
-                            <td>{{ $item->current_price()->avg_price }}</td>
-                            <td>{{ $item->current_price()->max_price }}</td>
-                            <td>
-                            <td><a href="{{ url("/admin/prices/$item->id/newprice") }}" class="btn btn-primary">Change price</a></td>
-                            <td><a href="{{ url("/admin/prices/$item->id/edit") }}" class="btn btn-warning">Update item</a></td>
-                            <button class="btn btn-danger btn-delete" data-toggle="modal"
-                                    data-target="#deleteModal"
-                                    data-id="{{ $item->id }}">Delete
-                            </button>
-                            </td>
+                            <td>{{ $item->type }}</td>
+                            <td>{{ $item->currentPrice()->min_price }}</td>
+                            <td>{{ $item->currentPrice()->avg_price }}</td>
+                            <td>{{ $item->currentPrice()->max_price }}</td>
+                            <td><a href="{{ url("/admin/prices/$item->id/edit") }}" class="btn btn-warning btn-xs">Change price</a></td>
                         </tr>
                     @endforeach
                     </tbody>

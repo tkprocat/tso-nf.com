@@ -18,12 +18,10 @@ class DatabaseSeeder extends Seeder
         $this->call('EntrustSeeder');
 
         $this->call('LootTrackerAdventureSeeder');
-        $this->call('LootTrackerPriceListSeeder');
+        $this->call('ItemSeeder');
         $this->call('LootTrackerUserAdventureSeeder');
-        if (env('APP_ENV', 'production') === 'testing') {
-            $this->call('UserSeeder');
-            $this->call('GuildSeeder');
-            $this->call('BlogSeeder');
-        }
+        $this->call('UserSeeder');
+        $this->call('GuildSeeder');
+        $this->call('BlogSeeder');
     }
 }
