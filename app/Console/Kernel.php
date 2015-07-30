@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'LootTracker\Console\Commands\Inspire',
+        'LootTracker\Console\Commands\FixPermissions',
         'LootTracker\Console\Commands\GenerateItems',
     ];
 
