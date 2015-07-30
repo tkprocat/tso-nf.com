@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\MessageBag;
 use LootTracker\Repositories\Adventure\AdventureInterface;
 use LootTracker\Repositories\Loot\LootInterface;
 
@@ -141,8 +142,7 @@ class LootTest extends TestCase
         $this->userRepo->login($user);
 
         //Check that we get an error.
-        $this->call('GET', '/loot/1/edit');
-        $this->assertRedirectedTo('/loot', array('error' => 'Sorry you do not have permission to do this!'));
+        $this->visit('/loot/1/edit')->see('Sorry you do not have permission to do this!');
 
         $data = array(
             'adventure_id' => '1',
@@ -157,7 +157,9 @@ class LootTest extends TestCase
 
         //Check that we get an error.
         $this->call('PUT', '/loot/1', $data);
-        $this->assertRedirectedTo('/loot', array('error' => 'Sorry you do not have permission to do this!'));
+        //$this->assertRedirectedTo('/loot', new MessageBag(['Sorry you do not have permission to do this!']));
+        $this->assertRedirectedTo('/loot');
+        $this->assertSessionHas('errors');
     }
 
     /** @test */

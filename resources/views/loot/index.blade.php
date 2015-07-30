@@ -1,6 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
+@include('errors.list')
 @foreach($loots as $loot)
 <div class="panel panel-default">
     <div class="panel-heading">

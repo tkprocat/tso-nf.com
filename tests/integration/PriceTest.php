@@ -31,7 +31,7 @@ class PriceListTest extends TestCase
     public function canSeePriceIndexPage()
     {
         $this->visit('/prices')
-            ->see('Pricelist:');
+            ->see('Price list');
     }
 
     /** @test */

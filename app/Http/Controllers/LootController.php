@@ -80,7 +80,7 @@ class LootController extends Controller
         $user_adventure = $this->lootRepo->byId($user_adventure_id);
 
         if (!($this->userRepo->IsAdmin() || $this->userRepo->getUser()->id === $user_adventure->User->id)) {
-            return Redirect::to('/loot')->with('error', 'Sorry you do not have permission to do this!');
+            return Redirect::to('/loot')->withErrors('Sorry you do not have permission to do this!');
         }
 
         $adventures = $this->adventureRepo->all();
@@ -114,19 +114,19 @@ class LootController extends Controller
 
         //Check it's an admin or it's the same user.
         $user_adventure = $this->lootRepo->byId($user_adventure_id);
-        if (!$this->userRepo->isAdmin() && !$this->userRepo->getUser()->id === $user_adventure->User->id) {
-            return Redirect::to('/')->with('error', 'Sorry you do not have permission to do this!');
+        if ((!$this->userRepo->isAdmin()) && ($this->userRepo->getUser()->id !== $user_adventure->User->id)) {
+            return Redirect::to('/loot')->withErrors('Sorry you do not have permission to do this!');
         }
 
         $data = Input::all();
         $data['user_id'] = $this->userRepo->getUser()->id;
         $data['user_adventure_id'] = $user_adventure_id;
-        $v = Validator::make($data, $this->rules());
-        if ($v->passes()) {
+        $validator = Validator::make($data, $this->rules());
+        if ($validator->passes()) {
             $this->lootRepo->update($data);
             return Redirect::to('loot')->with(array('success' => 'Loot updated successfully.'));
         } else {
-            return Redirect::to('loot/'.$user_adventure_id.'/edit')->withInput()->withErrors($v->errors());
+            return Redirect::to('loot/'.$user_adventure_id.'/edit')->withInput()->withErrors($validator->errors());
         }
     }
 
@@ -161,24 +161,14 @@ class LootController extends Controller
         }
     }
 
-    ///**
-    // * @param $adventure_id
-    // * @return \Illuminate\View\View
-    // */
-    //public function createForm($adventure_id)
-    //{
-    //    $adventure = $this->adventureRepo->findAdventureWithLoot($adventure_id);
-    //    return view('loot.create_form', $adventure);
-    //}
-
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store()
     {
-        $v = Validator::make(Input::all(), $this->rules());
+        $validator = Validator::make(Input::all(), $this->rules());
 
-        if ($v->passes()) {
+        if ($validator->passes()) {
             $data = Input::all();
             $data['user_id'] = $this->userRepo->getUser()->id;
             $this->lootRepo->create($data);
@@ -186,7 +176,7 @@ class LootController extends Controller
                 array('success' => 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>')
             );
         } else {
-            return Redirect::to('loot/create')->withInput()->withErrors($v->errors());
+            return Redirect::to('loot/create')->withInput()->withErrors($validator->errors());
         }
     }
 

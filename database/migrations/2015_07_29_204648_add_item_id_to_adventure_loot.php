@@ -14,7 +14,7 @@ class AddItemIdToAdventureLoot extends Migration
     {
         if (!Schema::hasColumn('adventure_loot', 'item_id')) {
             Schema::table('adventure_loot', function ($table) {
-                $table->integer('item_id')->unsigned()->index();
+                $table->integer('item_id')->unsigned()->nullable()->index();
                 $table->foreign('item_id')->references('id')->on('items');
             });
         }

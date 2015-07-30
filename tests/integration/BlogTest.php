@@ -144,8 +144,9 @@ class BlogTest extends TestCase
         $this->visit('/blog/create')
             ->type($this->faker->title, 'title')
             ->press('Create')
+            ->followRedirects()
             ->onPage('blog/create')
-            ->assertSessionHasErrors('content');
+            ->see('The content field is required.');
     }
 
     /** @test */
