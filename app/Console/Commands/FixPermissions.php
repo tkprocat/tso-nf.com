@@ -65,7 +65,7 @@ class FixPermissions extends Command
             {
                 $tempUser = User::find($guildAdmin->user_id);
                 if (($tempUser != null) && (!$tempUser->hasRole('guild_admin')))
-                    $user->attachRole($guildAdminRole);
+                    $tempUser->attachRole($guildAdminRole);
             }
         }
 
