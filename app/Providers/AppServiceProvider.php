@@ -9,6 +9,7 @@ use LootTracker\Repositories\Guild\EloquentGuildApplicationRepository;
 use LootTracker\Repositories\Guild\EloquentGuildRepository;
 use LootTracker\Repositories\Item\Admin\EloquentAdminItemRepository;
 use LootTracker\Repositories\Item\EloquentItemRepository;
+use LootTracker\Repositories\Item\ItemInterface;
 use LootTracker\Repositories\Loot\EloquentLootRepository;
 use LootTracker\Repositories\Price\Admin\AdminPriceInterface;
 use LootTracker\Repositories\Price\Admin\EloquentAdminPriceRepository;
@@ -100,7 +101,7 @@ class AppServiceProvider extends ServiceProvider
         //--------------- Adventure ----------------
 
         $this->app->bind('LootTracker\Repositories\Adventure\AdventureInterface', function () {
-            return new EloquentAdventureRepository();
+            return new EloquentAdventureRepository($this->app->make(ItemInterface::class));
         });
 
         //--------------- Admin Prices ----------------

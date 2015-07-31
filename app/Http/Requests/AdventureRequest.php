@@ -16,7 +16,7 @@ class AdventureRequest extends Request
         $itemCount = count($data["items"]);
         if ($itemCount > 0) {
             for ($a = 1; $a <= $itemCount; $a++) {
-                if (($data["items"][$a]["slot"] == "") && ($data["items"][$a]["type"] == "") && ($data["items"][$a]["amount"] == "")) {
+                if (($data["items"][$a]["slot"] == "") && ($data["items"][$a]["amount"] == "")) {
                     unset($data["items"][$a]);
                 }
             }
@@ -25,9 +25,9 @@ class AdventureRequest extends Request
         //Add dynamic rules.
         for ($i = 1; $i < count($data["items"]); $i++) {
             //Only check if one of the fields are filled out
-            if (($data["items"][$i]['slot'] != '') || ($data["items"][$i]['type'] != '') || ($data["items"][$i]['amount'] != '')) {
+            if (($data["items"][$i]['slot'] != '') || ($data["items"][$i]['itemid'] != '') || ($data["items"][$i]['amount'] != '')) {
                 $this->rules = array_add($this->rules, "items.$i.slot", 'required|integer');
-                //$this->rules = array_add($this->rules, "items.$i.type", 'required|alpha_spaces');
+                $this->rules = array_add($this->rules, "items.$i.type", 'required|integer');
                 $this->rules = array_add($this->rules, "items.$i.amount", 'required|integer');
             }
         }

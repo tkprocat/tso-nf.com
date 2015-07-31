@@ -149,7 +149,6 @@ Route::group(['middleware' => ['auth'], 'permission' => ['edit-prices', 'edit-it
 
 Route::group(['middleware' => ['auth'], 'role' => ['admin']], function () {
     //Admin/Adventure
-    Route::get('admin/adventures/create', 'AdminAdventureController@create');
     Route::get('admin/adventures/getItemTypes', 'AdminAdventureController@getItemTypes');
     Route::get('admin/adventures/getAdventureTypes', 'AdminAdventureController@getAdventureTypes');
     Route::resource('admin/adventures', 'AdminAdventureController');

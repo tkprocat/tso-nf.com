@@ -1,11 +1,31 @@
 <?php namespace LootTracker\Repositories\Adventure;
 
+use LootTracker\Repositories\Item\Item;
+use LootTracker\Repositories\Item\ItemInterface;
+
 /**
  * Class EloquentAdventureRepository
  * @package LootTracker\Repositories\Adventure
  */
 class EloquentAdventureRepository implements AdventureInterface
 {
+
+    /**
+     * @var ItemInterface
+     */
+    protected $itemRepo;
+
+
+    /**
+     * EloquentAdventureRepository constructor.
+     *
+     * @param ItemInterface $itemInterface
+     */
+    public function __construct(ItemInterface $itemInterface)
+    {
+        $this->itemRepo = $itemInterface;
+    }
+
 
     /**
      * @param bool|false $onlyActives
@@ -67,11 +87,11 @@ class EloquentAdventureRepository implements AdventureInterface
         $adventure->save();
 
         for ($slot = 1; $slot < 9; $slot++) {
-            if (!is_null($data['slot' . $slot])) {
+            if (isset($data['slot' . $slot])) {
                 foreach ($data['slot' . $slot] as $item) {
                     $newItem = new AdventureLoot;
                     $newItem->slot = $slot;
-                    $newItem->type = $item['type'];
+                    $newItem->item_id = $item['item_id'];
                     $newItem->amount = $item['amount'];
                     $newItem->adventure_id = $adventure->id;
                     $newItem->save();
@@ -101,7 +121,7 @@ class EloquentAdventureRepository implements AdventureInterface
      */
     public function findAllDifferentLootTypes()
     {
-        return AdventureLoot::distinct('type')->orderBy('type')->lists('type');
+        return Item::distinct('name')->orderBy('name')->lists('name');
     }
 
 

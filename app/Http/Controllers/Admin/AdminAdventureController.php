@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use LootTracker\Http\Requests\AdventureRequest;
 use LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface;
+use LootTracker\Repositories\Item\ItemInterface;
 use LootTracker\Repositories\User\UserInterface;
 
 /**
@@ -23,14 +24,21 @@ class AdminAdventureController extends Controller
      */
     protected $userRepo;
 
+    /**
+     * @var ItemInterface
+     */
+    protected $itemRepo;
+
 
     /**
      * @param AdminAdventureInterface $adminAdventure
+     * @param ItemInterface           $item
      * @param UserInterface           $user
      */
-    public function __construct(AdminAdventureInterface $adminAdventure, UserInterface $user)
+    public function __construct(AdminAdventureInterface $adminAdventure, ItemInterface $item, UserInterface $user)
     {
         $this->adminAdventureRepo = $adminAdventure;
+        $this->itemRepo = $item;
         $this->userRepo = $user;
     }
 
@@ -54,7 +62,8 @@ class AdminAdventureController extends Controller
      */
     public function create()
     {
-        return view('admin.adventure.create');
+        $items = $this->itemRepo->all();
+        return view('admin.adventure.create')->with('items', $items);
     }
 
 
@@ -99,8 +108,9 @@ class AdminAdventureController extends Controller
         if (is_null($adventure)) {
             return Redirect::to('admin/adventures')->with('error', 'Adventure not found!');
         }
+        $items = $this->itemRepo->all();
 
-        return view('admin.adventure.edit')->with('adventure', $adventure);
+        return view('admin.adventure.edit')->with(array('adventure' => $adventure, 'items' => $items));
     }
 
 

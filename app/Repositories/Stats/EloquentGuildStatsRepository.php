@@ -84,7 +84,7 @@ class EloquentGuildStatsRepository implements GuildStatsInterface
             ))
             ->where('users.guild_id', $guild_id)
             ->groupBy('adventure_loot.id')
-            ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount');
+            ->orderBy('adventure_id')->orderBy('slot')->orderBy('amount');
 
         if ($adventure_id > 0) {
             $query->where('user_adventure.adventure_id', $adventure_id);

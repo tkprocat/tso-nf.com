@@ -38,7 +38,7 @@
             @endif
             <tr{!! ($secondaryColor ? ' class="active"' : '') !!}>
                 <td>{{$loot['slot']}}</td>
-                <td>{{$loot['type']}}</td>
+                <td>{{$loot['name']}}</td>
                 <td>{{$loot['amount']}}</td>
                 <td>{{$loot['dropped']}}</td>
                 <td>{{$loot['dropped_percentage']}}%</td>

@@ -21,9 +21,10 @@ class Adventure extends Model
     public function loot()
     {
         return $this->hasMany('\LootTracker\Repositories\Adventure\AdventureLoot')
-            ->select(array('id','slot','type','amount'))
+            ->join('items', 'items.id', '=', 'adventure_loot.item_id')
+            ->select(array('adventure_loot.id','slot','name','amount','item_id'))
             ->orderBy('slot')
-            ->orderBy('type')
+            ->orderBy('name')
             ->orderBy('amount');
     }
 

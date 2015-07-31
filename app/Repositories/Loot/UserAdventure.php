@@ -1,6 +1,7 @@
 <?php namespace LootTracker\Repositories\Loot;
 
 use Illuminate\Database\Eloquent\Model;
+use LootTracker\Repositories\Item\Item;
 
 /**
  * Class UserAdventure
@@ -54,7 +55,6 @@ class UserAdventure extends Model
         return $this->hasMany('LootTracker\Repositories\Loot\UserAdventureLoot');
     }
 
-
     /**
      * @return string
      */
@@ -70,11 +70,11 @@ class UserAdventure extends Model
             if ($text != '') {
                 $text .= ' / ';
             }
-            if ($userLoot->loot->type == 'Nothing') {
+            if ($userLoot->loot->item->name == 'Nothing') {
                 $text .= 'Nothing';
             } //small hack to remove amount.
             else {
-                $text .= $userLoot->loot->type . ' ' . $userLoot->loot->amount;
+                $text .= $userLoot->loot->item->name . ' ' . $userLoot->loot->amount;
             }
         }
 

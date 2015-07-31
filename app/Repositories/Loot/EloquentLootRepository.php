@@ -198,13 +198,14 @@ class EloquentLootRepository implements LootInterface
             '=',
             'adventure_loot.id'
         )
+        ->join('items', 'items.id', '=', 'adventure_loot.item_id')
         ->select(['adventure_loot.*', DB::raw('COUNT(' . \DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')])
         ->groupBy('adventure_loot.id')
             ->orderBy('adventure_id')
             ->orderBy('slot')
-            ->orderBy('type')
+            ->orderBy('name')
             ->orderBy('amount')
-            ->lists('dropped', 'id');
+            ->lists('dropped', 'adventure_loot.id');
     }
 
 
@@ -220,15 +221,15 @@ class EloquentLootRepository implements LootInterface
             'user_adventure_loot.adventure_loot_id',
             '=',
             'adventure_loot.id'
-        )
+        )->join('items', 'items.id', '=', 'adventure_loot.item_id')
         ->select(['adventure_loot.*', DB::raw('COUNT(' . DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')])
         ->where('adventure_id', $adventure_id)
             ->groupBy('adventure_loot.id')
             ->orderBy('adventure_id')
             ->orderBy('slot')
-            ->orderBy('type')
+            ->orderBy('name')
             ->orderBy('amount')
-            ->lists('dropped', 'id');
+            ->lists('dropped', 'adventure_loot.id');
     }
 
 

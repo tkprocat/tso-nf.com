@@ -21,13 +21,13 @@ class EloquentAdminAdventureRepository implements AdminAdventureInterface
 
 
     /**
-     * @param $id
+     * @param $adventureId
      *
      * @return mixed
      */
-    public function findAdventureById($id)
+    public function findAdventureById($adventureId)
     {
-        return Adventure::findOrFail($id);
+        return Adventure::findOrFail($adventureId);
     }
 
 
@@ -54,47 +54,52 @@ class EloquentAdminAdventureRepository implements AdminAdventureInterface
         $adventure->save();
 
         foreach ($data['items'] as $item) {
-            $newItem = new AdventureLoot;
-            $newItem->slot = $item['slot'];
-            $newItem->type = $item['type'];
-            $newItem->amount = $item['amount'];
-            $newItem->adventure_id = $adventure->id;
-            $newItem->save();
+            // Small hack to check the item is set since itemid always will be filled out.
+            if ((isset($item['slot'])) && ($item['slot'] != '') && (isset( $item['amount'])) && ($item['amount'] != '')) {
+                    $newItem = new AdventureLoot;
+                    $newItem->slot = $item['slot'];
+                    $newItem->item_id = $item['itemid'];
+                    $newItem->amount = $item['amount'];
+                    $newItem->adventure_id = $adventure->id;
+                    $newItem->save();
+            }
         }
-
         return $adventure;
     }
 
 
     /**
-     * @param $id
+     * @param $adventureId
      * @param $data
      *
      * @return mixed
      */
-    public function update($id, $data)
+    public function update($adventureId, $data)
     {
-        $adventure = Adventure::findOrFail($id);
+        $adventure = Adventure::findOrFail($adventureId);
         $adventure->name = $data['name'];
         $adventure->type = (isset($data['type']) ? $data['type'] : '');
         $adventure->disabled = (isset($data['disabled']) ? ($data['disabled'] == 'on') : '0');
         $adventure->save();
 
         foreach ($data['items'] as $item) {
-            if (isset($item['id'])) { //Update
-                $updateItem = AdventureLoot::find($item['id']);
-                $updateItem->slot = $item['slot'];
-                $updateItem->type = $item['type'];
-                $updateItem->amount = $item['amount'];
-                $updateItem->adventure_id = $adventure->id;
-                $updateItem->save();
-            } else {
-                $newItem = new AdventureLoot;
-                $newItem->slot = $item['slot'];
-                $newItem->type = $item['type'];
-                $newItem->amount = $item['amount'];
-                $newItem->adventure_id = $adventure->id;
-                $newItem->save();
+            // Small hack to check the item is set since itemid always will be filled out.
+            if ((isset($item['slot'])) && ($item['slot'] != '') && (isset( $item['amount'])) && ($item['amount'] != '')) {
+                if (isset( $item['id'] )) { //Update
+                    $updateItem               = AdventureLoot::find($item['id']);
+                    $updateItem->slot         = $item['slot'];
+                    $updateItem->item_id      = $item['itemid'];
+                    $updateItem->amount       = $item['amount'];
+                    $updateItem->adventure_id = $adventure->id;
+                    $updateItem->save();
+                } else { // Add item
+                    $newItem               = new AdventureLoot;
+                    $newItem->slot         = $item['slot'];
+                    $newItem->item_id      = $item['itemid'];
+                    $newItem->amount       = $item['amount'];
+                    $newItem->adventure_id = $adventure->id;
+                    $newItem->save();
+                }
             }
         }
 
@@ -103,13 +108,13 @@ class EloquentAdminAdventureRepository implements AdminAdventureInterface
 
 
     /**
-     * @param $id
+     * @param $adventureId
      *
      * @return mixed
      */
-    public function findAllLootForAdventure($id)
+    public function findAllLootForAdventure($adventureId)
     {
-        return Adventure::firstOrFail($id)->loot();
+        return Adventure::firstOrFail($adventureId)->loot();
     }
 
 

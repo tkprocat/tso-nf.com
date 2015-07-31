@@ -1,32 +1,14 @@
 @extends('layouts.default-admin')
-
-{{-- Web site Title --}}
-@section('title')
-    @parent
-    Update adventure
-@stop
-
-{{-- Content --}}
 @section('content')
-    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-3 col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
-                    <li><a href="/admin/">Overview</a></li>
-                    <li><a href="/admin/users">Users</a></li>
-                    <li class="active"><a href="/admin/adventures">Adventures <span class="sr-only">(current)</span></a></li>
-                    <li><a href="/admin/adventures/create">- Add new adventure</a></li>
-                    <li><a href="/admin/prices">Prices</a></li>
-                    <li><a href="/admin/prices/create">- Add new item</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h4>Update adventure:</h4>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="well">
+@include('admin.menu', array('active' => 'Add adventures'))
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Updating adventure: {{ $adventure->name }}</div>
+                        <div class="panel-body">
                             @include('errors.list')
                             <form method="POST" action="/admin/adventures/{{ $adventure->id }}" accept-charset="UTF-8" class="form-horizontal">
                                 <input type="hidden" name="_method" value="PUT">
@@ -69,10 +51,14 @@
                                                 <input type="text" name="items[{{$i}}][slot]" class="form-control" value="{{ old('items[$i][slot]', $adventure->loot[$i-1]->slot) }}" placeholder="Slot">
                                             </div>
                                             <div class="col-sm-4">
-                                                <input type="text" name="items[{{$i}}][type]" class="form-control" value="{{ old('items[$i][type]', $adventure->loot[$i-1]->type) }}" placeholder="Item">
+                                                <select name="items[{{$i}}][itemid]" class="form-control">
+                                                    @foreach($items as $item)
+                                                        <option value="{{ $item->id }}" {!! old('items[$i][itemid]', $adventure->loot[$i-1]->item_id) == $item->id ? 'selected="selected"' : ''  !!}>{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="col-sm-2">
-                                                <input type="text" name="items[{{$i}}][amount]" class="form-control" value="{{ old('items[$i][amount]', $adventure->loot[$i-1]->slot) }}" placeholder="Amount">
+                                                <input type="text" name="items[{{$i}}][amount]" class="form-control" value="{{ old('items[$i][amount]', $adventure->loot[$i-1]->amount) }}" placeholder="Amount">
                                             </div>
                                         </div>
                                     @endfor
@@ -85,7 +71,11 @@
                                                 <input type="text" name="items[{{$i}}][slot]" class="form-control" value="{{ old('items[$i][slot]') }}" placeholder="Slot">
                                             </div>
                                             <div class="col-sm-4">
-                                                <input type="text" name="items[{{$i}}][type]" class="form-control" value="{{ old('items[$i][type]') }}" placeholder="Item">
+                                                <select name="items[{{$i}}][itemid]" class="form-control">
+                                                    @foreach($items as $item)
+                                                        <option value="{{ $item->id }}" {!! old('items[$i][itemid]') == $item->id ? 'selected="selected"' : ''  !!}>{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="col-sm-2">
                                                 <input type="text" name="items[{{$i}}][amount]" class="form-control" value="{{ old('items[$i][amount]') }}" placeholder="Amount">
@@ -101,35 +91,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        var items = [];
-        var adventureTypes = [];
-        $(document).ready(function () {
-            $.get("/admin/adventures/getItemTypes", function (data) {
-                items = data;
-            });
-            $.get("/admin/adventures/getAdventureTypes", function (data) {
-                adventureTypes = data;
-            });
-        });
-
-        $(".items").autocomplete({
-            source: function (request, response) {
-                var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                response($.grep(items, function (item) {
-                    return matcher.test(item);
-                }));
-            }
-        });
-
-        $("#type").autocomplete({
-            source: function (request, response) {
-                var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                response($.grep(adventureTypes, function (item) {
-                    return matcher.test(item);
-                }));
-            }
-        });
-    </script>
+</div>
 @stop

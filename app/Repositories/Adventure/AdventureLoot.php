@@ -1,6 +1,7 @@
 <?php namespace LootTracker\Repositories\Adventure;
 
 use Illuminate\Database\Eloquent\Model;
+use LootTracker\Repositories\Item\Item;
 use LootTracker\Repositories\Loot\UserAdventureLoot;
 
 /**
@@ -31,6 +32,15 @@ class AdventureLoot extends Model
     public function adventure()
     {
         return $this->belongsTo('LootTracker\Repositories\Adventure\Adventure');
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
     }
 
 

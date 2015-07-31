@@ -83,7 +83,7 @@
                 $('[name=slot' + this.slot +']').parent().addClass('has-warning');
                 lastSlot = this.slot;
             }
-            $('[name=slot' + this.slot +']').append('<option value="' + this.id + '">' + this.type + ' - ' + this.amount + '</option>');
+            $('[name=slot' + this.slot +']').append('<option value="' + this.id + '">' + this.name + ' - ' + this.amount + '</option>');
         });
 
         for (var i = 1; i <= 20; i++) {

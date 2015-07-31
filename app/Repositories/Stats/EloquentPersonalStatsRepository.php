@@ -141,22 +141,22 @@ class EloquentPersonalStatsRepository implements PersonalStatsInterface
      *
      * @return array
      */
-    public function getLootDropCountForUser($user_id, $from = '', $to = '')
+    public function getLootDropCountForUser($userId, $dateFrom = '', $dateTo = '')
     {
-
         $query = DB::table('adventure_loot')
             ->leftJoin('user_adventure_loot', 'user_adventure_loot.adventure_loot_id', '=', 'adventure_loot.id')
             ->join('user_adventure', 'user_adventure_loot.user_adventure_id', '=', 'user_adventure.id')
+            ->join('items', 'items.id', '=', 'adventure_loot.item_id')
             ->select(array(
                 'adventure_loot.*',
                 DB::raw('COUNT(' . DB::getTablePrefix() . 'user_adventure_loot.id) as dropped')
             ))
             ->groupBy('adventure_loot.id')
-            ->where('user_adventure.user_id', $user_id)
-            ->orderBy('adventure_id')->orderBy('slot')->orderBy('type')->orderBy('amount');
+            ->where('user_adventure.user_id', $userId)
+            ->orderBy('adventure_id')->orderBy('slot')->orderBy('name')->orderBy('amount');
 
-        if (($from != '') && ($to != '')) {
-            $query->whereBetween('user_adventure.created_at', array($from, $to));
+        if (($dateFrom != '') && ($dateTo != '')) {
+            $query->whereBetween('user_adventure.created_at', array($dateFrom, $dateTo));
         }
 
         return $query->lists('dropped', 'id');
@@ -175,12 +175,13 @@ class EloquentPersonalStatsRepository implements PersonalStatsInterface
         return DB::table('user_adventure')
             ->join('user_adventure_loot', 'user_adventure_loot.user_adventure_id', '=', 'user_adventure.id')
             ->join('adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
-            ->where('adventure_loot.type', '!=', 'Nothing')
+            ->join('items', 'items.id', '=', 'adventure_loot.item_id')
+            ->where('items.name', '!=', 'Nothing')
             ->where('user_id', $user_id)
             ->whereBetween('user_adventure.created_at', array($from_date, $to_date))
-            ->groupBy('adventure_loot.type')
-            ->orderBy('adventure_loot.type')
-            ->select(array(DB::raw('SUM(amount) as amount'), 'type'))
+            ->groupBy('items.name')
+            ->orderBy('items.name')
+            ->select(array(DB::raw('SUM(amount) as amount'), 'items.name'))
             ->get();
     }
 }

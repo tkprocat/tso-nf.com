@@ -12,10 +12,10 @@
     foreach($accumulatedLoot as $loot) {
         if ($i % 2 == 0) {
             echo '<tr>';
-            echo '<td>'.$loot->type.'</td>';
+            echo '<td>'.$loot->name.'</td>';
             echo '<td><div class="show-tooltip">'.$loot->amount.'</div></td>';
         } else {
-            echo '<td>'.$loot->type.'</td>';
+            echo '<td>'.$loot->name.'</td>';
             echo '<td><div class="show-tooltip">'.$loot->amount.'</div></td>';
             echo '</tr>';
         }

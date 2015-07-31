@@ -93,7 +93,7 @@ class LootController extends Controller
                 $loot_types[0] = "Please select loot.";
             }
             foreach ($adventure->loot()->slot($slot) as $loot) {
-                $loot_types[$loot->id] = $loot->type . ' - '.$loot->amount;
+                $loot_types[$loot->id] = $loot->name . ' - '.$loot->amount;
             }
             $loot_slots[$slot] = $loot_types;
         }
@@ -147,7 +147,7 @@ class LootController extends Controller
                 }
 
                 foreach ($adventure->loot()->slot($slot) as $lootSlot) {
-                    $lootTypes[$lootSlot->id] = $lootSlot->type . ' - '.$lootSlot->amount;
+                    $lootTypes[$lootSlot->id] = $lootSlot->name . ' - '.$lootSlot->amount;
                 }
 
                 if (!empty($lootTypes)) {
@@ -205,7 +205,7 @@ class LootController extends Controller
         $result = $this->adventureRepo->byId($data["adventure"])
             ->loot()
             ->orderBy('slot')
-            ->orderBy('type')
+            ->orderBy('name')
             ->orderBy('amount')
             ->get();
         return $result;

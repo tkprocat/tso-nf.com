@@ -37,8 +37,9 @@ class EloquentGlobalStatsRepository implements GlobalStatsInterface
         return DB::table('adventure_loot')
             ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
             ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')
-            ->select(array('adventure.name', 'adventure_loot.type', DB::raw('((COUNT(\'' . \DB::getTablePrefix() . 'user_adventure_loot.*\' ) * ' . \DB::getTablePrefix() . 'adventure_loot.Amount) / (SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE adventure_id = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id )) AS avg_drop')))
-            ->where('adventure_loot.type', $type)
+            ->join('items', 'items.id', '=', 'adventure_loot.item_id')
+            ->select(array('adventure.name', 'adventure.name', DB::raw('((COUNT(\'' . \DB::getTablePrefix() . 'user_adventure_loot.*\' ) * ' . \DB::getTablePrefix() . 'adventure_loot.Amount) / (SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE adventure_id = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id )) AS avg_drop')))
+            ->where('items.name', $type)
             ->groupBy('adventure_loot.adventure_id')
             ->orderBy('avg_drop', 'desc')->take(10)->get();
     }
