@@ -14,6 +14,12 @@ class RenameTypeInAdventureLoot extends Migration
     {
         if (Schema::hasColumn('adventure_loot', 'type')) {
             Schema::table('adventure_loot', function ($table) {
+                $table->string('type')->nullable()->change();
+            });
+        }
+
+        if (Schema::hasColumn('adventure_loot', 'type')) {
+            Schema::table('adventure_loot', function ($table) {
                 $table->renameColumn('type', 'type_old');
             });
         }

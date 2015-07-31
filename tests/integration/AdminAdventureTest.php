@@ -1,14 +1,13 @@
 <?php namespace LootTracker\Test;
 
 use App;
-use \LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface;
-use LootTracker\Repositories\Item\ItemInterface;
+use LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface;
 
 class AdminAdventureTest extends TestCase
 {
 
     /**
-     * @var $adventureRepo \LootTracker\Repositories\Adventure\Admin\AdminAdventureInterface
+     * @var $adventureRepo AdminAdventureInterface
      */
     protected $adventureRepo;
 

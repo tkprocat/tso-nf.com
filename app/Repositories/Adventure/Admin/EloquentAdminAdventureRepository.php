@@ -129,15 +129,6 @@ class EloquentAdminAdventureRepository implements AdminAdventureInterface
     }
 
 
-    /**
-     * @return mixed
-     */
-    public function findAllDifferentLootTypes()
-    {
-        //TODO: either remove this or getItemTypes().
-        return AdventureLoot::distinct('type')->orderBy('type')->lists('type');
-    }
-
 
     /**
      * @return array

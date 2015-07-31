@@ -1,12 +1,4 @@
 @extends('layouts.default-admin')
-
-{{-- Web site Title --}}
-@section('title')
-    @parent
-    Home
-@stop
-
-{{-- Content --}}
 @section('content')
 @include('admin.menu', array('active' => 'Adventures'))
     <div class="container-fluid">
@@ -37,8 +29,6 @@
                                 </table>
                             </div>
                         </div>
-
-
                         <a href="{{ URL::to("/admin/adventures") }}" class="btn btn-primary">Back</a>
                         <a href="{{ URL::to("/admin/adventures/$adventure->id/edit") }}"
                            class="btn btn-warning">Update</a>

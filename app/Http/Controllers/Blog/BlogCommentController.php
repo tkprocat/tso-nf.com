@@ -144,5 +144,7 @@ class BlogCommentController extends Controller
         }
 
         $this->blogCommentRepo->delete($comment_id);
+
+        return Redirect::back()->with(array('success' => 'Blog deleted.'));
     }
 }
