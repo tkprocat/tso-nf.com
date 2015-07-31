@@ -6,15 +6,13 @@ interface AdminAdventureInterface
 
     public function create($data);
 
-    public function findAdventureById($id);
+    public function findAdventureById($adventureId);
 
     public function findAdventureByName($name);
 
     public function getAdventuresWithLoot();
 
-    public function findAllLootForAdventure($id);
-
-    public function findAllDifferentLootTypes();
+    public function findAllLootForAdventure($adventureId);
 
     public function getItemTypes();
 

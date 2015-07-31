@@ -129,7 +129,6 @@ class EloquentAdminAdventureRepository implements AdminAdventureInterface
     }
 
 
-
     /**
      * @return array
      */
