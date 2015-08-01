@@ -1,15 +1,6 @@
 @extends('layouts.default')
-
-{{-- Web site Title --}}
-@section('title')
-@parent
-Home
-@stop
-
-{{-- Content --}}
 @section('content')
-<h4>News:</h4>
-
+@include('errors.list')
 @foreach($blogs as $blog)
 <div class="panel panel-default">
     <div class="panel-heading">

@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->user->paginate(25);
+        $users = $this->user->all();
         return view('users.index')->with('users', $users);
     }
 
