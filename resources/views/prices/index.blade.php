@@ -27,9 +27,9 @@
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->category }}</td>
-                                    <td>{{ $item->currentPrice()->min_price }}</td>
-                                    <td>{{ $item->currentPrice()->avg_price }}</td>
-                                    <td>{{ $item->currentPrice()->max_price }}</td>
+                                    <td>{{ $item->currentPrice->min_price }}</td>
+                                    <td>{{ $item->currentPrice->avg_price }}</td>
+                                    <td>{{ $item->currentPrice->max_price }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

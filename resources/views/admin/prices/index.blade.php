@@ -27,9 +27,9 @@
                         <tr>
                             <td><a href="{{ url("/admin/prices/$item->id") }}">{{ $item->name }}</a></td>
                             <td>{{ $item->category }}</td>
-                            <td>{{ $item->currentPrice()->min_price }}</td>
-                            <td>{{ $item->currentPrice()->avg_price }}</td>
-                            <td>{{ $item->currentPrice()->max_price }}</td>
+                            <td>{{ $item->currentPrice->min_price }}</td>
+                            <td>{{ $item->currentPrice->avg_price }}</td>
+                            <td>{{ $item->currentPrice->max_price }}</td>
                             <td><a href="{{ url("/admin/prices/$item->id/edit") }}" class="btn btn-warning btn-xs">Change price</a></td>
                         </tr>
                     @endforeach

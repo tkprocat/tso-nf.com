@@ -1,13 +1,20 @@
 <?php namespace LootTracker\Http\Controllers;
 
 use LootTracker\Repositories\Item\ItemInterface;
+use Response;
 
 class PriceController extends Controller
 {
 
+    /**
+     * @var ItemInterface
+     */
     protected $itemRepo;
 
 
+    /**
+     * @param ItemInterface $itemRepo
+     */
     public function __construct(ItemInterface $itemRepo)
     {
         $this->itemRepo = $itemRepo;
@@ -99,5 +106,31 @@ class PriceController extends Controller
     public function destroy($item_id)
     {
         //
+    }
+
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function showAdvancedCalc()
+    {
+        return view('prices.advancedCalc');
+    }
+
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function showSimpleCalc()
+    {
+        return view('prices.simpleCalc');
+    }
+
+
+    /**
+     * @return Response
+     */
+    public function getItemsWithPrices()
+    {
+        $items = $this->itemRepo->getItemsWithPrices();
+        return Response::json($items);
     }
 }

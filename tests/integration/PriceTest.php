@@ -39,9 +39,9 @@ class PriceListTest extends TestCase
     {
         $item = $this->itemRepo->byId(1);
         $this->assertNotNull($item);
-        $this->assertEquals(0.00001, $item->currentPrice()->min_price, 'Failure in comparing min_price!');
-        $this->assertEquals(0.00002, $item->currentPrice()->avg_price, 'Failure in comparing avg_price!');
-        $this->assertEquals(0.00003, $item->currentPrice()->max_price, 'Failure in comparing max_price!');
+        $this->assertEquals(0.00001, $item->currentPrice->min_price, 'Failure in comparing min_price!');
+        $this->assertEquals(0.00002, $item->currentPrice->avg_price, 'Failure in comparing avg_price!');
+        $this->assertEquals(0.00003, $item->currentPrice->max_price, 'Failure in comparing max_price!');
     }
 
     public function tearDown()

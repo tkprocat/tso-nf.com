@@ -131,7 +131,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 //Prices
 Route::group(['middleware' => ['auth'], 'permission' => ['see-prices']], function () {
-
+    Route::get('prices/advancedcalc', 'PriceController@showAdvancedCalc');
+    Route::get('prices/simplecalc', 'PriceController@showSimpleCalc');
+    Route::get('prices/getItemsWithPrices', 'PriceController@getItemsWithPrices');
     Route::resource('prices', 'PriceController');
 });
 

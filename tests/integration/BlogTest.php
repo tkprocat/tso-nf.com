@@ -35,8 +35,7 @@ class BlogTest extends TestCase
     /** @test */
     public function canLoadFrontPage()
     {
-        $this->visit('blog')
-            ->see('News');
+        $this->visit('blog');
 
         //Log in
         $this->login();

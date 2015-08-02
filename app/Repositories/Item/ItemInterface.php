@@ -7,4 +7,6 @@ interface ItemInterface
     public function byId($id);
 
     public function byName($name);
+
+    public function getItemsWithPrices();
 }

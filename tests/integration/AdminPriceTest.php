@@ -50,8 +50,8 @@ class AdminPriceTest extends TestCase
         $item = $this->itemRepo->byId(1);
         $this->assertCount(2, $this->priceAdminRepo->findAllPriceChangesForItemById(1));
         $this->assertNotNull($item);
-        $this->assertEquals(0.00004, $item->currentPrice()->min_price, 'Failure in comparing min_price after price update!');
-        $this->assertEquals(0.00005, $item->currentPrice()->avg_price, 'Failure in comparing avg_price after price update!');
-        $this->assertEquals(0.00006, $item->currentPrice()->max_price, 'Failure in comparing max_price after price update!');
+        $this->assertEquals(0.00004, $item->currentPrice->min_price, 'Failure in comparing min_price after price update!');
+        $this->assertEquals(0.00005, $item->currentPrice->avg_price, 'Failure in comparing avg_price after price update!');
+        $this->assertEquals(0.00006, $item->currentPrice->max_price, 'Failure in comparing max_price after price update!');
     }
 }

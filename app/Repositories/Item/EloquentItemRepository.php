@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Repositories\Item;
 
+use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Log;
 use SebastianBergmann\Environment\Console;
@@ -16,8 +17,8 @@ class EloquentItemRepository implements ItemInterface
      */
     public function all()
     {
-        $priceItems = Item::orderBy('Name')->get();
-        return $priceItems;
+        $items = Item::orderBy('Name')->get();
+        return $items;
     }
 
 
@@ -43,5 +44,14 @@ class EloquentItemRepository implements ItemInterface
         } catch(ModelNotFoundException $ex) {
              dd('Missing item: '.$name);
         }
+    }
+
+
+    public function getItemsWithPrices()
+    {
+        DB::enableQueryLog();
+        $items = Item::with('currentPrice')->select('id', 'name', 'category')->orderBy('name')->get();
+        //dd(DB::getQueryLog());
+        return $items;
     }
 }
