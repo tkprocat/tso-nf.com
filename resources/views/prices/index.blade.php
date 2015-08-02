@@ -12,7 +12,13 @@
                     <p>
                         Prices on this list was originally based off the <a href="http://tiny.cc/newfoundlandtrade">Newfoundland Trade Sheet by THU & TP1</a>, all credits to them for providing the information.
                     </p>
-                    Show prices for quantities of: <select id="quantity"><option value="1">1</option><option value="1000">1000</option></select>
+                    <div class="form-inline">
+                        Show prices for quantities of:
+                        <select id="quantity" class="form-control">
+                            <option value="1">1</option>
+                            <option value="1000">1000</option>
+                        </select>
+                    </div>
                     <table class="table table-striped"id="items">
                         <thead>
                             <tr>
