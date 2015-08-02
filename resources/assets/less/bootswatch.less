@@ -1,48 +1,107 @@
-// Sandstone 3.3.5
+// Cerulean 3.3.5
 // Bootswatch
 // -----------------------------------------------------
 
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,500");
+.btn-shadow(@color) {
+  #gradient > .vertical-three-colors(lighten(@color, 8%), @color, 60%, darken(@color, 4%));
+  filter: none;
+  border-bottom: 1px solid darken(@color, 10%);
+}
 
 // Navbar =====================================================================
 
-.sandstone {
-  font-size: 11px;
-  line-height: 22px;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
 .navbar {
-  .nav > li > a {
-    .sandstone;
+  .btn-shadow(@navbar-default-bg);
+  filter: none;
+  .box-shadow(0 1px 10px rgba(0, 0, 0, 0.1));
+
+  &-default {
+
+    .badge {
+      background-color: #fff;
+      color: @navbar-default-bg;
+    }
   }
 
-  &-form input,
-  &-form .form-control {
-    border: none;
+  &-inverse {
+    #gradient > .vertical-three-colors(lighten(@navbar-inverse-bg, 8%), lighten(@navbar-inverse-bg, 4%), 60%, darken(@navbar-inverse-bg, 2%));
+    filter: none;
+    border-bottom: 1px solid darken(@navbar-inverse-bg, 10%);
+
+    .badge {
+      background-color: #fff;
+      color: @navbar-inverse-bg;
+    }
+  }
+
+  .navbar-nav > li > a,
+  &-brand {
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (max-width: @grid-float-breakpoint-max) {
+
+  .navbar {
+
+    .dropdown-header {
+      color: #fff;
+    }
+
+    .dropdown-menu {
+      a {
+        color: #fff;
+      }
+    }
   }
 }
 
 // Buttons ====================================================================
 
 .btn {
-  border: none;
-  .sandstone;
+
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+
+  .caret {
+    border-top-color: #fff;
+  }
+}
+
+.btn-default {
+
+  .btn-shadow(@btn-default-bg);
 
   &:hover {
-    border-color: transparent;
+    color: @btn-default-color;
   }
 
-  &-lg {
-    line-height: 26px;
+  .caret {
+    border-top-color: @text-color;
   }
+}
 
-  &-default {
-    &:hover {
-      background-color: @navbar-default-link-active-bg;
-    }
-  }
+.btn-default {
+  .btn-shadow(@btn-default-bg);
+}
+
+.btn-primary {
+  .btn-shadow(@btn-primary-bg);
+}
+
+.btn-success {
+  .btn-shadow(@btn-success-bg);
+}
+
+.btn-info {
+  .btn-shadow(@btn-info-bg);
+}
+
+.btn-warning {
+  .btn-shadow(@btn-warning-bg);
+}
+
+.btn-danger {
+  .btn-shadow(@btn-danger-bg);
 }
 
 // Typography =================================================================
@@ -51,144 +110,22 @@
 
 // Forms ======================================================================
 
-input,
-.form-control {
-  .box-shadow(none);
-
-  &:focus {
-    border-color: @input-border;
-    .box-shadow(none);
-  }
-}
-
 // Navs =======================================================================
-
-.nav {
-  .sandstone;
-
-  .open > a,
-  .open > a:hover,
-  .open > a:focus {
-    border-color: @gray-light;
-  }
-}
-
-.nav-tabs {
-
-  & > li > a {
-    background-color: @gray-lighter;
-    border-color: @nav-tabs-border-color;
-    color: @gray;
-  }
-
-  > li.disabled > a:hover {
-    background-color: @gray-lighter;
-  }
-}
-
-.nav-pills {
-  a {
-    color: @gray;
-  }
-
-  li > a {
-    border: 1px solid transparent;
-  }
-
-  li.active > a,
-  li > a:hover {
-    border-color: @gray-light;
-  }
-
-  li.disabled > a {
-    border-color: transparent;
-  }
-}
-
-.breadcrumb {
-  .sandstone;
-
-  border: 1px solid @gray-light;
-
-  a {
-    color: @gray;
-  }
-}
-
-.pagination {
-  .sandstone;
-}
-
-.pager {
-  .sandstone;
-
-  li > a {
-    color: @gray;
-  }
-}
-
-.dropdown-menu {
-  & > li > a {
-    .sandstone;
-  }
-}
 
 // Indicators =================================================================
 
-.alert {
-
-  a,
-  .alert-link {
-    color: #fff;
-  }
-}
-
-.tooltip {
-  .sandstone;
-}
-
 // Progress bars ==============================================================
-
-.progress {
-  border-radius: 10px;
-  background-color: @gray-light;
-  .box-shadow(none);
-
-  &-bar {
-    .box-shadow(none);
-  }
-}
 
 // Containers =================================================================
 
-.list-group {
-  &-item {
-    padding: 16px 24px;
-  }
-}
-
-.well {
-  .box-shadow(none);
-}
-
-.panel {
-  .box-shadow(none);
+.panel-primary,
+.panel-success,
+.panel-warning,
+.panel-danger,
+.panel-info {
 
   .panel-heading,
   .panel-title {
-    .sandstone;
     color: #fff;
-  }
-
-  .panel-footer {
-    .sandstone;
-  }
-
-  &-default {
-    .panel-heading,
-    .panel-title,
-    .panel-footer {
-      color: @gray;
-    }
   }
 }
