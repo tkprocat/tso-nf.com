@@ -16,6 +16,7 @@
                         Show prices for quantities of:
                         <select id="quantity" class="form-control">
                             <option value="1">1</option>
+                            <option value="25">25</option>
                             <option value="1000">1000</option>
                         </select>
                     </div>
@@ -24,6 +25,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Category</th>
+                                <th>Quantity</th>
                                 <th>Min.</th>
                                 <th>Avg.</th>
                                 <th>Max.</th>
@@ -34,6 +36,7 @@
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->category }}</td>
+                                    <td>1</td>
                                     <td>{{ $item->currentPrice->min_price }}</td>
                                     <td>{{ $item->currentPrice->avg_price }}</td>
                                     <td>{{ $item->currentPrice->max_price }}</td>
@@ -62,13 +65,25 @@
         $.get("/prices/getItemsWithPrices", function(data) {
             //Repopulate table
             $.each(data, function(index, item) {
-                itemsTable.append(
-                        $('<tr><td>'+item.name+'</td>'+
-                            '<td>'+item.category+'</td>' +
-                            '<td>'+item.current_price.min_price*quantity+'</td>' +
-                            '<td>'+item.current_price.avg_price*quantity+'</td>' +
-                            '<td>'+item.current_price.max_price*quantity+'</td></tr>')
-                );
+                if (item.category != 'Decoration') {
+                    itemsTable.append(
+                            '<tr><td>'+item.name+'</td>'+
+                                '<td>'+item.category+'</td>' +
+                                '<td>'+quantity+'</td>' +
+                                '<td>'+Math.round(item.current_price.min_price*quantity*1000)/1000+'</td>' +
+                                '<td>'+Math.round(item.current_price.avg_price*quantity*1000)/1000+'</td>' +
+                                '<td>'+Math.round(item.current_price.max_price*quantity*1000)/1000+'</td></tr>'
+                    );
+                } else {
+                    itemsTable.append(
+                            '<tr><td>'+item.name+'</td>'+
+                                    '<td>'+item.category+'</td>' +
+                                    '<td>1</td>' +
+                                    '<td>'+Math.round(item.current_price.min_price*1000)/1000+'</td>' +
+                                    '<td>'+Math.round(item.current_price.avg_price*1000)/1000+'</td>' +
+                                    '<td>'+Math.round(item.current_price.max_price*1000)/1000+'</td></tr>'
+                    );
+                }
             });
             $('#items').DataTable({
                 paging: false
