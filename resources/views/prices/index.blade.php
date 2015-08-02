@@ -12,6 +12,7 @@
                     <p>
                         Prices on this list was originally based off the <a href="http://tiny.cc/newfoundlandtrade">Newfoundland Trade Sheet by THU & TP1</a>, all credits to them for providing the information.
                     </p>
+                    Show prices for quantities of: <select id="quantity"><option value="1">1</option><option value="1000">1000</option></select>
                     <table class="table table-striped"id="items">
                         <thead>
                             <tr>
@@ -43,6 +44,29 @@
     $(document).ready( function () {
         $('#items').DataTable({
             paging: false
+        });
+    });
+    $('#quantity').change(function(){
+        var itemsTable = $('#items');
+        var quantity = $('#quantity').val();
+        //Delete old data
+        itemsTable.empty();
+        itemsTable.DataTable().destroy();
+        //Load data via ajax
+        $.get("/prices/getItemsWithPrices", function(data) {
+            //Repopulate table
+            $.each(data, function(index, item) {
+                itemsTable.append(
+                        $('<tr><td>'+item.name+'</td>'+
+                            '<td>'+item.category+'</td>' +
+                            '<td>'+item.current_price.min_price*quantity+'</td>' +
+                            '<td>'+item.current_price.avg_price*quantity+'</td>' +
+                            '<td>'+item.current_price.max_price*quantity+'</td></tr>')
+                );
+            });
+            $('#items').DataTable({
+                paging: false
+            });
         });
     });
 </script>
