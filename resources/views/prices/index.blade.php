@@ -20,7 +20,7 @@
                             <option value="1000">1000</option>
                         </select>
                     </div>
-                    <table class="table table-striped"id="items">
+                    <table class="table table-striped" id="items">
                         <thead>
                             <tr>
                                 <th>Name</th>
