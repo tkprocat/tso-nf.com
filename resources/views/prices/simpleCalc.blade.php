@@ -67,7 +67,7 @@
         addResultData(1000, itemFrom, itemTo, true);
         addResultData(2500, itemFrom, itemTo, true);
         addResultData(5000, itemFrom, itemTo, true);
-        resultTable.append('<tr id="extratoggle"><td colspan="4" style="text-align: center">Click here to see results for commonly traded quantities.</td></tr>');
+        resultTable.append('<tr id="extratoggle"><td colspan="4" style="text-align: center"><a href="#">Click here to see results for commonly traded quantities.</a></td></tr>');
         $('.extra').hide();
         $('#extratoggle').click(function() {
             $('.extra').show();
