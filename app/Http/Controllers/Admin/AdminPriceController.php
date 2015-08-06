@@ -13,7 +13,7 @@ class AdminPriceController extends Controller
     /**
      * @var AdminPriceInterface
      */
-    protected $adminPriceListRepo;
+    protected $adminPriceRepo;
 
     /**
      * @var ItemInterface
@@ -39,7 +39,7 @@ class AdminPriceController extends Controller
      */
     public function __construct(AdminPriceInterface $adminPrice, PriceInterface $price, ItemInterface $item, UserInterface $user)
     {
-        $this->adminPriceListRepo = $adminPrice;
+        $this->adminPriceRepo = $adminPrice;
         $this->itemRepo = $item;
         $this->priceRepo = $price;
         $this->userRepo = $user;
@@ -67,7 +67,7 @@ class AdminPriceController extends Controller
     public function show($item_id)
     {
         $priceItem = $this->itemRepo->byId($item_id);
-        $priceHistory = $this->priceListRepo->findAllPriceChangesForItemById($item_id);
+        $priceHistory = $this->priceRepo->findAllPriceChangesForItemById($item_id);
 
         return view('admin.prices.show')->with(array('item' => $priceItem, 'price_history' => $priceHistory));
     }
@@ -102,7 +102,7 @@ class AdminPriceController extends Controller
     {
         $data = $request->all();
         $user_id = $this->userRepo->getUser()->id;
-        $this->adminPriceListRepo->update($item_id, $data['min_price'], $data['avg_price'], $data['max_price'], $user_id);
+        $this->adminPriceRepo->update($item_id, $data['min_price'], $data['avg_price'], $data['max_price'], $user_id);
         return Redirect::to('admin/prices')->with('success', 'Prices updated.');
     }
 }
