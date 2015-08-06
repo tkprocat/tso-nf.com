@@ -4,6 +4,7 @@ use App;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use LootTracker\Repositories\Item\ItemInterface;
 use LootTracker\Repositories\Price\Admin\AdminPriceInterface;
+use LootTracker\Repositories\Price\PriceInterface;
 
 class AdminPriceTest extends TestCase
 {
@@ -19,11 +20,17 @@ class AdminPriceTest extends TestCase
      */
     protected $priceAdminRepo;
 
+    /**
+     * @var $itemAdminRepo \LootTracker\Repositories\Price\PriceInterface
+     */
+    protected $priceRepo;
+
     public function setUp()
     {
         parent::setUp();
         $this->login('admin');
         $this->itemRepo = App::make(ItemInterface::class);
+        $this->priceRepo = App::make(PriceInterface::class);
         $this->priceAdminRepo = App::make(AdminPriceInterface::class);
     }
 
@@ -48,7 +55,7 @@ class AdminPriceTest extends TestCase
 
         //Get the item again and see if the price has been updated.
         $item = $this->itemRepo->byId(1);
-        $this->assertCount(2, $this->priceAdminRepo->findAllPriceChangesForItemById(1));
+        $this->assertCount(2, $this->priceRepo->findAllPriceChangesForItemById(1));
         $this->assertNotNull($item);
         $this->assertEquals(0.00004, $item->currentPrice->min_price, 'Failure in comparing min_price after price update!');
         $this->assertEquals(0.00005, $item->currentPrice->avg_price, 'Failure in comparing avg_price after price update!');
