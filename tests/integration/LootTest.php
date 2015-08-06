@@ -39,7 +39,7 @@ class LootTest extends TestCase
     {
         $username = $this->userRepo->getUser()->username;
 
-        $this->visit('/loot/'.$username);
+        $this->visit('/loot/user/'.$username);
     }
 
     /** @test */
@@ -182,7 +182,7 @@ class LootTest extends TestCase
     public function canGetLatestLootForASingleAdventure()
     {
         $user = $this->userRepo->getUser();
-        $this->visit('/loot/'.$user->username.'/Bandit+Nest');
+        $this->visit('/loot/user/'.$user->username.'/Bandit+Nest');
     }
 
     public function tearDown()
