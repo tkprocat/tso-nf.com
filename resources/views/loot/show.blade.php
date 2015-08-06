@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">#{{ $userAdventure->id }} by {{ $userAdventure->user->username }}</div>
+                <div class="panel-heading">#{{ $userAdventure->id }} - {{ $userAdventure->adventure->name }} by {{ $userAdventure->user->username }} at {{ $userAdventure->created_at }}</div>
                 <div class="panel-body">
                     <div class="form-group">
                         <table class="table table-hover table-bordered table-striped">
