@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 <div class="container-fluid">
     <div class="row">
@@ -15,10 +15,12 @@
                     <div class="form-inline">
                         Show prices for quantities of:
                         <select id="quantity" class="form-control">
+                            <option value="0">Default</option>
                             <option value="1">1</option>
                             <option value="25">25</option>
                             <option value="1000">1000</option>
                         </select>
+                        <p>Please use 1 for decorations, adventures, loot spots, 25 for stackable items like buffs, and 1000 for most resources.</p>
                     </div>
                     <table class="table table-striped" id="items">
                         <thead>
@@ -32,16 +34,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($items as $item)
-                                <tr>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->category }}</td>
-                                    <td>1</td>
-                                    <td>{{ $item->currentPrice->min_price }}</td>
-                                    <td>{{ $item->currentPrice->avg_price }}</td>
-                                    <td>{{ $item->currentPrice->max_price }}</td>
-                                </tr>
-                            @endforeach
+                            <tr><td>Loading data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -50,44 +43,67 @@
     </div>
 </div>
 <script>
+    var items;
     $(document).ready( function () {
-        $('#items').DataTable({
-            paging: false
+        $.get("/prices/getItemsWithPrices", function(data) {
+            items = data;
+            $('#quantity').change();
         });
     });
+
     $('#quantity').change(function(){
-        var itemsTable = $('#items');
+        var itemsTable = $('#items tbody');
         var quantity = $('#quantity').val();
         //Delete old data
         itemsTable.empty();
-        itemsTable.DataTable().destroy();
-        //Load data via ajax
-        $.get("/prices/getItemsWithPrices", function(data) {
-            //Repopulate table
-            $.each(data, function(index, item) {
-                if (item.category != 'Decoration') {
+        if ($.fn.dataTable.isDataTable('#items')) {
+            itemsTable.DataTable().destroy();
+        }
+        //Repopulate table
+        $.each(items, function(index, item) {
+            if (quantity == 0) {
+                if ((item.category == 'Decoration') || (item.category == 'Unknown')) {
                     itemsTable.append(
                             '<tr><td>'+item.name+'</td>'+
-                                '<td>'+item.category+'</td>' +
-                                '<td>'+quantity+'</td>' +
-                                '<td>'+Math.round(item.current_price.min_price*quantity*1000)/1000+'</td>' +
-                                '<td>'+Math.round(item.current_price.avg_price*quantity*1000)/1000+'</td>' +
-                                '<td>'+Math.round(item.current_price.max_price*quantity*1000)/1000+'</td></tr>'
-                    );
+                            '<td>'+item.category+'</td>' +
+                            '<td>1</td>' +
+                            '<td>'+Math.round(item.current_price.min_price*1000)/1000+'</td>' +
+                            '<td>'+Math.round(item.current_price.avg_price*1000)/1000+'</td>' +
+                            '<td>'+Math.round(item.current_price.max_price*1000)/1000+'</td></tr>'
+                    )
+                } else if (item.category == 'Buff') {
+                    itemsTable.append(
+                            '<tr><td>'+item.name+'</td>'+
+                            '<td>'+item.category+'</td>' +
+                            '<td>25</td>' +
+                            '<td>'+Math.round(item.current_price.min_price*25*1000)/1000+'</td>' +
+                            '<td>'+Math.round(item.current_price.avg_price*25*1000)/1000+'</td>' +
+                            '<td>'+Math.round(item.current_price.max_price*25*1000)/1000+'</td></tr>'
+                    )
                 } else {
                     itemsTable.append(
                             '<tr><td>'+item.name+'</td>'+
-                                    '<td>'+item.category+'</td>' +
-                                    '<td>1</td>' +
-                                    '<td>'+Math.round(item.current_price.min_price*1000)/1000+'</td>' +
-                                    '<td>'+Math.round(item.current_price.avg_price*1000)/1000+'</td>' +
-                                    '<td>'+Math.round(item.current_price.max_price*1000)/1000+'</td></tr>'
-                    );
+                            '<td>'+item.category+'</td>' +
+                            '<td>1000</td>' +
+                            '<td>'+Math.round(item.current_price.min_price*1000*1000)/1000+'</td>' +
+                            '<td>'+Math.round(item.current_price.avg_price*1000*1000)/1000+'</td>' +
+                            '<td>'+Math.round(item.current_price.max_price*1000*1000)/1000+'</td></tr>'
+                    )
                 }
-            });
-            $('#items').DataTable({
-                paging: false
-            });
+            } else {
+                itemsTable.append(
+                    '<tr><td>'+item.name+'</td>'+
+                    '<td>'+item.category+'</td>' +
+                    '<td>'+quantity+'</td>' +
+                    '<td>'+Math.round(item.current_price.min_price*quantity*1000)/1000+'</td>' +
+                    '<td>'+Math.round(item.current_price.avg_price*quantity*1000)/1000+'</td>' +
+                    '<td>'+Math.round(item.current_price.max_price*quantity*1000)/1000+'</td></tr>'
+                )
+            }
+        });
+
+        $('#items').DataTable({
+            paging: false
         });
     });
 </script>
