@@ -11,7 +11,7 @@
         <a href="#accumulated">Accumulated loot</a>
     </li>
     <li>
-        <a href="/loot/{{$username}}">Latest loot</a>
+        <a href="/loot/user/{{$username}}">Latest loot</a>
     </li>
     <li>
         <a href="#adventuresplayed">Adventures played</a>
