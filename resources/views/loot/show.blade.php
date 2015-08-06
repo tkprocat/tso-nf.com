@@ -20,16 +20,16 @@
                             @foreach($userAdventure->loot as $userAdventureLoot)
                                 <tr>
                                     <td><a href="/prices/{{ urlencode($userAdventureLoot->loot->item->name) }}">{{ $userAdventureLoot->loot->item->name }}</a></td>
-                                    <td>{{ $userAdventureLoot->loot->amount }}</td>
-                                    <td>{{ $userAdventureLoot->loot->item->currentPrice->avg_price }}</td>
-                                    <td>{{ $userAdventureLoot->loot->amount * $userAdventureLoot->loot->item->currentPrice->avg_price }}</td>
+                                    <td style="text-align: right">{{ number_format($userAdventureLoot->loot->amount) }}</td>
+                                    <td style="text-align: right">{{ preg_replace("/\.?0*$/",'', number_format($userAdventureLoot->loot->item->currentPrice->avg_price, 3)) }}</td>
+                                    <td style="text-align: right">{{ preg_replace("/\.?0*$/",'', number_format($userAdventureLoot->loot->amount * $userAdventureLoot->loot->item->currentPrice->avg_price,3)) }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="3">Total:</td>
-                                    <td>{{ $userAdventure->getEstimatedLootValue() }} GC</td>
+                                    <td style="text-align: right">{{ preg_replace("/\.?0*$/",'', number_format($userAdventure->getEstimatedLootValue(), 3)) }} GC</td>
                                 </tr>
                             </tfoot>
                         </table>
