@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Redirect;
 use LootTracker\Http\Requests\UpdatePriceRequest;
 use LootTracker\Repositories\Item\ItemInterface;
 use LootTracker\Repositories\Price\Admin\AdminPriceInterface;
+use LootTracker\Repositories\Price\PriceInterface;
 use LootTracker\Repositories\User\UserInterface;
 
 class AdminPriceController extends Controller
@@ -24,15 +25,23 @@ class AdminPriceController extends Controller
      */
     protected $userRepo;
 
+    /**
+     * @var PriceInterface
+     */
+    protected $priceRepo;
+
 
     /**
      * @param AdminPriceInterface $adminPrice
+     * @param PriceInterface      $price
+     * @param ItemInterface       $item
      * @param UserInterface       $user
      */
-    public function __construct(AdminPriceInterface $adminPrice, ItemInterface $item, UserInterface $user)
+    public function __construct(AdminPriceInterface $adminPrice, PriceInterface $price, ItemInterface $item, UserInterface $user)
     {
         $this->adminPriceListRepo = $adminPrice;
         $this->itemRepo = $item;
+        $this->priceRepo = $price;
         $this->userRepo = $user;
     }
 
@@ -58,7 +67,7 @@ class AdminPriceController extends Controller
     public function show($item_id)
     {
         $priceItem = $this->itemRepo->byId($item_id);
-        $priceHistory = $this->adminPriceListRepo->findAllPriceChangesForItemById($item_id);
+        $priceHistory = $this->priceListRepo->findAllPriceChangesForItemById($item_id);
 
         return view('admin.prices.show')->with(array('item' => $priceItem, 'price_history' => $priceHistory));
     }

@@ -10,19 +10,6 @@ class EloquentAdminPriceRepository implements AdminPriceInterface
 {
     /**
      * @param $item_id
-     *
-     * @return mixed
-     */
-    public function findAllPriceChangesForItemById($item_id)
-    {
-        $priceChanges = Price::where('item_id', $item_id)->orderBy('created_at', 'desc')->get();
-
-        return $priceChanges;
-    }
-
-
-    /**
-     * @param $item_id
      * @param $min_price
      * @param $avg_price
      * @param $max_price
