@@ -286,7 +286,7 @@ class GuildController extends Controller
         }
 
         //Check if we have more then one admin left in the guild after the demote.
-        if (count($guild->admins()) == 1) {
+        if (count($guild->admins) == 1) {
             return Redirect::back()->with([
                 'error' => 'You can not demote the last admin in the guild, either promote a new one or disband the guild.'
             ]);

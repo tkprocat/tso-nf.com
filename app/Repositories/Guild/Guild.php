@@ -39,6 +39,19 @@ class Guild extends Model
             ->where('users.guild_id', $this->id);
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getAdminsListAttribute()
+    {
+        // if relation is not loaded already, let's do it first
+        if ( ! $this->relationLoaded('admins'))
+            $this->load('admins');
+
+        return $this->getRelation('admins');
+    }
+
     /**
      * @param $member
      *
@@ -58,6 +71,23 @@ class Guild extends Model
         return $this->hasMany('LootTracker\Repositories\User\User');
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getMembersListAttribute()
+    {
+        // if relation is not loaded already, let's do it first
+        if ( ! $this->relationLoaded('members'))
+            $this->load('members');
+
+        return $this->getRelation('members');
+    }
+
+
+    /**
+     * @return mixed
+     */
     public function membersCount()
     {
         return $this->hasOne('LootTracker\Repositories\User\User')
@@ -65,6 +95,10 @@ class Guild extends Model
             ->groupBy('guild_id');
     }
 
+
+    /**
+     * @return int
+     */
     public function getMembersCountAttribute()
     {
         // if relation is not loaded already, let's do it first

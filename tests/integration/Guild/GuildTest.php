@@ -66,7 +66,7 @@ class GuildTest extends TestCase
         $this->assertNotNull($guild);
         $this->assertEquals($data['name'], $guild->name);
         $this->assertEquals($data['tag'], $guild->tag);
-        $this->assertEquals($this->userRepo->getUser()->username, $guild->admins()[0]->username);
+        $this->assertEquals($this->userRepo->getUser()->username, $guild->admins[0]->username);
     }
 
     /** @test */
@@ -95,7 +95,7 @@ class GuildTest extends TestCase
 
         $guild = $this->guild->byTag('DM');
         $this->assertNotNull($guild);
-        $this->assertEquals($this->userRepo->getUser()->username, $guild->admins()[0]->username);
+        $this->assertEquals($this->userRepo->getUser()->username, $guild->admins[0]->username);
     }
 
     /** @test */
@@ -163,8 +163,8 @@ class GuildTest extends TestCase
     public function canGetAdminsForGuild()
     {
         $guild1 = $this->guild->byTag('TG');
-        $this->assertCount(1, $guild1->admins());
-        $this->assertEquals('user1', $guild1->admins()[0]->username);
+        $this->assertCount(1, $guild1->admins);
+        $this->assertEquals('user1', $guild1->admins[0]->username);
     }
 
     /** @test */

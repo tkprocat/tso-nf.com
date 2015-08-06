@@ -187,7 +187,7 @@ class EloquentGuildRepository implements GuildInterface
     {
         $guild = $this->byId($guild_id);
 
-        return $guild->members();
+        return $guild->members;
     }
 
     /**
@@ -198,7 +198,7 @@ class EloquentGuildRepository implements GuildInterface
     {
         $guild = $this->byId($guild_id);
 
-        return $guild->admins();
+        return $guild->admins;
     }
 
     /**
