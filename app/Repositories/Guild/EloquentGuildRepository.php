@@ -38,7 +38,7 @@ class EloquentGuildRepository implements GuildInterface
      */
     public function paginate($itemsPerPage)
     {
-        return Guild::orderBy('name')->paginate($itemsPerPage);
+        return Guild::with('membersCount', 'admins')->orderBy('name')->paginate($itemsPerPage);
     }
 
     /**

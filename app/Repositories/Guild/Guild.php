@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Repositories\Guild;
 
+use Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use LootTracker\Repositories\User\Role;
@@ -27,16 +28,16 @@ class Guild extends Model
      */
     public function admins()
     {
-        $role = Role::whereName('guild_admin')->first();
+        $role_id = Cache::rememberForever('guild_admin_role_id', function() {
+            return Role::whereName('guild_admin')->first()->id;
+        });
 
-        return DB::table('users')->select('users.id', 'users.username')
+        return $this->hasMany('LootTracker\Repositories\User\User')
             ->join('role_user', 'users.id', '=', 'role_user.user_id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
-            ->where('roles.id', $role->id)
-            ->where('guild_id', $this->id)
-            ->orderBy('users.username')->get();
+            ->where('roles.id', $role_id)
+            ->where('users.guild_id', $this->id);
     }
-
 
     /**
      * @param $member
@@ -54,6 +55,25 @@ class Guild extends Model
      */
     public function members()
     {
-        return $this->hasMany('LootTracker\Repositories\User\User')->orderBy('username')->get();
+        return $this->hasMany('LootTracker\Repositories\User\User');
+    }
+
+    public function membersCount()
+    {
+        return $this->hasOne('LootTracker\Repositories\User\User')
+            ->selectRaw('guild_id, count(*) as aggregate')
+            ->groupBy('guild_id');
+    }
+
+    public function getMembersCountAttribute()
+    {
+        // if relation is not loaded already, let's do it first
+        if ( ! array_key_exists('membersCount', $this->relations))
+            $this->load('membersCount');
+
+        $related = $this->getRelation('membersCount');
+
+        // then return the count directly
+        return ($related) ? (int) $related->aggregate : 0;
     }
 }

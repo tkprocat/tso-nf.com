@@ -27,13 +27,14 @@
                             <tr>
                                 <td><a href="{{ URL::to('/guilds/'.$guild->id) }}">{{ $guild->name }}</a></td>
                                 <td>{{ $guild->tag }}</td>
-                                <td>{{ $guild->members()->count() }}</td>
+                                <td>{{ $guild->membersCount }}</td>
                                 <td>
-                                @for($i = 0; $i < count($guild->admins()); $i++)
-                                    @if (count($guild->admins()) > $i+1)
-                                            {{ $guild->admins()[$i]->username }},
+                                @define($admins = $guild->admins()->get())
+                                @for($i = 0; $i < count($admins); $i++)
+                                    @if (count($admins) > $i+1)
+                                            {{ $admins[$i]->username }},
                                     @else
-                                            {{ $guild->admins()[$i]->username }}
+                                            {{ $admins[$i]->username }}
                                     @endif
 
                                 @endfor
