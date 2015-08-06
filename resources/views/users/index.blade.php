@@ -23,7 +23,7 @@
                             <tr>
                                 <td><a href="{{ URL::to('stats/personal') .'/'. $user->username }}">{{ $user->username }}</a></td>
                                 <td>@if (isset($user->guild->name)) {{ $user->guild->name }} @endif</td>
-                                <td>{{ $user->userAdventure()->count() }}</td>
+                                <td>{{ $user->playedCount }}</td>
                             </tr>
                         @endforeach
                         </tbody>

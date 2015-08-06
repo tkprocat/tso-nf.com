@@ -54,4 +54,33 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasOne('LootTracker\Repositories\Guild\Guild', 'id', 'guild_id');
     }
+
+
+    /**
+     * Returns the amount of adventures a given player has played.
+     *
+     * @return mixed
+     */
+    public function playedCount()
+    {
+        return $this->hasOne('LootTracker\Repositories\Loot\UserAdventure')
+            ->selectRaw('user_id, count(*) as aggregate')
+            ->groupBy('user_id');
+    }
+
+
+    /**
+     * Helper function for playedCount().
+     *
+     * @return int
+     */
+    public function getPlayedCountAttribute()
+    {
+        if (!$this->relationLoaded('playedCount'))
+            $this->load('playedCount');
+
+        $related = $this->getRelation('playedCount');
+
+        return ($related) ? (int) $related->aggregate : 0;
+    }
 }

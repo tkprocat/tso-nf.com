@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Repositories\User;
 
+use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
@@ -15,7 +16,7 @@ class EloquentUserRepository implements UserInterface
      */
     public function all()
     {
-        return User::with('guild')->get();
+        return User::with('guild', 'playedCount')->get();
     }
 
 
