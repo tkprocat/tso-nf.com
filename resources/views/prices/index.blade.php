@@ -64,7 +64,7 @@
             if (quantity == 0) {
                 if ((item.category == 'Decoration') || (item.category == 'Unknown')) {
                     itemsTable.append(
-                            '<tr><td>'+item.name+'</td>'+
+                            '<tr><td><a href="/prices/'+encodeURIComponent(item.name)+'">'+item.name+'</a></td>'+
                             '<td>'+item.category+'</td>' +
                             '<td>1</td>' +
                             '<td>'+Math.round(item.current_price.min_price*1000)/1000+'</td>' +
@@ -73,7 +73,7 @@
                     )
                 } else if (item.category == 'Buff') {
                     itemsTable.append(
-                            '<tr><td>'+item.name+'</td>'+
+                            '<tr><td><a href="/prices/'+encodeURIComponent(item.name)+'">'+item.name+'</a></td>'+
                             '<td>'+item.category+'</td>' +
                             '<td>25</td>' +
                             '<td>'+Math.round(item.current_price.min_price*25*1000)/1000+'</td>' +
@@ -82,7 +82,7 @@
                     )
                 } else {
                     itemsTable.append(
-                            '<tr><td>'+item.name+'</td>'+
+                            '<tr><td><a href="/prices/'+encodeURIComponent(item.name)+'">'+item.name+'</a></td>'+
                             '<td>'+item.category+'</td>' +
                             '<td>1000</td>' +
                             '<td>'+Math.round(item.current_price.min_price*1000*1000)/1000+'</td>' +
@@ -92,7 +92,7 @@
                 }
             } else {
                 itemsTable.append(
-                    '<tr><td>'+item.name+'</td>'+
+                    '<tr><td><a href="/prices/'+encodeURIComponent(item.name)+'">'+item.name+'</a></td>'+
                     '<td>'+item.category+'</td>' +
                     '<td>'+quantity+'</td>' +
                     '<td>'+Math.round(item.current_price.min_price*quantity*1000)/1000+'</td>' +

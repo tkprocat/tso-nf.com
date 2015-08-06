@@ -27,7 +27,8 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-loot']], function 
     Route::post('loot/getJSONLoot', 'LootController@getLootForAdventure');
     Route::get('loot/getJSONLoot', 'LootController@getLootForAdventure');
     Route::get('loot/adventure/{adventure}', 'LootController@index');
-    Route::get('loot/{username}/{adventure}', 'LootController@show');
+    Route::get('loot/id/{id}', 'LootController@show');
+    Route::get('loot/user/{username}/{adventure}', 'LootController@indexByUser');
     Route::resource('loot', 'LootController', ['only' => ['index', 'show']]);
 });
 

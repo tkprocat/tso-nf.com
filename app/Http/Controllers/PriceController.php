@@ -1,6 +1,7 @@
 <?php namespace LootTracker\Http\Controllers;
 
 use LootTracker\Repositories\Item\ItemInterface;
+use LootTracker\Repositories\Price\PriceInterface;
 use Response;
 
 class PriceController extends Controller
@@ -11,13 +12,20 @@ class PriceController extends Controller
      */
     protected $itemRepo;
 
+    /**
+     * @var PriceInterface
+     */
+    protected $priceRepo;
+
 
     /**
-     * @param ItemInterface $itemRepo
+     * @param ItemInterface  $items
+     * @param PriceInterface $prices
      */
-    public function __construct(ItemInterface $itemRepo)
+    public function __construct(ItemInterface $items, PriceInterface $prices)
     {
-        $this->itemRepo = $itemRepo;
+        $this->itemRepo = $items;
+        $this->priceRepo = $prices;
     }
 
 
@@ -64,9 +72,11 @@ class PriceController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show($item_id)
+    public function show($itemName)
     {
-        //
+        $item = $this->itemRepo->byName(urldecode($itemName));
+        $priceHistory = $this->priceRepo->findAllPriceChangesForItemById($item->id);
+        return view('prices.show')->with(array('item' => $item, 'priceHistory' => $priceHistory));
     }
 
 

@@ -53,11 +53,10 @@ class LootController extends Controller
     }
 
     /**
-     * @param string $username
      * @param string $adventure_name
      * @return \Illuminate\View\View
      */
-    public function show($username = '', $adventure_name = '')
+    public function indexByUser($username = '', $adventure_name = '')
     {
         //Make sure the username is filled out.
         if ($username == '') {
@@ -68,6 +67,18 @@ class LootController extends Controller
 
         $loots = $this->lootRepo->paginate(25, $adventure_name, $user_id);
         return view('loot.index')->with('loots', $loots);
+    }
+
+
+    /**
+     * @param $id
+     *
+     * @return \Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $userAdventure = $this->lootRepo->byId($id);
+        return view('loot.show')->with('userAdventure', $userAdventure);
     }
 
     /**

@@ -80,4 +80,20 @@ class UserAdventure extends Model
 
         return $text;
     }
+
+
+    /**
+     * Runs through all items and calculates an estimated price based on each items avg. market price.
+     *
+     * @return int
+     */
+    public function getEstimatedLootValue()
+    {
+        $value = 0;
+        foreach($this->loot as $userAdventureLoot)
+        {
+            $value += $userAdventureLoot->loot->item->currentPrice->avg_price * $userAdventureLoot->loot->amount;
+        }
+        return round($value, 2);
+    }
 }
