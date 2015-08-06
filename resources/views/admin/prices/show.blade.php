@@ -12,8 +12,8 @@
                     <th>Min.</th>
                     <th>Avg.</th>
                     <th>Max.</th>
-                    <th>Created at</th>
-                    <th>Created by</th>
+                    <th>Changed at</th>
+                    <th>Changed by</th>
                 </tr>
                 </thead>
                 <tbody>
