@@ -86,7 +86,7 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-loot']], function 
         'GlobalStatsController@getTop10BestAdventuresForLootTypeByAvgDrop');
 
     Route::get('stats/global', 'GlobalStatsController@index');
-    Route::get('stats/global/submissionrate', 'GlobalStatsController@showSpubmissionRate');
+    Route::get('stats/global/submissionrate', 'GlobalStatsController@showSubmissionRate');
 
     Route::get('stats/global/newuserrate', ['as' => 'stats', 'uses' => 'GlobalStatsController@showNewUserRate']);
     Route::get('stats/global/getPlayedCountForLast30Days/{adventure}',
