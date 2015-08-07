@@ -7,11 +7,11 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-lg-4"><a href="/loot/id/{{ $loot->id }}">#{{ $loot->id }}</a></div>
-            <div class="col-lg-4"><strong>{{ $loot->User->username }}</strong> <i><small>({{ $loot->User->guild !== null ? $loot->User->guild->name : '' }})</small></i></div>
+            <div class="col-lg-4"><strong>{{ $loot->user->username }}</strong> <i><small>({{ $loot->user->guild !== null ? $loot->user->guild->name : '' }})</small></i></div>
             <div class="col-lg-2">{{ $loot->created_at }}</div>
         </div>
         <div class="row">
-            <div class="col-lg-4"><a href="/stats/global/#{{ str_replace(' ','',$loot->Adventure->name) }}">{{ $loot->Adventure->name }}</a> <i><small>({{ $loot->Adventure->type }})</small></i></div>
+            <div class="col-lg-4"><a href="/stats/global/#{{ str_replace(' ','',$loot->adventure->name) }}">{{ $loot->adventure->name }}</a> <i><small>({{ $loot->adventure->type }})</small></i></div>
             <div class="col-lg-4">Estimated loot value: {{ $loot->getEstimatedLootValue() }} GC</div>
             @if (Entrust::hasRole('admin') || (Auth::user()->id == $loot->User->id))
             <div class="col-lg-4" style="text-align: right">
