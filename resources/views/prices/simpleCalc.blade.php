@@ -68,7 +68,7 @@
     ], function( Globalize, enNumbers, likelySubtags) {
         Globalize.load(enNumbers);
         Globalize.load(likelySubtags);
-        //Globalize.locale( "en" );
+        Globalize.locale( "en" );
         formatter = Globalize.numberFormatter({
             minimumSignificantDigits: 1,
             maximumSignificantDigits: 3
