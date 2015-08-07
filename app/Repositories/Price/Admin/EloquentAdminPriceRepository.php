@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Repositories\Price\Admin;
 
+use Cache;
 use LootTracker\Repositories\Price\Price;
 
 /**
@@ -23,5 +24,7 @@ class EloquentAdminPriceRepository implements AdminPriceInterface
         $price->max_price = $max_price;
         $price->user_id = $user_id;
         $price->save();
+
+        Cache::tags('prices')->flush();
     }
 }

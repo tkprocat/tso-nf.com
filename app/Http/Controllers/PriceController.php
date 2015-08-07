@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Http\Controllers;
 
+use Cache;
 use LootTracker\Repositories\Item\ItemInterface;
 use LootTracker\Repositories\Price\PriceInterface;
 use Response;
@@ -140,7 +141,10 @@ class PriceController extends Controller
      */
     public function getItemsWithPrices()
     {
-        $items = $this->itemRepo->getItemsWithPrices();
+        $items = Cache::tags('prices')->remember('getItemsWithPrices', 10, function(){
+            return $this->itemRepo->getItemsWithPrices();
+        });
+
         return Response::json($items);
     }
 }
