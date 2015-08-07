@@ -15,11 +15,17 @@
     "bootstrap-sortable": "~1.11.0",
     "bootstrap": "~3.3.0",
     "bootstrap-3-datepicker": "*",
+    "bootstrap-combobox": "~1.1.6",
+    "bootstrap-submenu": "~1.2.13",
     "tinymce": "~4.1.9",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
     "jquery-ujs": "~1.0.4",
-    "bootstrap-combobox": "~1.1.6",
-    "bootstrap-submenu": "~1.2.13"
+    "globalize": "~1.0.0",
+    "cldrjs": "~0.4.1",
+    "cldr-data": "~27.0.3",
+    "requirejs": "~2.1.20",
+    "requirejs-text": "~0.0.3",
+    "requirejs-json": "~2.0.14"
   }
 }

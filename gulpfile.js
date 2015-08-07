@@ -34,6 +34,18 @@ elixir(function(mix) {
                  'js/bootstrap-ujs.js',
                  '/bower/bootstrap-submenu/dist/js/bootstrap-submenu.js'],
                 './public/js', './resources/assets/');
+    mix.copy('./resources/assets/bower/globalize/dist/globalize.js', './public/js');
+    mix.copy('./resources/assets/bower/globalize/dist/globalize/date.js', './public/js/globalize');
+    mix.copy('./resources/assets/bower/globalize/dist/globalize/number.js', './public/js/globalize');
+    mix.copy('./resources/assets/bower/cldrjs/dist/cldr.js', './public/js');
+    mix.copy('./resources/assets/bower/cldrjs/dist/cldr/event.js', './public/js/cldr');
+    mix.copy('./resources/assets/bower/cldrjs/dist/cldr/supplemental.js', './public/js/cldr');
+    mix.copy('./resources/assets/bower/cldrjs/dist/cldr/unresolved.js', './public/js/cldr');
+    mix.copy('./resources/assets/bower/cldr-data/main/en/', './public/js/cldr-data/main/en');
+    mix.copy('./resources/assets/bower/cldr-data/supplemental/likelySubtags.json', './public/js/cldr-data/supplemental');
+    mix.copy('./resources/assets/bower/requirejs/require.js', './public/js/requirejs');
+    mix.copy('./resources/assets/bower/requirejs-json/json.js', './public/js/requirejs');
+    mix.copy('./resources/assets/bower/requirejs-text/text.js', './public/js/requirejs');
 });
 
 
