@@ -73,20 +73,20 @@
             minimumSignificantDigits: 1,
             maximumSignificantDigits: 3
         });
-    });
 
-    $(document).ready(function() {
-        $.get("/prices/getItemsWithPrices", function(data) {
-            items = data;
-            tradeItemFromControl.empty();
-            tradeItemToControl.empty();
-            $.each(data, function(index, item) {
-                tradeItemFromControl.append(new Option(item.name, item.id));
-                tradeItemToControl.append(
-                        $('<option>', { value : item.id, text: item.name })
-                );
+        $(document).ready(function() {
+            $.get("/prices/getItemsWithPrices", function(data) {
+                items = data;
+                tradeItemFromControl.empty();
+                tradeItemToControl.empty();
+                $.each(data, function(index, item) {
+                    tradeItemFromControl.append(new Option(item.name, item.id));
+                    tradeItemToControl.append(
+                            $('<option>', { value : item.id, text: item.name })
+                    );
+                });
+                $('#tradeItemTo').val($('#tradeItemTo option:contains(Gold Coins)').val());
             });
-            $('#tradeItemTo').val($('#tradeItemTo option:contains(Gold Coins)').val());
         });
     });
 
@@ -126,6 +126,20 @@
         return false;
     });
 
+    function formatNumber(value) {
+        if (isNaN(value))
+            return 0;
+
+        value = parseInt(value);
+        value = formatter(value);
+
+        //Hack since numberFormatter returns NaN on zero.
+        if (value == 'NaN')
+            return 0;
+        else
+            return value;
+    }
+
     function addResultData(amount, itemFrom, itemTo, extra) {
         var minPrice = (amount * itemFrom.current_price.min_price) / (itemTo.current_price.max_price);
         var avgPrice = (amount * itemFrom.current_price.avg_price) / (itemTo.current_price.avg_price);
@@ -133,17 +147,17 @@
 
         if (extra)
             resultTable.append('<tr class="extra">'+
-                    '<td>'+ amount+'</td>'+
-                    '<td>' + formatter(minPrice) + '</td>'+
-                    '<td>' + formatter(avgPrice) + '</td>'+
-                    '<td>' + formatter(maxPrice) + '</td>'+'' +
+                    '<td>' + formatNumber(amount) + '</td>'+
+                    '<td>' + formatNumber(minPrice) + '</td>'+
+                    '<td>' + formatNumber(avgPrice) + '</td>'+
+                    '<td>' + formatNumber(maxPrice) + '</td>'+'' +
                     '</tr>');
         else
             resultTable.append('<tr>'+
-                    '<td>'+amount+'</td>'+
-                    '<td>' + formatter(minPrice) + '</td>'+
-                    '<td>' + formatter(avgPrice) + '</td>'+
-                    '<td>' + formatter(maxPrice) + '</td>'+
+                    '<td>' + formatNumber(amount) + '</td>'+
+                    '<td>' + formatNumber(minPrice) + '</td>'+
+                    '<td>' + formatNumber(avgPrice) + '</td>'+
+                    '<td>' + formatNumber(maxPrice) + '</td>'+
                     '</tr>');
     }
 </script>
