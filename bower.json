@@ -25,7 +25,7 @@
     "cldrjs": "~0.4.1",
     "cldr-data": "~27.0.3",
     "requirejs": "~2.1.20",
-    "requirejs-text": "~0.0.3",
-    "requirejs-json": "~2.0.14"
+    "requirejs-text": "~2.0.14",
+    "requirejs-json": "~0.0.3"
   }
 }

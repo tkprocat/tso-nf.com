@@ -25,11 +25,56 @@
         </div>
     </div>
 </div>
+<script src="/js/requirejs/require.js"></script>
 <script>
     var items = null;
     var tradeItemFromControl = $('#tradeItemFrom');
     var tradeItemToControl = $('#tradeItemTo');
     var resultTable = $('#result');
+    var formatter;
+
+    require.config({
+        paths: {
+            // Globalize dependencies paths.
+            cldr: "/js/cldr",
+
+            // Unicode CLDR JSON data.
+            "cldr-data": "/js/cldr-data",
+
+            // require.js plugin we'll use to fetch CLDR JSON content.
+            json: "/js/requirejs/json",
+
+            // text is json's dependency.
+            text: "/js/requirejs/text",
+
+            // Globalize.
+            globalize: "/js/globalize"
+        }
+    });
+
+
+    /**
+     * 2. Require dependencies and run your code.
+     */
+    require([
+        "globalize",
+
+        // CLDR content.
+        "json!cldr-data/main/en/numbers.json",
+        "json!cldr-data/supplemental/likelySubtags.json",
+
+        // Extend Globalize with Date and Number modules.
+        "globalize/number"
+    ], function( Globalize, enNumbers, likelySubtags) {
+        Globalize.load(enNumbers);
+        Globalize.load(likelySubtags);
+        //Globalize.locale( "en" );
+        formatter = Globalize.numberFormatter({
+            minimumSignificantDigits: 1,
+            maximumSignificantDigits: 3
+        });
+    });
+
     $(document).ready(function() {
         $.get("/prices/getItemsWithPrices", function(data) {
             items = data;
@@ -70,21 +115,36 @@
         resultTable.append('<tr id="extratoggle"><td colspan="4" style="text-align: center"><a href="#">Click here to see results for commonly traded quantities.</a></td></tr>');
         $('.extra').hide();
         $('#extratoggle').click(function() {
-            $('.extra').show();
-            $(this).hide();
+            if ($('.extra').is(':visible')) {
+                $('.extra').hide();
+                $(this).html('<td colspan="4" style="text-align: center"><a href="#">Click here to see results for commonly traded quantities.</a></td>');
+            } else {
+                $('.extra').show();
+                $(this).html('<td colspan="4" style="text-align: center"><a href="#">Click here to hide results for commonly traded quantities.</a></td>');
+            }
         });
         return false;
     });
 
     function addResultData(amount, itemFrom, itemTo, extra) {
-        var minPrice = Math.max(Math.round((amount * itemFrom.current_price.min_price) / (itemTo.current_price.max_price) * 100) / 100, 0);
-        var avgPrice = Math.max(Math.round((amount * itemFrom.current_price.avg_price) / (itemTo.current_price.avg_price) * 100) / 100, 0);
-        var maxPrice = Math.max(Math.round((amount * itemFrom.current_price.max_price) / (itemTo.current_price.min_price) * 100) / 100, 0);
+        var minPrice = (amount * itemFrom.current_price.min_price) / (itemTo.current_price.max_price);
+        var avgPrice = (amount * itemFrom.current_price.avg_price) / (itemTo.current_price.avg_price);
+        var maxPrice = (amount * itemFrom.current_price.max_price) / (itemTo.current_price.min_price);
 
         if (extra)
-            resultTable.append('<tr class="extra"><td>'+amount+'</td><td>' + minPrice + '</td><td>' + avgPrice + '</td><td>' + maxPrice + '</td></tr>');
+            resultTable.append('<tr class="extra">'+
+                    '<td>'+ amount+'</td>'+
+                    '<td>' + formatter(minPrice) + '</td>'+
+                    '<td>' + formatter(avgPrice) + '</td>'+
+                    '<td>' + formatter(maxPrice) + '</td>'+'' +
+                    '</tr>');
         else
-            resultTable.append('<tr><td>'+amount+'</td><td>' + minPrice + '</td><td>' + avgPrice + '</td><td>' + maxPrice + '</td></tr>');
+            resultTable.append('<tr>'+
+                    '<td>'+amount+'</td>'+
+                    '<td>' + formatter(minPrice) + '</td>'+
+                    '<td>' + formatter(avgPrice) + '</td>'+
+                    '<td>' + formatter(maxPrice) + '</td>'+
+                    '</tr>');
     }
 </script>
 @stop

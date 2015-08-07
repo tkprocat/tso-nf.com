@@ -6,10 +6,8 @@
         <meta name="csrf-param" content="_token" />
         <title>Loot Tracker</title>
         <link rel="stylesheet" href="/css/all.css">
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/ui-darkness/jquery-ui.css">
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
         <script type="text/javascript" src="/js/all.js"></script>
-        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     </head>
     <body>
         <div class="container">
