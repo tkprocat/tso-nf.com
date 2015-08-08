@@ -1,6 +1,7 @@
 @extends('layouts.default')
 @section('content')
-
+<link rel="stylesheet" href="/css/jquery-ui/overcast/jquery-ui.min.css">
+<script type="text/javascript" src="/js/jquery-ui/all.js"></script>
 <h1 style="text-align: center">Personal Stats</h1>
 
 <div class="nav nav-pills nav-justified">

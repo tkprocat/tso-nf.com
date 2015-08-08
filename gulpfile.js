@@ -34,6 +34,10 @@ elixir(function(mix) {
                  'js/bootstrap-ujs.js',
                  '/bower/bootstrap-submenu/dist/js/bootstrap-submenu.js'],
                 './public/js', './resources/assets/');
+    mix.scripts(['bower/jquery-ui/ui/core.js',
+                 'bower/jquery-ui/ui/datepicker.js'],
+                 './public/js/jquery-ui', './resources/assets/');
+    mix.copy('./resources/assets/bower/jquery-ui/themes/overcast', './public/css/jquery-ui/overcast');
     mix.copy('./resources/assets/bower/globalize/dist/globalize.js', './public/js');
     mix.copy('./resources/assets/bower/globalize/dist/globalize/date.js', './public/js/globalize');
     mix.copy('./resources/assets/bower/globalize/dist/globalize/number.js', './public/js/globalize');
