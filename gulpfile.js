@@ -17,7 +17,6 @@ elixir(function(mix) {
                 '/bower/jquery-ui/themes/ui-darkness/jquery-ui.css',
                 '/bower/jquery-ui/themes/ui-darkness/theme.css',
                 '/bower/bootstrap-combobox/css/bootstrap-combobox.css',
-                '/bower/bootstrap-submenu/dist/css/bootstrap-submenu.min.css',
                 '/bower/tinymce/skins/lightgray/skin.min.css'],
                './public/css', './resources/assets/');
 });
