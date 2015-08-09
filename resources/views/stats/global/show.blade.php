@@ -31,25 +31,23 @@
     <tbody style="border-width: 3px">
     @define($lastSlot = 1)
     @define($secondaryColor = false)
-    @foreach ($adventure->loot as $loot)
-        @if ($loot->adventure_id == $adventure->id)
-            @if ($lastSlot !== $loot->slot)
-                @define($secondaryColor = ($secondaryColor ? false : true))
-                @define($lastSlot = $loot->slot)
-            @endif
-
-            <tr{!! ($secondaryColor ? ' class="active"' : '') !!}>
-                <td>{{$loot->slot}}</td>
-                <td>{{$loot->type}}</td>
-                <td>{{$loot->amount}}</td>
-                <td>{{$drop_count_list[$loot->id]}}</td>
-                @if ($adventure->played->count() > 0)
-                    <td>{{number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100)}}%</td>
-                @else
-                    <td>0%</td>
-                @endif
-            </tr>
+    @foreach ($adventure->loot()->get() as $loot)
+        @if ($lastSlot !== $loot->slot)
+            @define($secondaryColor = ($secondaryColor ? false : true))
+            @define($lastSlot = $loot->slot)
         @endif
+
+        <tr{!! ($secondaryColor ? ' class="active"' : '') !!}>
+            <td>{{$loot->slot}}</td>
+            <td>{{$loot->name}}</td>
+            <td>{{$loot->amount}}</td>
+            <td>{{$drop_count_list[$loot->id]}}</td>
+            @if ($adventure->played->count() > 0)
+                <td>{{number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100)}}%</td>
+            @else
+                <td>0%</td>
+            @endif
+        </tr>
     @endforeach
     </tbody>
     <tfoot>

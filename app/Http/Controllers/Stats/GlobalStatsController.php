@@ -90,7 +90,6 @@ class GlobalStatsController extends Controller
         $adventure = $this->lootRepo->getAdventureWithPlayedAndLoot($adventure->id)->first();
         $total_played = $this->lootRepo->getAllUserAdventuresWithLoot()->count();
         $drop_count_list = $this->lootRepo->getLootDropCountForAdventure($adventure->id);
-        dd($drop_count_list);
 
         return view('stats.global.show', compact('adventure', 'total_played', 'drop_count_list'));
     }
