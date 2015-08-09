@@ -34,14 +34,20 @@ class EloquentGlobalStatsRepository implements GlobalStatsInterface
      */
     public function getTop10BestAdventuresForLootTypeByAvgDrop($type)
     {
-        return DB::table('adventure_loot')
-            ->join('user_adventure_loot', 'adventure_loot.id', '=', 'user_adventure_loot.adventure_loot_id')
+        $result = DB::table('items')
+            ->join('adventure_loot', 'adventure_loot.item_id', '=', 'items.id')
+            ->join('user_adventure_loot', 'user_adventure_loot.adventure_loot_id', '=', 'adventure_loot.id')
             ->join('adventure', 'adventure.id', '=', 'adventure_loot.adventure_id')
-            ->join('items', 'items.id', '=', 'adventure_loot.item_id')
-            ->select(array('adventure.name', 'adventure.name', DB::raw('((COUNT(\'' . \DB::getTablePrefix() . 'user_adventure_loot.*\' ) * ' . \DB::getTablePrefix() . 'adventure_loot.Amount) / (SELECT count( * ) FROM ' . \DB::getTablePrefix() . 'user_adventure WHERE adventure_id = ' . \DB::getTablePrefix() . 'adventure_loot.adventure_id GROUP BY adventure_id )) AS avg_drop')))
+            ->join('user_adventure', 'user_adventure.id', '=', 'user_adventure_loot.user_adventure_id')
+            ->select(array('adventure.name',
+                DB::raw('sum(adventure_loot.amount) as totalDropped'),
+                DB::raw('count(user_adventure.id) as totalPlayed'),
+                DB::raw('(sum(adventure_loot.amount) / count(user_adventure.id)) as avgDrop')))
             ->where('items.name', $type)
-            ->groupBy('adventure_loot.adventure_id')
-            ->orderBy('avg_drop', 'desc')->take(10)->get();
+            ->groupBy('adventure.id')
+            ->orderBy('avgDrop', 'desc')
+            ->orderBy('adventure.name')->take(10)->get();
+        return $result;
     }
 
 
