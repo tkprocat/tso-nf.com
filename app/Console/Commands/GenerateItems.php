@@ -49,7 +49,7 @@ class GenerateItems extends Command
         $adventureLootItems = AdventureLoot::all();
         foreach($adventureLootItems as $adventureLootItem)
         {
-            $item = Item::where('name', $adventureLootItem->type_old)->first();
+            $item = Item::where('name', e($adventureLootItem->type_old))->first();
             //Check if we found anything.
             if ($item == null)
                 $item = $this->itemAdminRepo->create(['name' => $adventureLootItem->type_old, 'category' => 'Unknown', 'user_id' => '1']);
