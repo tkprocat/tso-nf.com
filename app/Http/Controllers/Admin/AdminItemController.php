@@ -1,8 +1,11 @@
 <?php namespace LootTracker\Http\Controllers;
 
+
 use Redirect;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use LootTracker\Http\Requests\ItemRequest;
+use LootTracker\Repositories\Item\Admin\ItemUsedInAdventureException;
 use LootTracker\Repositories\Item\Admin\AdminItemInterface;
 use LootTracker\Repositories\Item\ItemInterface;
 
@@ -126,11 +129,17 @@ class AdminItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $item_id
-     * @return \Illuminate\View\View
+     * @param  int    $item_id
+     *
+     * @return Redirect
      */
     public function destroy($item_id)
     {
-        $this->adminItemRepo->delete($item_id);
+        try {
+            $this->adminItemRepo->delete($item_id);
+        } catch(ItemUsedInAdventureException $ex) {
+            return redirect()->back()->withErrors('Item is used on an adventure and can not be deleted.');
+        }
+        return redirect()->back();
     }
 }

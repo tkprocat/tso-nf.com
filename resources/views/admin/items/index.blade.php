@@ -9,7 +9,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">Items</div>
         <div class="panel-body">
-            @include('layouts/notifications')
+            @include('errors.list')
 
             <table class="table table-striped table-hover sortable" id="items">
                 <thead>
@@ -24,11 +24,12 @@
                     <tr>
                         <td><a href="{{ url("/admin/items/$item->id") }}">{{ $item->name }}</a></td>
                         <td>{{ $item->category }}</td>
-                        <td><a href="{{ url("/admin/items/$item->id/edit") }}" class="btn btn-warning btn-xs">Update item</a>
-                        <a href="/admin/items/{{ $item->id }}" data-method="delete" rel="nofollow"
-                           class="btn btn-danger btn-xs" data-confirm="Are you sure you want to delete this loot entry?">
-                            Delete
-                        </a>
+                        <td>
+                            <a href="{{ url("/admin/items/$item->id/edit") }}" class="btn btn-warning btn-xs">Update item</a>
+                            <a href="/admin/items/{{ $item->id }}" data-method="delete" rel="nofollow"
+                               class="btn btn-danger btn-xs" data-confirm="Are you sure you want to delete this loot entry?">
+                                Delete
+                            </a>
                         </td>
                     </tr>
                 @endforeach

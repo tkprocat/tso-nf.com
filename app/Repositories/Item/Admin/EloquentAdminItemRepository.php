@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Repositories\Item\Admin;
 
+use LootTracker\Repositories\Adventure\AdventureLoot;
 use LootTracker\Repositories\Item\Item;
 use LootTracker\Repositories\Price\Admin\AdminPriceInterface;
 use LootTracker\Repositories\User\UserInterface;
@@ -60,9 +61,15 @@ class EloquentAdminItemRepository implements AdminItemInterface
 
     /**
      * @param $item_id
+     *
+     * @throws ItemUsedInAdventureException
      */
     public function delete($item_id)
     {
+        //Check if the item has been used in an adventure.
+        if (AdventureLoot::where('item_id', $item_id)->count() > 0)
+            throw new ItemUsedInAdventureException('Item id:'.$item_id);
+
         $item = Item::findOrFail($item_id);
         $item->delete();
     }
