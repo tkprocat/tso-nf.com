@@ -11,4 +11,6 @@ interface GuildStatsInterface
     public function getLootDropCount($guild_id, $adventure_id = 0);
 
     public function getAdventuresWithPlayedAndLoot($guild_id, $adventure_id = 0);
+
+    public function getSubmissionsForWeek($guildId, Carbon $date);
 }

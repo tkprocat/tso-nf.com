@@ -15,7 +15,7 @@ class GuildStatsController extends Controller
 
     protected $loot;
     protected $adventure;
-    protected $stats;
+    protected $guildStatsRepo;
     protected $user;
     protected $guild;
 
@@ -36,7 +36,7 @@ class GuildStatsController extends Controller
     ) {
         $this->loot = $loot;
         $this->adventure = $adventure;
-        $this->stats = $stats;
+        $this->guildStatsRepo = $stats;
         $this->user = $user;
         $this->guild = $guild;
     }
@@ -46,12 +46,12 @@ class GuildStatsController extends Controller
         $guild_id = $this->user->getUser()->guild_id;
 
         // Get all played adventures.
-        $adventures = Collection::make($this->stats->getAdventuresWithPlayedAndLoot($guild_id));
+        $adventures = Collection::make($this->guildStatsRepo->getAdventuresWithPlayedAndLoot($guild_id));
         $adventures = $adventures->sortBy(function ($adventure) {
             return $adventure->type . ' - ' . $adventure->name;
         });
-        $total_played = $this->stats->getPlayedCount($guild_id);
-        $drop_count_list = $this->stats->getLootDropCount($guild_id);
+        $total_played = $this->guildStatsRepo->getPlayedCount($guild_id);
+        $drop_count_list = $this->guildStatsRepo->getLootDropCount($guild_id);
         return view('stats.guild.index', compact('adventures', 'total_played', 'drop_count_list'));
     }
 
@@ -70,11 +70,11 @@ class GuildStatsController extends Controller
 
 
         // Get all played adventures.
-        $adventure = Collection::make($this->stats->getAdventuresWithPlayedAndLoot($guild_id, $tempAdventure->id))
+        $adventure = Collection::make($this->guildStatsRepo->getAdventuresWithPlayedAndLoot($guild_id, $tempAdventure->id))
             ->first();
 
-        $total_played = $this->stats->getPlayedCount($guild_id, $tempAdventure->id);
-        $drop_count_list = $this->stats->getLootDropCount($guild_id, $tempAdventure->id);
+        $total_played = $this->guildStatsRepo->getPlayedCount($guild_id, $tempAdventure->id);
+        $drop_count_list = $this->guildStatsRepo->getLootDropCount($guild_id, $tempAdventure->id);
         $adventureLoot = $tempAdventure->loot->toArray();
         //Merge adventure loot with drop count.
         array_walk($adventureLoot, function (&$value, $key) use ($drop_count_list, $total_played) {
@@ -110,8 +110,23 @@ class GuildStatsController extends Controller
         $date = Carbon::now();
         $weeks = [];
         for ($i = 1; $i <= 30; $i++) {
-            $weeks[] = $this->stats->getPlayedCountPerDayForAdventure($guild_id, $date, $adventure->id);
+            $weeks[] = $this->guildStatsRepo->getPlayedCountPerDayForAdventure($guild_id, $date, $adventure->id);
             $date = $date->subDay();
+        }
+        return Response::json(array_reverse($weeks));
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSubmissionsForTheLast10Weeks()
+    {
+        $guild_id = $this->user->getUser()->guild_id;
+        $date = Carbon::now();
+        $weeks = [];
+        for ($i = 1; $i <= 10; $i++) {
+            $weeks[] = $this->guildStatsRepo->getSubmissionsForWeek($guild_id, $date);
+            $date = $date->subWeek();
         }
         return Response::json(array_reverse($weeks));
     }

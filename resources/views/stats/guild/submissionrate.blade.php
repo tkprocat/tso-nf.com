@@ -19,7 +19,7 @@
     var chart;
 
     function loadData() {
-        $.get("/stats/getSubmissionsForTheLast10Weeks", function(json) {
+        $.get("/stats/guild/getSubmissionsForTheLast10Weeks", function(json) {
             chart.addSeries({
                 name: "Submissions",
                 data: json

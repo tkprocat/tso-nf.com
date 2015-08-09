@@ -88,7 +88,7 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-loot']], function 
     Route::get('stats/global', 'GlobalStatsController@index');
     Route::get('stats/global/submissionrate', 'GlobalStatsController@showSubmissionRate');
 
-    Route::get('stats/global/newuserrate', ['as' => 'stats', 'uses' => 'GlobalStatsController@showNewUserRate']);
+    Route::get('stats/global/newuserrate', 'GlobalStatsController@showNewUserRate');
     Route::get('stats/global/getPlayedCountForLast30Days/{adventure}',
         'GlobalStatsController@getPlayedCountForLast30Days');
 
@@ -98,13 +98,13 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-loot']], function 
 //Guild stats
 Route::group(['middleware' => ['auth'], 'role' => ['guild_member']], function () {
     Route::get('stats/guild', 'GuildStatsController@index');
-    Route::get('stats/guild/submissionrate', ['as' => 'stats', 'uses' => 'GuildStatsController@showSubmissionRate']);
-    Route::get('stats/guild/newuserrate', ['as' => 'stats', 'uses' => 'GuildStatsController@showNewUserRate']);
+    Route::get('stats/guild/submissionrate', 'GuildStatsController@showSubmissionRate');
+    Route::get('stats/guild/newuserrate', 'GuildStatsController@showNewUserRate');
     Route::get(
         'stats/guild/getPlayedCountForLast30Days/{adventure}',
         'GuildStatsController@getPlayedCountForLast30Days'
     );
-
+    Route::get('stats/guild/getSubmissionsForTheLast10Weeks', 'GuildStatsController@getSubmissionsForTheLast10Weeks');
     Route::get('stats/guild/adventure/{adventurename}', 'GuildStatsController@show');
 });
 

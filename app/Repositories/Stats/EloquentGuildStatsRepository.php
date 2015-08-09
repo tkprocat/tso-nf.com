@@ -119,4 +119,24 @@ class EloquentGuildStatsRepository implements GuildStatsInterface
 
         return $query->get();
     }
+
+
+    /**
+     * @param int $guildId
+     * @param Carbon $date
+     *
+     * @return mixed
+     */
+    public function getSubmissionsForWeek($guildId, Carbon $date)
+    {
+        $startOfWeek = clone $date->startOfWeek();
+        $endOfWeek = $date->endOfWeek();
+
+        return UserAdventure::join('users', 'users.id', '=', 'user_adventure.user_id')
+            ->where('users.guild_id', $guildId)
+            ->where('user_adventure.created_at', '>=', $startOfWeek)
+            ->where('user_adventure.created_at', '<=', $endOfWeek)
+            ->get()
+            ->count();
+    }
 }
