@@ -10,7 +10,7 @@
                 <div class="panel-heading">Price list</div>
                 <div class="panel-body">
                     <p>
-                        Prices on this list was originally based off the <a href="http://tiny.cc/newfoundlandtrade">Newfoundland Trade Sheet by THU & TP1</a>, all credits to them for providing the information.
+                        Prices on this list was originally based off the <a href="http://tiny.cc/newfoundlandtrade" target="_new">Newfoundland Trade Sheet by THU & TP1</a>, all credits to them for providing the information.
                     </p>
                     <div class="form-inline">
                         Show prices for quantities of:
