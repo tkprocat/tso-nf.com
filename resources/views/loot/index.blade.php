@@ -6,7 +6,7 @@
 <div class="panel panel-info">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-lg-4"><a href="/stats/global/{{ urldecode($loot->adventure->name) }}">{{ $loot->adventure->name }}</a> <i><small>({{ $loot->adventure->type }})</small></i></div>
+            <div class="col-lg-4"><a href="/stats/global/{{ urldecode($loot->adventure->name) }}"><strong>{{ $loot->adventure->name }}</strong></a> <i><small>({{ $loot->adventure->type }})</small></i></div>
             <div class="col-lg-4"><strong>{{ $loot->user->username }}</strong> <i><small>({{ $loot->user->guild !== null ? $loot->user->guild->name : '' }})</small></i></div>
             <div class="col-lg-2">{{ $loot->created_at }}</div>
         </div>
