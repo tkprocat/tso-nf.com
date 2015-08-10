@@ -116,7 +116,7 @@
         //Repopulate table
         $.each(items, function(index, item) {
             if (quantity == 0) {
-                if ((item.category == 'Decoration') || (item.category == 'Unknown') || (item.category == 'Building')) {
+                if ((item.category == 'Decoration') || (item.category == 'Unknown') || (item.category == 'Building') || (item.category == 'Epic Buff')) {
                     itemsTable.append(
                             '<tr><td><a href="/prices/'+encodeURIComponent(item.name)+'">'+item.name+'</a></td>'+
                             '<td>'+item.category+'</td>' +
