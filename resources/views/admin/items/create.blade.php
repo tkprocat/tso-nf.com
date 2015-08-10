@@ -1,7 +1,7 @@
 @extends('layouts.default-admin')
 @section('content')
 @include('admin.menu', array('active' => 'Add prices'))
-<div class="panel panel-default">
+<div class="panel panel-info">
     <div class="panel-heading">Add item</div>
     <div class="panel-body">
         @include('errors.list')
@@ -16,9 +16,23 @@
             </div>
 
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">Category:</label>
+                <label for="category" class="col-sm-2 control-label">Category:</label>
                 <div class="col-sm-4">
                     <input type="text" name="category" class="form-control" placeholder="Category" value="{{ old('category') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tradable" class="col-sm-2 control-label">Tradable:</label>
+                <div class="col-sm-4">
+                    <input type="checkbox" name="tradable" class="checkbox" {{ old('tradable', 'checked') ? 'checked' : ''}}>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="stackable" class="col-sm-2 control-label">Stackable:</label>
+                <div class="col-sm-4">
+                    <input type="checkbox" name="stackable" class="checkbox" {{ old('stackable', 'checked') ? 'checked' : ''}}>
                 </div>
             </div>
 
@@ -43,8 +57,10 @@
                 </div>
             </div>
 
-            <div class="col-md-offset-6">
-                <input type="submit" value="Add" class="btn btn-primary">
+            <div class="row">
+                <div class="col-md-offset-5 col-md-2">
+                    <input type="submit" value="Add" class="btn btn-primary">
+                </div>
             </div>
         </form>
     </div>

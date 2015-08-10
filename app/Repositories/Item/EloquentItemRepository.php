@@ -45,7 +45,7 @@ class EloquentItemRepository implements ItemInterface
 
     public function getItemsWithPrices()
     {
-        $items = Item::with('currentPrice')->whereTradable(1)->select('id', 'name', 'category')->orderBy('name')->get();
+        $items = Item::with('currentPrice')->select('id', 'name', 'category', 'tradable', 'stackable')->orderBy('name')->get();
         return $items;
     }
 }

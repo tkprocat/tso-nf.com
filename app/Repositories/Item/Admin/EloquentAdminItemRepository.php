@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Repositories\Item\Admin;
 
+use Cache;
 use LootTracker\Repositories\Adventure\AdventureLoot;
 use LootTracker\Repositories\Item\Item;
 use LootTracker\Repositories\Price\Admin\AdminPriceInterface;
@@ -55,6 +56,9 @@ class EloquentAdminItemRepository implements AdminItemInterface
         $user_id = (isset($data['user_id']) ? $data['user_id'] : $this->userRepo->getUser()->id);
         $this->adminPriceRepo->update($item->id, $min_price, $avg_price, $max_price, $user_id);
 
+        //Clear cache
+        Cache::tags('items')->flush();
+
         return $item;
     }
 
@@ -72,12 +76,17 @@ class EloquentAdminItemRepository implements AdminItemInterface
 
         $item = Item::findOrFail($item_id);
         $item->delete();
+
+        //Clear cache
+        Cache::tags('items')->flush();
     }
 
 
     /**
      * @param $item_id
      * @param $data
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
     public function update($item_id, $data)
     {
@@ -85,6 +94,13 @@ class EloquentAdminItemRepository implements AdminItemInterface
         $item->name = e($data['name']);
         $item->category = e($data['category']);
         $item->tradable = (isset($data['tradable']) && $data['tradable'] === 'on' ? true : false);
+        $item->stackable = (isset($data['stackable']) && $data['stackable'] === 'on' ? true : false);
         $item->save();
+
+        //Clear cache
+        Cache::tags('items')->flush();
+
+        //Return updated item.
+        return $item;
     }
 }

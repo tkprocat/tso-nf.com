@@ -141,7 +141,7 @@ class PriceController extends Controller
      */
     public function getItemsWithPrices()
     {
-        $items = Cache::tags('prices')->remember('getItemsWithPrices', 10, function(){
+        $items = Cache::tags('prices', 'items')->remember('getItemsWithPrices', 10, function(){
             return $this->itemRepo->getItemsWithPrices();
         });
 

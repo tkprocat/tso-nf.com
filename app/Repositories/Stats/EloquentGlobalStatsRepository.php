@@ -41,8 +41,8 @@ class EloquentGlobalStatsRepository implements GlobalStatsInterface
             ->join('user_adventure', 'user_adventure.id', '=', 'user_adventure_loot.user_adventure_id')
             ->select(array('adventure.name',
                 DB::raw('sum(adventure_loot.amount) as totalDropped'),
-                DB::raw('count(user_adventure.id) as totalPlayed'),
-                DB::raw('(sum(adventure_loot.amount) / count(user_adventure.id)) as avgDrop')))
+                DB::raw('(select count(*) from user_adventure where user_adventure.adventure_id = adventure.id) as totalPlayed'),
+                DB::raw('(sum(adventure_loot.amount) / (select count(*) from user_adventure where user_adventure.adventure_id = adventure.id)) as avgDrop')))
             ->where('items.name', $type)
             ->groupBy('adventure.id')
             ->orderBy('avgDrop', 'desc')

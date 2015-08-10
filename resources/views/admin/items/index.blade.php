@@ -16,6 +16,7 @@
                     <th>Name</th>
                     <th>Category</th>
                     <th>Tradable</th>
+                    <th>Stackable</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -25,6 +26,7 @@
                     <td><a href="{{ url("/admin/items/$item->id") }}">{{ $item->name }}</a></td>
                     <td>{{ $item->category }}</td>
                     <td>{{ $item->tradable ? 'Yes' : 'No'}}</td>
+                    <td>{{ $item->stackable ? 'Yes' : 'No'}}</td>
                     <td>
                         <a href="{{ url("/admin/items/$item->id/edit") }}" class="btn btn-warning btn-xs">Update item</a>
                         <a href="/admin/items/{{ $item->id }}" data-method="delete" rel="nofollow"

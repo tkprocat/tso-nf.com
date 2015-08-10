@@ -13,7 +13,7 @@
                         Prices on this list was originally based off the <a href="http://tiny.cc/newfoundlandtrade" target="_new">Newfoundland Trade Sheet by THU & TP1</a>, all credits to them for providing the information.
                     </p>
                     <div class="form-inline">
-                        Show prices for quantities of:
+                        <label>Show prices for quantities of:</label>
                         <select id="quantity" class="form-control">
                             <option value="0">Default</option>
                             <option value="1">1</option>
@@ -22,7 +22,11 @@
                             <option value="10000">10,000</option>
                             <option value="100000">100,000</option>
                         </select>
-                        <p>Please use 1 for decorations, adventures, loot spots, 25 for stackable items like buffs, and 1000 for most resources.</p>
+                        <p><i>Please use 1 for decorations, adventures, loot spots, 25 for stackable items like buffs, and 1000 for most resources.</i></p>
+                    </div>
+                    <div class="form-inline">
+                        <label for="showNonTradables">Show non tradables:</label>
+                        <input type="checkbox" id="showNonTradables">
                     </div>
                     <table class="table table-striped" id="items">
                         <thead>
@@ -105,8 +109,13 @@
             return formatter(value);
     }
 
+    $('#showNonTradables').change(function() {
+        $('#quantity').change();
+    });
+
     $('#quantity').change(function(){
         var itemsTable = $('#items tbody');
+        var showTradables = $('#showNonTradables').prop('checked');
         var quantity = $('#quantity').val();
         //Delete old data
         if ($.fn.dataTable.isDataTable('#items')) {
@@ -115,8 +124,12 @@
         itemsTable.empty();
         //Repopulate table
         $.each(items, function(index, item) {
+            if ((item.tradable == 0) && (showTradables == false)) {
+                return true;
+            }
+
             if (quantity == 0) {
-                if ((item.category == 'Decoration') || (item.category == 'Unknown') || (item.category == 'Building') || (item.category == 'Epic Buff')) {
+                if ((item.stackable == 0) || (item.category == 'Decoration') || (item.category == 'Unknown') || (item.category == 'Building') || (item.category == 'Epic Buff')) {
                     itemsTable.append(
                             '<tr><td><a href="/prices/'+encodeURIComponent(item.name)+'">'+item.name+'</a></td>'+
                             '<td>'+item.category+'</td>' +

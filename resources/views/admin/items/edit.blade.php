@@ -30,6 +30,13 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="stackable" class="col-sm-2 control-label">Stackable:</label>
+                <div class="col-sm-4">
+                    <input type="checkbox" name="stackable" {{ old('stackable', $item->stackable) ? 'checked' : ''}}>
+                </div>
+            </div>
+
             <input type="submit" value="Update" class="btn btn-warning">
         </form>
     </div>
