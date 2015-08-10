@@ -51,10 +51,13 @@
     @endforeach
     </tbody>
     <tfoot>
-    <tr>
-        <td colspan="5"><a href="#">Back to top</a> - <a
-                    href="/loot/adventure/{{ urlencode($adventure->name) }}">See latest loot</a></td>
-    </tr>
+        <tr>
+            <td colspan="5" style="text-align: center">Total amount registered: {{ $adventure->played->count() }}</td>
+        </tr>
+        <tr>
+            <td colspan="5"><a href="#">Back to top</a> - <a
+                        href="/loot/adventure/{{ urlencode($adventure->name) }}">See latest loot</a></td>
+        </tr>
     </tfoot>
 </table>
 
