@@ -83,7 +83,7 @@
                 }
             },
             title: {
-                text: ''
+                text: 'Number of times the adventure have been played per day for the last month'
             },
             xAxis: {
                 title: {
@@ -100,7 +100,7 @@
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">Week {point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
