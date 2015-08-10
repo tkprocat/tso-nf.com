@@ -18,7 +18,9 @@
                             <option value="0">Default</option>
                             <option value="1">1</option>
                             <option value="25">25</option>
-                            <option value="1000">1000</option>
+                            <option value="1000">1,000</option>
+                            <option value="10000">10,000</option>
+                            <option value="100000">100,000</option>
                         </select>
                         <p>Please use 1 for decorations, adventures, loot spots, 25 for stackable items like buffs, and 1000 for most resources.</p>
                     </div>
