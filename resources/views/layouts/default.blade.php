@@ -116,7 +116,7 @@
                                     <li {!! (Request::is('users/' . Auth::user()->username) ? 'class="active"' : '') !!}>
                                         <a href="{{ URL::to('users') .'/'. Auth::user()->username .'/edit'}}">{{ Auth::user()->username }}</a>
                                     </li>
-                                    @if (Entrust::hasRole('admin'))
+                                    @if (Entrust::hasRole('admin') || Entrust::hasRole('prices_admin'))
                                         <li>
                                             <a href="{{ URL::to('admin/') }}">Admin</a>
                                         </li>

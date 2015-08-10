@@ -139,7 +139,7 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-prices']], functio
 });
 
 //Admin prices
-Route::group(['middleware' => ['auth'], 'permission' => ['edit-prices'], 'role' => ['admin']], function () {
+Route::group(['middleware' => ['auth'], 'permission' => ['edit-prices'], 'role' => ['admin', 'prices_admin']], function () {
     Route::resource('admin/prices', 'AdminPriceController');
     Route::get('admin/prices/{id}/newprice', 'AdminPriceController@createNewPrice');
     Route::post('admin/prices/newprice/{id}', 'AdminPriceController@storeNewPrice');
@@ -150,14 +150,16 @@ Route::group(['middleware' => ['auth'], 'permission' => ['edit-prices', 'edit-it
     Route::resource('admin/items', 'AdminItemController');
 });
 
+//Admin
+Route::group(['middleware' => ['auth'], 'role' => ['admin', 'prices_admin']], function () {
+    Route::get('admin', 'AdminController@index');
+});
+
 Route::group(['middleware' => ['auth'], 'role' => ['admin']], function () {
     //Admin/Adventure
     Route::get('admin/adventures/getItemTypes', 'AdminAdventureController@getItemTypes');
     Route::get('admin/adventures/getAdventureTypes', 'AdminAdventureController@getAdventureTypes');
     Route::resource('admin/adventures', 'AdminAdventureController');
-
-    //Admin
-    Route::get('admin', 'AdminController@index');
 
     //Admin users
     Route::resource('admin/users', 'AdminUserController');

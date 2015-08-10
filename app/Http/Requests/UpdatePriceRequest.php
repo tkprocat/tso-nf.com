@@ -23,7 +23,7 @@ class UpdatePriceRequest extends Request
         }
 
         //Check if the user is an admin.
-        if (!Auth::user()->hasRole('admin')) {
+        if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('prices_admin')) {
             return false;
         }
 
