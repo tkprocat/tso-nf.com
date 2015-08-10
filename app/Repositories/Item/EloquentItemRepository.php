@@ -39,19 +39,13 @@ class EloquentItemRepository implements ItemInterface
      */
     public function byName($name)
     {
-         try {
-            return Item::whereName($name)->firstOrFail();
-        } catch(ModelNotFoundException $ex) {
-             dd('Missing item: '.$name);
-        }
+        return Item::whereName($name)->firstOrFail();
     }
 
 
     public function getItemsWithPrices()
     {
-        DB::enableQueryLog();
-        $items = Item::with('currentPrice')->select('id', 'name', 'category')->orderBy('name')->get();
-        //dd(DB::getQueryLog());
+        $items = Item::with('currentPrice')->whereTradable(1)->select('id', 'name', 'category')->orderBy('name')->get();
         return $items;
     }
 }

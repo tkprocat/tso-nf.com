@@ -84,6 +84,7 @@ class EloquentAdminItemRepository implements AdminItemInterface
         $item = Item::findOrFail($item_id);
         $item->name = e($data['name']);
         $item->category = e($data['category']);
+        $item->tradable = (isset($data['tradable']) && $data['tradable'] === 'on' ? true : false);
         $item->save();
     }
 }
