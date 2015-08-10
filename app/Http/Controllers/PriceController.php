@@ -69,7 +69,7 @@ class PriceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $item_id
+     * @param  string $itemName
      *
      * @return \Illuminate\View\View
      */
