@@ -151,7 +151,7 @@ class AuthController extends Controller
         );
 
         Mail::queue('emails.activate', $data, function ($message) use ($user) {
-            $message->subject(trans('auth.pleaseActivate'));
+            $message->subject(trans('auth.welcomeTo'));
             $message->to($user->email);
         });
     }

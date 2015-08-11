@@ -29,8 +29,8 @@ return [
     'loggedIn'			=> 'You are logged in!',
 
     //emails
-    'pleaseActivate'	=> 'Please activate your account.',
-    'clickHereReset'	=> 'Click here to reset your password: ',
+    'welcomeTo'      	=> 'Welcome to tso-nf.com',
+    'clickHereReset'	=> 'Click here to reset your password on tso-nf.com: ',
     'clickHere'	        => 'click here',
     'toActivate'	    => 'To activate your account, ',
     'toActivate2'	    => 'Or point your browser to this address: ',
