@@ -1,32 +1,17 @@
-@extends('layouts.default')
-
-{{-- Web site Title --}}
-@section('title')
-@parent
-Home
-@stop
-
-{{-- Content --}}
+@extends('layouts.default-admin')
+@include('admin.menu', array('active' => 'Users'))
 @section('content')
-	<h4>Account Profile</h4>
-	
-  	<div class="well clearfix">
-	    <div class="col-md-8">
-		    @if ($user->username)
-		    	<p><strong>Username:</strong> {{ $user->username }} </p>
-			@endif
-			@if ($user->guildname)
-		    	<p><strong>Guild:</strong> {{ $user->guildname }} </p>
-			@endif
-		    <p><strong>Email:</strong> {{ $user->email }}</p>
-
-			<p><em>Account created: {{ $user->created_at }}</em></p>
-			<p><em>Last Updated: {{ $user->updated_at }}</em></p>
-			<button class="btn btn-primary" onClick="location.href='{{ action('UserController@edit', array($user->id)) }}'">Edit Profile</button>
-		</div>
-	</div>
-
-	<h4>Group Memberships:</h4>
-	<div class="well">
-	</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Account Profile</div>
+    <div class="panel-body">
+        <p><strong>Username:</strong> {{ $user->username }} </p>
+        <p><strong>Guild:</strong> {{ $user->guild_id > 0 ? $user->guild->name : 'N/A' }} </p>
+        <p><strong>Email:</strong> {{ $user->email }}</p>
+        <p><strong>Activated: </strong>{{ $user->activated ? 'Yes' : 'No' }}</p>
+        <p><strong>Price admin: </strong>{{ $user->hasRole('prices_admin') ? 'Yes' : 'No' }}</p>
+        <p><strong>Account created: </strong> {{ $user->created_at }}</p>
+        <p><strong>Last updated: </strong>{{ $user->updated_at }}</p>
+        <p><strong>Last login: </strong>{{ $user->last_login }}</p>
+    </div>
+</div>
 @stop

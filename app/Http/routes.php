@@ -160,6 +160,7 @@ Route::group(['middleware' => ['auth'], 'role' => ['admin']], function () {
     Route::resource('admin/adventures', 'AdminAdventureController');
 
     //Admin users
+    Route::post('admin/users/{id}/password/change', 'AdminUserController@changePassword');
     Route::resource('admin/users', 'AdminUserController');
 });
 
