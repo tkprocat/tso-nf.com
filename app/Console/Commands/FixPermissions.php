@@ -89,5 +89,9 @@ class FixPermissions extends Command
         $user = User::whereUsername('Notious')->first();
         if (!$user->hasRole('admin'))
             $user->attachRole($adminRole);
+
+        $user = User::whereUsername('MarkG')->first();
+        if (!$user->hasRole('admin'))
+            $user->attachRole($adminRole);
     }
 }
