@@ -45,4 +45,31 @@ class Adventure extends Model
     {
         return trim($this->type . ' - ' . $this->name);
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getLootAttribute()
+    {
+        if (!$this->relationLoaded('loot'))
+            $this->load('loot');
+
+        return $this->loot()->get();
+    }
+
+
+    /**
+     * @return float|int
+     */
+    public function getSlotCountAttribute()
+    {
+       $uniqueItems = [];
+       foreach($this->loot()->get() as $item)
+       {
+           if (!in_array($item->slot, $uniqueItems))
+               $uniqueItems[] += $item->slot;
+       }
+       return count($uniqueItems);
+    }
 }
