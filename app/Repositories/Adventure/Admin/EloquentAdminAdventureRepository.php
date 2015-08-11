@@ -127,22 +127,4 @@ class EloquentAdminAdventureRepository implements AdminAdventureInterface
     {
         return Adventure::whereName($name)->first();
     }
-
-
-    /**
-     * @return array
-     */
-    public function getItemTypes()
-    {
-        return DB::table('adventure_loot')->groupBy('type')->orderBy('type')->lists('type');
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getAdventureTypes()
-    {
-        return DB::table('adventure')->groupBy('type')->orderBy('type')->lists('type');
-    }
 }

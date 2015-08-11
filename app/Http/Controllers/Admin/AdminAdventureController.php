@@ -1,5 +1,6 @@
 <?php namespace LootTracker\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use LootTracker\Http\Requests\AdventureRequest;
@@ -90,7 +91,11 @@ class AdminAdventureController extends Controller
      */
     public function show($id)
     {
-        $adventure = $this->adminAdventureRepo->findAdventureById($id);
+        try {
+            $adventure = $this->adminAdventureRepo->findAdventureById($id);
+        } catch(ModelNotFoundException $ex) {
+            return Redirect::to('admin/adventures')->with('error', 'Adventure not found!');
+        }
 
         return view('admin.adventure.show')->with(array('adventure' => $adventure));
     }
@@ -104,8 +109,9 @@ class AdminAdventureController extends Controller
      */
     public function edit($id)
     {
-        $adventure = $this->adminAdventureRepo->findAdventureById($id);
-        if (is_null($adventure)) {
+        try {
+            $adventure = $this->adminAdventureRepo->findAdventureById($id);
+        } catch(ModelNotFoundException $ex) {
             return Redirect::to('admin/adventures')->with('error', 'Adventure not found!');
         }
         $items = $this->itemRepo->all();
@@ -126,21 +132,5 @@ class AdminAdventureController extends Controller
         $adventure = $request->all();
         $this->adminAdventureRepo->update($id, $adventure);
         return Redirect::to('admin/adventures')->with('success', 'Adventure updated successfully');
-    }
-
-    /**
-     * Returns all available item types.
-     */
-    public function getItemTypes()
-    {
-        return $this->adminAdventureRepo->getItemTypes();
-    }
-
-    /**
-     * Returns all available adventure types.
-     */
-    public function getAdventureTypes()
-    {
-        return $this->adminAdventureRepo->getAdventureTypes();
     }
 }

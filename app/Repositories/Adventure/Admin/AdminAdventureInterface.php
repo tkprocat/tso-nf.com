@@ -13,8 +13,4 @@ interface AdminAdventureInterface
     public function getAdventuresWithLoot();
 
     public function findAllLootForAdventure($adventureId);
-
-    public function getItemTypes();
-
-    public function getAdventureTypes();
 }
