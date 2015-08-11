@@ -1,8 +1,9 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
 use App;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use \LootTracker\Repositories\Adventure\AdventureInterface;
+use LootTracker\Repositories\Adventure\AdventureInterface;
+use LootTracker\Test\TestCase;
 
 class GuildStatsTest extends TestCase
 {

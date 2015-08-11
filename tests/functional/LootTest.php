@@ -1,9 +1,10 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use LootTracker\Repositories\Adventure\AdventureInterface;
 use LootTracker\Repositories\Loot\LootInterface;
+use LootTracker\Test\TestCase;
 
 class LootTest extends TestCase
 {

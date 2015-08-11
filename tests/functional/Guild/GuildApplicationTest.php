@@ -1,9 +1,10 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
 use App;
 use LootTracker\Repositories\Guild\GuildApplication;
 use LootTracker\Repositories\Guild\GuildInterface;
 use LootTracker\Repositories\Guild\GuildApplicationInterface;
+use LootTracker\Test\TestCase;
 
 class GuildApplicationTest extends TestCase
 {

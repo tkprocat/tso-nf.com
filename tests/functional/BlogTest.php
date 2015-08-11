@@ -1,10 +1,11 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
 use App;
 use Faker\Factory as Faker;
 use Illuminate\Support\Str;
-use \LootTracker\Repositories\Blog\BlogCommentInterface;
-use \LootTracker\Repositories\Blog\BlogPostInterface;
+use LootTracker\Repositories\Blog\BlogCommentInterface;
+use LootTracker\Repositories\Blog\BlogPostInterface;
+use LootTracker\Test\TestCase;
 
 class BlogTest extends TestCase
 {

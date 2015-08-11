@@ -1,7 +1,7 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
-use Laracasts\TestDummy\Factory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use LootTracker\Test\TestCase;
 
 class GeneralStatsTest extends TestCase
 {

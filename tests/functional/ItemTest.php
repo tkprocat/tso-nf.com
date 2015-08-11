@@ -1,9 +1,9 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
 use App;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use LootTracker\Repositories\Item\Admin\AdminItemInterface;
 use LootTracker\Repositories\Item\ItemInterface;
+use LootTracker\Test\TestCase;
 
 class ItemTest extends TestCase
 {

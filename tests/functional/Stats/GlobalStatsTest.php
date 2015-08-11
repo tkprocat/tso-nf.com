@@ -1,6 +1,7 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use LootTracker\Test\TestCase;
 
 class GlobalStatsTest extends TestCase
 {

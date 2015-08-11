@@ -1,8 +1,9 @@
-<?php namespace LootTracker\Test;
+<?php namespace LootTracker\Test\Functional;
 
 use App;
 use \LootTracker\Repositories\Guild\GuildInterface;
 use LootTracker\Repositories\User\Role;
+use LootTracker\Test\TestCase;
 
 class GuildTest extends TestCase
 {
