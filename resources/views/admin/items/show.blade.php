@@ -7,7 +7,6 @@
         <div class="panel-body">
             <ul>
                 <li>Category: {{ $item->category }}</li>
-                <li>Created by: {{ $item->created_by }}</li>
                 <li>Created at: {{ $item->created_at }}</li>
                 <li>Last updated at: {{ $item->updated_at }}</li>
             </ul>
