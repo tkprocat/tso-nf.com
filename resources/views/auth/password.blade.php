@@ -7,6 +7,8 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Reset Password</div>
 				<div class="panel-body">
+					<p>Please enter your email and click the button below. The system will send you a link to a page where you can set a new password.</p>
+
 					@if (session('status'))
 						<div class="alert alert-success">
 							{{ session('status') }}
@@ -28,8 +30,8 @@
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 						<div class="form-group">
-							<label class="col-md-4 control-label">E-Mail Address</label>
-							<div class="col-md-6">
+							<label class="col-md-3 control-label">E-Mail Address:</label>
+							<div class="col-md-8">
 								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
 							</div>
 						</div>
@@ -37,7 +39,7 @@
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<button type="submit" class="btn btn-primary">
-									Send Password Reset Link
+									Send mail
 								</button>
 							</div>
 						</div>
