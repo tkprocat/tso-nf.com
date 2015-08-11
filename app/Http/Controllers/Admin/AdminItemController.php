@@ -104,7 +104,7 @@ class AdminItemController extends Controller
         {
             $item = $this->itemRepo->byId($item_id);
         } catch(ModelNotFoundException $ex) {
-            return Redirect::to('admin/prices')->withErrors('Item not found!');
+            return Redirect::to('admin/items')->withErrors('Item not found!');
         }
 
         return view('admin.items.edit')->with('item', $item);
