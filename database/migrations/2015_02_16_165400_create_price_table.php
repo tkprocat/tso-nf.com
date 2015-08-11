@@ -17,7 +17,7 @@ class CreatePriceTable extends Migration {
 			$table->increments('id');
 			$table->integer('item_id')->unsigned();
 			$table->foreign('item_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
-			$table->integer('user_id')->unsigned();
+			$table->integer('user_id')->unsigned()->nullable();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
 			$table->double('min_price');
 			$table->double('avg_price');
