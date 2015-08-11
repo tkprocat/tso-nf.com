@@ -16,7 +16,7 @@ class EloquentUserRepository implements UserInterface
      */
     public function all()
     {
-        return User::with('guild', 'playedCount')->get();
+        return User::with('guild', 'playedCount')->orderBy('username')->get();
     }
 
 

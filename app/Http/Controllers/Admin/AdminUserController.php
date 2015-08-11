@@ -1,8 +1,8 @@
 <?php namespace LootTracker\Http\Controllers;
 
 use Hash;
-use LootTracker\Repositories\User\Role;
 use Redirect;
+use LootTracker\Repositories\User\Role;
 use LootTracker\Repositories\User\UserInterface;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class AdminUserController extends Controller
     /**
      * @var UserInterface
      */
-    protected $user;
+    protected $userRepo;
 
 
     /**
@@ -23,7 +23,7 @@ class AdminUserController extends Controller
      */
     public function __construct(UserInterface $user)
     {
-        $this->user = $user;
+        $this->userRepo = $user;
     }
 
 
@@ -34,7 +34,7 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        $users = $this->user->all();
+        $users = $this->userRepo->all();
 
         return view('admin.users.index')->with('users', $users);
     }
@@ -46,7 +46,7 @@ class AdminUserController extends Controller
      */
     public function show($id)
     {
-        $user = $this->user->byId($id);
+        $user = $this->userRepo->byId($id);
 
         return view('admin.users.show')->with('user', $user);
     }
@@ -59,7 +59,7 @@ class AdminUserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->user->byId($id);
+        $user = $this->userRepo->byId($id);
 
         return view('admin.users.edit')->with('user', $user);
     }
@@ -78,7 +78,7 @@ class AdminUserController extends Controller
         ]);
 
         //Reset the password
-        $user = $this->user->byId($id);
+        $user = $this->userRepo->byId($id);
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
@@ -100,7 +100,7 @@ class AdminUserController extends Controller
         ]);
 
         //Reset the password
-        $user = $this->user->byId($id);
+        $user = $this->userRepo->byId($id);
         $user->username = $request->username;
         $user->email = $request->email;
         $user->activated = ($request->get('activated', '') === 'on');
