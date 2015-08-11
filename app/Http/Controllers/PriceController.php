@@ -43,29 +43,6 @@ class PriceController extends Controller
         return view('prices.index')->with('items', $items);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        //
-    }
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function store()
-    {
-        //
-    }
-
-
     /**
      * Display the specified resource.
      *
@@ -78,45 +55,6 @@ class PriceController extends Controller
         $item = $this->itemRepo->byName(urldecode($itemName));
         $priceHistory = $this->priceRepo->findAllPriceChangesForItemById($item->id);
         return view('prices.show')->with(array('item' => $item, 'priceHistory' => $priceHistory));
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $item_id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function edit($item_id)
-    {
-        //
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int $item_id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function update($item_id)
-    {
-        //
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $item_id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function destroy($item_id)
-    {
-        //
     }
 
     /**
