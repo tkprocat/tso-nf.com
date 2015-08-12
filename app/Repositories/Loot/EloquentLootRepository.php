@@ -29,34 +29,34 @@ class EloquentLootRepository implements LootInterface
      *
      * @return mixed
      */
-    public function paginate($itemsPerPage, $adventure_name = '', $user_id = 0)
+    public function paginate($itemsPerPage, $page, $adventure_name = '', $user_id = 0)
     {
         if ($adventure_name != '') {
             $adventureRepo = App::make('LootTracker\Repositories\Adventure\AdventureInterface');
             $adventure     = $adventureRepo->byName(urldecode($adventure_name));
             //Check if we have the adventure
             if ($user_id > 0) {
-                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name, 5, function() use($itemsPerPage, $user_id, $adventure) {
+                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
                     return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
                         'user', 'adventure', 'user.guild')->where('adventure_id', $adventure->id)->
                         where('user_id', $user_id)->
                         orderBy('created_at', 'desc')->paginate($itemsPerPage);
                 });
             } else {
-                return Cache::tags('loot')->remember('all_loots'.$user_id, 5, function() use($itemsPerPage, $user_id, $adventure) {
+                return Cache::tags('loot')->remember('all_loots'.$user_id.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
                     return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
                         'user', 'adventure', 'user.guild')->where('adventure_id', $adventure->id)->
                         orderBy('created_at', 'desc')->paginate($itemsPerPage);
                 });
             } //Return all if we can't find it.
         } elseif ($user_id > 0) {
-            return Cache::tags('loot')->remember('all_loots_userid_'.$user_id, 5, function() use($itemsPerPage, $user_id) {
+            return Cache::tags('loot')->remember('all_loots_userid_'.$user_id.'_page_'.$page, 5, function() use($itemsPerPage, $user_id) {
                 return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice', 'user',
                     'adventure', 'user.guild')->whereUserId($user_id)->orderBy('created_at',
                     'desc')->paginate($itemsPerPage);
             });
         } else {
-            return Cache::tags('loot')->remember('all_loots', 5, function() use($itemsPerPage){
+            return Cache::tags('loot')->remember('all_loots_page_'.$page, 5, function() use($itemsPerPage){
                 return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
                     'user', 'adventure','user.guild')->orderBy('created_at', 'desc')->paginate($itemsPerPage);
             });

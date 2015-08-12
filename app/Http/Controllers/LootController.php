@@ -48,7 +48,7 @@ class LootController extends Controller
      */
     public function index($adventure_name = '')
     {
-        $loots = $this->lootRepo->paginate(25, urldecode($adventure_name));
+        $loots = $this->lootRepo->paginate(25, Input::get('page'),urldecode($adventure_name));
         return view('loot.index')->with('loots', $loots);
     }
 
