@@ -144,7 +144,7 @@
             @yield('content')
         </div>
 
-    @if(env('piwik_enabled', false))
+    @if(env('PIWIK_ENABLED', false))
             <!-- Piwik -->
         <script type="text/javascript">
             var _paq = _paq || [];
