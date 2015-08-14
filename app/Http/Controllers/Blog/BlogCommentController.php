@@ -72,8 +72,12 @@ class BlogCommentController extends Controller
     public function store(BlogCommentRequest $request)
     {
         //Passed validation, store the blog post.
-        $this->blogCommentRepo->create($request->data);
-        $post = $this->blogPostRepo->findId($request->data['post_id']);
+        $data = $request->all();
+        $data['user_id'] = $this->userRepo->getUser()->id;
+        $this->blogCommentRepo->create($data);
+
+        //Find the slug for the post to redirect back to.
+        $post = $this->blogPostRepo->byId($data['post_id']);
 
         return Redirect::to('blog/' . $post->slug)->with('success', 'Comment posted successfully.');
     }

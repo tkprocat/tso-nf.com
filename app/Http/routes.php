@@ -34,8 +34,7 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-loot']], function 
 
 //Blog
 Route::group(['middleware' => ['auth'], 'permission' => ['admin-blog']], function () {
-    Route::resource('blog/{post}/comment', 'BlogCommentController', ['only' => 'create']);
-    Route::resource('blog/comment', 'BlogCommentController', ['except' => ['index', 'create']]);
+    Route::resource('blog/{post}/comment', 'BlogCommentController', ['except' => ['index', 'show']]);
     Route::resource('blog', 'BlogPostController', ['except' => ['index', 'show']]);
 });
 

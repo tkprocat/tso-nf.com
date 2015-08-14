@@ -250,20 +250,13 @@ class BlogTest extends TestCase
         //create dummy post.
         $post = $this->createBlogPost();
 
-        //create dummy post.
-        $comment = array(
-            'id' => 2,
-            'post_id' => $post['id'],
-            'user_id' => $this->userRepo->getUser()->id,
-            'content' => $this->faker->text
-        );
-        $this->call('POST', '/blog/' . $post['id'] . '/comment', $comment);
-
-        //check how many blog comments we have
-        $blogPostCount = $this->blogPostRepo->all()->count();
-
-        //It should have returned 2.
-        $this->assertEquals(2, $blogPostCount);
+        //create dummy comment
+        $this->visit('/blog/'.$post['id'].'/comment/create')
+            ->type('Test comment', 'content')
+            ->press('Create')
+            ->seePageIs('/blog/'.$post['slug'])
+            ->see('Comment posted successfully.')
+            ->seeInDatabase('comments', ['post_id' => $post['id'], 'content' => 'Test comment']);
     }
 
     /** @test */
