@@ -28,7 +28,7 @@
     </tbody>
     <tfoot>
     <tr>
-        <th style="text-align: center" colspan="5">Total adventures registered: {{ $total_played }}</th>
+        <th style="text-align: center" colspan="6">Total adventures registered: {{ $total_played }}</th>
     </tr>
     </tfoot>
 </table>
