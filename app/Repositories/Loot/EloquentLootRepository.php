@@ -36,14 +36,14 @@ class EloquentLootRepository implements LootInterface
             $adventure     = $adventureRepo->byName(urldecode($adventure_name));
             //Check if we have the adventure
             if ($user_id > 0) {
-                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
+                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_user_'.$user_id.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
                     return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
                         'user', 'adventure', 'user.guild')->where('adventure_id', $adventure->id)->
                         where('user_id', $user_id)->
                         orderBy('created_at', 'desc')->paginate($itemsPerPage);
                 });
             } else {
-                return Cache::tags('loot')->remember('all_loots'.$user_id.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
+                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
                     return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
                         'user', 'adventure', 'user.guild')->where('adventure_id', $adventure->id)->
                         orderBy('created_at', 'desc')->paginate($itemsPerPage);
