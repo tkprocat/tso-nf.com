@@ -2,7 +2,7 @@
 @include('admin.menu', array('active' => 'Users'))
 @section('content')
 <div class="panel panel-default">
-    <div class="panel-heading">Change email</div>
+    <div class="panel-heading">Account Profile</div>
     <div class="panel-body">
         @include('errors.list')
 
