@@ -272,22 +272,15 @@ class BlogTest extends TestCase
         $this->createBlogComment($post);
         $comment = $this->createBlogComment($post);
 
-        //Check we can load the edit page.
-        $this->call('GET', '/blog/comment/' . $comment['id'] . '/edit');
-        $this->assertResponseOk();
-
-        //update the text
-        $oldContent = $comment['content'];
+        //New content text
         $newContent = $this->faker->text;
 
-        //Just to make sure nothing bad happens later.
-        $this->assertNotEquals($oldContent, $newContent);
-
-        $comment['content'] = $newContent;
-        $this->call('PUT', '/blog/comment/' . $comment['id'], $comment);
-
-        $comment = $this->blogCommentRepo->byId($comment['id']);
-        $this->assertEquals($comment['content'], $newContent);
+        //Check we can load the edit page.
+        $this->visit('/blog/'.$post['id'].'/comment/' . $comment['id'] . '/edit')
+            ->see('Edit')
+            ->type($newContent, 'content')
+            ->press('Update')
+            ->seeInDatabase('comments', ['id' => $comment['id'], 'content' => $newContent]);
     }
 
     /** @test */
@@ -309,7 +302,7 @@ class BlogTest extends TestCase
         $this->assertEquals(1, $blogCommentCount);
 
         //Now delete the comment again.
-        $this->call('DELETE', '/blog/comment/' . $comment['id']);
+        $this->call('DELETE', '/blog/'.$post['id'].'/comment/' . $comment['id']);
 
         //It should now it should be zero.
         $blogCommentCount = $this->blogPostRepo->byId($post['id'])->comments()->count();

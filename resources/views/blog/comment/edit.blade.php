@@ -9,7 +9,7 @@
             <input name="_token" type="hidden" value="{{ csrf_token() }}">
 
             <div class="form-group {{ ($errors->has('name')) ? 'has-error' : '' }}" for="content">
-                <label for="content" class="col-sm-2 control-label"></label>
+                <label for="content" class="col-sm-2 control-label">Content</label>
 
                 <div class="col-sm-10">
                     <textarea class="form-control" placeholder="Content" name="content" cols="50" rows="10">{!! old('content', $comment->content) !!}</textarea>

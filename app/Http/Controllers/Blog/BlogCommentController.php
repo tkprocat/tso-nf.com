@@ -90,7 +90,7 @@ class BlogCommentController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function edit($comment_id)
+    public function edit($blog_id, $comment_id)
     {
         $comment = $this->blogCommentRepo->byId($comment_id);
 
@@ -111,7 +111,7 @@ class BlogCommentController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function update(BlogCommentRequest $request, $comment_id)
+    public function update(BlogCommentRequest $request, $blog_id, $comment_id)
     {
         //Check if the user has permission to post news.
         $comment = $this->blogCommentRepo->byId($comment_id);
@@ -136,7 +136,7 @@ class BlogCommentController extends Controller
      *
      * @return \Illuminate\View\View|void
      */
-    public function destroy($comment_id)
+    public function destroy($blog_id, $comment_id)
     {
         //Check if the user has permission to post news.
         $comment = $this->blogCommentRepo->byId($comment_id);
