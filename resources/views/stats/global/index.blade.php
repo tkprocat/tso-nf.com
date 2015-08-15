@@ -11,6 +11,7 @@
         <th>Slots</th>
         <th>Played</th>
         <th>Played %</th>
+        <th>Estimated value (GC)</th>
     </tr>
     </thead>
     <tbody>
@@ -18,9 +19,10 @@
         <tr>
             <td><a href="/stats/global/{{ urlencode($adventure->name) }}">{{ $adventure->name }}</a></td>
             <td>{{ $adventure->type }}</td>
-            <td>{{ $adventure->slotCount }}</td>
-            <td>{{ $adventure->played->count() }}</td>
-            <td>{{ number_format($adventure->played->count() / $total_played * 100) }}%</td>
+            <td style="text-align: right">{{ $adventure->slotCount }}</td>
+            <td style="text-align: right">{{ $adventure->played->count() }}</td>
+            <td style="text-align: right">{{ number_format($adventure->played->count() / $total_played * 100) }}%</td>
+            <td style="text-align: right">{{ number_format($adventure->estimated_value) }}</td>
         </tr>
     @endforeach
     </tbody>
@@ -30,6 +32,15 @@
     </tr>
     </tfoot>
 </table>
+<br>
+<div class="panel panel-info">
+    <div class="panel-heading">Help</div>
+    <div class="panel-body">
+        <p>Our estimated value for an adventure is based on all registered loot from players for said adventure.
+        The numbers are updated once every day to account for new loot registered and any price changes to items used previously.</p>
+        <p>This update runs at midnight CET.</p>
+    </div>
+</div>
 <script>
     $(document).ready(function(){
         $('#adventures').DataTable({

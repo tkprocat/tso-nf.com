@@ -26,6 +26,8 @@
         <td>Amount</td>
         <td>Drops</td>
         <td>Drop chance</td>
+        <td>Avg. price (item)</td>
+        <td>Avg. price</td>
     </tr>
     </thead>
     <tbody style="border-width: 3px">
@@ -40,22 +42,24 @@
         <tr{!! ($secondaryColor ? ' class="active"' : '') !!}>
             <td>{{$loot->slot}}</td>
             <td>{{$loot->name}}</td>
-            <td>{{$loot->amount}}</td>
-            <td>{{$drop_count_list[$loot->id]}}</td>
+            <td style="text-align: right">{{$loot->amount}}</td>
+            <td style="text-align: right">{{$drop_count_list[$loot->id]}}</td>
             @if ($adventure->played->count() > 0)
-                <td>{{number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100)}}%</td>
+                <td style="text-align: right">{{number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100)}}%</td>
             @else
-                <td>0%</td>
+                <td style="text-align: right">0%</td>
             @endif
+            <td style="text-align: right">{{ $loot->item->currentPrice->avg_price}} GC</td>
+            <td style="text-align: right">{{ number_format($loot->item->currentPrice->avg_price * $loot->amount, 2)}} GC</td>
         </tr>
     @endforeach
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="5" style="text-align: center">Total amount registered: {{ $adventure->played->count() }}</td>
+            <td colspan="7" style="text-align: center">Total amount registered: {{ $adventure->played->count() }}</td>
         </tr>
         <tr>
-            <td colspan="5"><a href="#">Back to top</a> - <a
+            <td colspan="7"><a href="#">Back to top</a> - <a
                         href="/loot/adventure/{{ urlencode($adventure->name) }}">See latest loot</a></td>
         </tr>
     </tfoot>

@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         'LootTracker\Console\Commands\Inspire',
         'LootTracker\Console\Commands\FixPermissions',
         'LootTracker\Console\Commands\GenerateItems',
+        'LootTracker\Console\Commands\UpdateEstimatedAdventureValue',
     ];
 
 
