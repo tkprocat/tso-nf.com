@@ -146,7 +146,8 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         Golonka\BBCode\BBCodeParserServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class
+        Barryvdh\Debugbar\ServiceProvider::class,
+        GrahamCampbell\Exceptions\ExceptionsServiceProvider::class
 
     ],
     /*

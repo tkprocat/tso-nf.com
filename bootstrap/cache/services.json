@@ -32,7 +32,8 @@
         "Zizaco\\Entrust\\EntrustServiceProvider",
         "Golonka\\BBCode\\BBCodeParserServiceProvider",
         "Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider",
-        "Barryvdh\\Debugbar\\ServiceProvider"
+        "Barryvdh\\Debugbar\\ServiceProvider",
+        "GrahamCampbell\\Exceptions\\ExceptionsServiceProvider"
     ],
     "eager": [
         "Illuminate\\Auth\\AuthServiceProvider",
@@ -54,7 +55,8 @@
         "LootTracker\\Providers\\RouteServiceProvider",
         "Zizaco\\Entrust\\EntrustServiceProvider",
         "Golonka\\BBCode\\BBCodeParserServiceProvider",
-        "Barryvdh\\Debugbar\\ServiceProvider"
+        "Barryvdh\\Debugbar\\ServiceProvider",
+        "GrahamCampbell\\Exceptions\\ExceptionsServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",

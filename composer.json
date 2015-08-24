@@ -9,6 +9,7 @@
         "laravel/framework": "5.1.x-dev",
         "zizaco/entrust": "dev-laravel-5",
         "golonka/bbcodeparser": "~1.4",
+	    "graham-campbell/exceptions": "^4.0",
 		"guzzlehttp/guzzle": "~4.0"
 	},
 	"require-dev": {

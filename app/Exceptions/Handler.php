@@ -1,7 +1,9 @@
 <?php namespace LootTracker\Exceptions;
 
+use App;
 use Exception;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use GrahamCampbell\Exceptions\ExceptionHandler as ExceptionHandler;
+use GrahamCampbell\Exceptions\ExceptionIdentifier;
 
 class Handler extends ExceptionHandler
 {
@@ -27,7 +29,12 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        return parent::report($e);
+        if ($this->shouldReport($e)) {
+            $request = App::make(\Illuminate\Http\Request::class);
+            $level = $this->getLevel($e);
+            $id = $this->container->make(ExceptionIdentifier::class)->identify($e);
+            $this->log->{$level}($e, ['url' => $request->url(), 'identification' => ['id' => $id]]);
+        }
     }
 
 
