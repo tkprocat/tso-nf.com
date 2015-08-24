@@ -19,14 +19,10 @@ elixir(function(mix) {
                 '/bower/bootstrap-combobox/css/bootstrap-combobox.css',
                 '/bower/tinymce/skins/lightgray/skin.min.css'],
                './public/css', './resources/assets/');
-});
 
-//Dashboard css for admin section
-elixir(function(mix) {
+    //Dashboard css for admin section
     mix.styles('dashboard.css', "public/css/dashboard.css");
-});
 
-elixir(function(mix) {
     mix.scripts(['bower/bootstrap/dist/js/bootstrap.js',
                  'bower/bootstrap-combobox/js/bootstrap-combobox.js',
                  'bower/jquery-ujs/src/rails.js',
@@ -49,11 +45,8 @@ elixir(function(mix) {
     mix.copy('./resources/assets/bower/requirejs/require.js', './public/js/requirejs');
     mix.copy('./resources/assets/bower/requirejs-json/json.js', './public/js/requirejs');
     mix.copy('./resources/assets/bower/requirejs-text/text.js', './public/js/requirejs');
-});
 
-
-//TinyMCE
-elixir(function(mix) {
+    //TinyMCE
     mix.copy('./resources/assets/bower/tinymce/tinymce.min.js', './public/tinymce');
     mix.copy('./resources/assets/bower/tinymce/plugins', './public/tinymce/plugins');
     mix.copy('./resources/assets/bower/tinymce/skins', './public/tinymce/skins');
