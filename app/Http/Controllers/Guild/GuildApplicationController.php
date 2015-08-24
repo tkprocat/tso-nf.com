@@ -92,72 +92,60 @@ class GuildApplicationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $application_id
+     * @param $guildId
+     * @param $applicationId
      *
      * @return \Illuminate\View\View
      */
-    public function show($application_id)
+    public function show($guildId, $applicationId)
     {
-        $application = $this->guildApplicationRepo->byId($application_id);
+        $application = $this->guildApplicationRepo->byId($applicationId);
         return view('guilds.applications.show', compact('application'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $guild = $this->guildApplicationRepo->byId($id);
-        return view('guild.applications.edit')->with('guild', $guild);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\View\View
-     */
-    public function update($id)
-    {
-    }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param $guildId
+     * @param $applicationId
+     *
      * @return \Illuminate\View\View
      */
-    public function destroy($id)
+    public function destroy($guildId, $applicationId)
     {
-        $this->guildApplicationRepo->delete($id);
+        $this->guildApplicationRepo->delete($applicationId);
     }
+
 
     /**
      * Approves an user to the guild and removes the application.
      *
-     * @param  int $id
+     * @param $guildId
+     * @param $applicationId
+     *
      * @return \Illuminate\View\View
      */
-    public function approve($id)
+    public function approve($guildId, $applicationId)
     {
-        $application = $this->guildApplicationRepo->byId($id);
-        $this->guildApplicationRepo->approve($id);
+        $application = $this->guildApplicationRepo->byId($applicationId);
+        $this->guildApplicationRepo->approve($applicationId);
         return Redirect::to('guilds/'.$application->guild->id.'/edit')->with(['success' => 'Member accepted to the guild.']);
     }
+
 
     /**
      * Declines the application and removes it.
      *
-     * @param  int $id
+     * @param $guildId
+     * @param $applicationId
+     *
      * @return \Illuminate\View\View
      */
-    public function decline($id)
+    public function decline($guildId, $applicationId)
     {
-        $application = $this->guildApplicationRepo->byId($id);
-        $this->guildApplicationRepo->decline($id);
+        $application = $this->guildApplicationRepo->byId($applicationId);
+        $this->guildApplicationRepo->decline($applicationId);
         return Redirect::to('guilds/'.$application->guild->id.'/edit')->with(['success' => 'Application declined.']);
     }
 }
