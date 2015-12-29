@@ -23,12 +23,13 @@ elixir(function(mix) {
     //Dashboard css for admin section
     mix.styles('dashboard.css', "public/css/dashboard.css");
 
-    mix.scripts(['bower/bootstrap/dist/js/bootstrap.js',
+    mix.scripts(['bower/jquery/dist/jquery.min.js',
+                 'bower/bootstrap/dist/js/bootstrap.js',
                  'bower/bootstrap-combobox/js/bootstrap-combobox.js',
                  'bower/jquery-ujs/src/rails.js',
                  'js/bootstrap-ujs.js',
                  '/bower/bootstrap-submenu/dist/js/bootstrap-submenu.js'],
-                './public/js', './resources/assets/');
+                 './public/js', './resources/assets/');
     mix.scripts(['bower/jquery-ui/ui/core.js',
                  'bower/jquery-ui/ui/datepicker.js'],
                  './public/js/jquery-ui', './resources/assets/');
