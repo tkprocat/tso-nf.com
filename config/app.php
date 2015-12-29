@@ -14,6 +14,7 @@ return [
     */
 
     'debug' => env('APP_DEBUG'),
+    'env' => env('APP_ENV', 'local'),
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -106,13 +107,11 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
         Illuminate\Cache\CacheServiceProvider::class,
         Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-        Illuminate\Routing\ControllerServiceProvider::class,
         Illuminate\Cookie\CookieServiceProvider::class,
         Illuminate\Database\DatabaseServiceProvider::class,
         Illuminate\Encryption\EncryptionServiceProvider::class,
@@ -135,7 +134,6 @@ return [
          */
         LootTracker\Providers\AppServiceProvider::class,
         LootTracker\Providers\BladeServiceProvider::class,
-        LootTracker\Providers\BusServiceProvider::class,
         LootTracker\Providers\ConfigServiceProvider::class,
         LootTracker\Providers\EventServiceProvider::class,
         LootTracker\Providers\RouteServiceProvider::class,

@@ -6,10 +6,10 @@
 	"type": "project",
 	"require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.1.x-dev",
+        "laravel/framework": "5.2.*",
         "zizaco/entrust": "dev-laravel-5",
-        "golonka/bbcodeparser": "~1.4",
-	    "graham-campbell/exceptions": "^4.0",
+        "golonka/bbcodeparser": "~2.2",
+	    "graham-campbell/exceptions": "^7.0",
 		"guzzlehttp/guzzle": "~4.0"
 	},
 	"require-dev": {
@@ -20,7 +20,10 @@
         "mockery/mockery": "0.9.*",
         "symfony/psr-http-message-bridge": "^0.1.0",
         "fzaninotto/faker": "~1.4",
-	  	"doctrine/dbal": "~2.5"
+	  	"doctrine/dbal": "~2.5",
+		"filp/whoops": "^1.1",
+		"symfony/css-selector": "2.8.*|3.0.*",
+		"symfony/dom-crawler": "2.8.*|3.0.*"
 	},
 	"autoload": {
 		"classmap": [
@@ -50,7 +53,7 @@
 		]
 	},
 	"config": {
-		"preferred-install": "dis"
+		"preferred-install": "dist"
 	},
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
