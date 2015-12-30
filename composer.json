@@ -7,7 +7,7 @@
 	"require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "zizaco/entrust": "dev-laravel-5",
+		"zizaco/entrust": "master",
         "golonka/bbcodeparser": "~2.2",
 	    "graham-campbell/exceptions": "^7.0",
 		"guzzlehttp/guzzle": "~4.0"
