@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         $this->call('EntrustSeeder');
+        $this->call('UserSeeder');
 
         $this->call('ItemSeeder');
         $this->call('LootTrackerAdventureSeeder');
         $this->call('LootTrackerUserAdventureSeeder');
-        $this->call('UserSeeder');
         $this->call('GuildSeeder');
         $this->call('BlogSeeder');
     }
