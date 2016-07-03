@@ -50,6 +50,6 @@ class Item extends Eloquent
      */
     public function currentPrice()
     {
-        return $this->hasOne(Price::class)->latest()->select('item_id', 'min_price', 'avg_price', 'max_price');
+        return $this->hasOne(Price::class)->latest()->select('item_id', 'min_price', 'avg_price', 'max_price')->orderBy('ID', 'desc');
     }
 }
