@@ -2,12 +2,13 @@
 
 use App;
 use Exception;
-use GrahamCampbell\Exceptions\ExceptionHandler as ExceptionHandler;
-use GrahamCampbell\Exceptions\ExceptionIdentifier;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exception\HttpResponseException;
+use GrahamCampbell\Exceptions\ExceptionHandler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -55,6 +56,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        /**
+         * Copied from GrahamCampbell\Exceptions\ExceptionHandlerTrait and modified cause of a bug with testing validation error handling.
+         */
+        if ($e instanceof HttpResponseException) {
+            return $e->getResponse();
+        }
+
+        $transformed = $this->getTransformed($e);
+
+        $response = method_exists($e, 'getResponse') ? $e->getResponse() : null;
+
+        if (!$response instanceof Response) {
+            $response = $this->getResponse($request, $e, $transformed);
+        }
+
+        return $this->toIlluminateResponse($response, $transformed);
     }
 }
