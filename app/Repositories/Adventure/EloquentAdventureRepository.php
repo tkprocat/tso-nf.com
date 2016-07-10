@@ -85,8 +85,7 @@ class EloquentAdventureRepository implements AdventureInterface
         $adventure = new Adventure();
         $adventure->name = $data['name'];
         $adventure->save();
-
-        for ($slot = 1; $slot < 9; $slot++) {
+        for ($slot = 1; $slot < 30; $slot++) {
             if (isset($data['slot' . $slot])) {
                 foreach ($data['slot' . $slot] as $item) {
                     $newItem = new AdventureLoot;
