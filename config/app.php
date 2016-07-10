@@ -137,7 +137,7 @@ return [
         LootTracker\Providers\ConfigServiceProvider::class,
         LootTracker\Providers\EventServiceProvider::class,
         LootTracker\Providers\RouteServiceProvider::class,
-	LootTracker\Providers\DropboxFilesystemServiceProvider::class,
+	    LootTracker\Providers\DropboxFilesystemServiceProvider::class,
 
         /*
          * Addons
@@ -147,7 +147,8 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
-	Spatie\Backup\BackupServiceProvider::class
+	    Spatie\Backup\BackupServiceProvider::class,
+        Dingo\Api\Provider\LaravelServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

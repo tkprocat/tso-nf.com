@@ -12,7 +12,8 @@
 	    "graham-campbell/exceptions": "^7.0",
 		"guzzlehttp/guzzle": "~4.0",
 		"spatie/laravel-backup": "^3.8",
-		"league/flysystem-dropbox": "^1.0"
+		"league/flysystem-dropbox": "^1.0",
+		"dingo/api": "1.0.*@dev"
 	},
 	"require-dev": {
         "barryvdh/laravel-debugbar": "dev-master",
