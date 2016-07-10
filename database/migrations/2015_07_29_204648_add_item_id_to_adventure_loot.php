@@ -29,6 +29,7 @@ class AddItemIdToAdventureLoot extends Migration
     {
         if (Schema::hasColumn('adventure_loot', 'item_id')) {
             Schema::table('adventure_loot', function ($table) {
+                $table->dropForeign('adventure_loot_item_id_foreign');
                 $table->dropColumn('item_id');
             });
         }
