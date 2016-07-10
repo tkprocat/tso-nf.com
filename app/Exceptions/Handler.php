@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Exception\HttpResponseException;
+use GrahamCampbell\Exceptions\ExceptionIdentifier;
 use GrahamCampbell\Exceptions\ExceptionHandler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
