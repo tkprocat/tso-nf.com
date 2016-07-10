@@ -7,13 +7,14 @@
 	"require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-		"zizaco/entrust": "master",
+		"zizaco/entrust": "^1.7.0",
         "golonka/bbcodeparser": "~2.2",
-	    "graham-campbell/exceptions": "^7.0",
+	    "graham-campbell/exceptions": "^8.0",
 		"guzzlehttp/guzzle": "~4.0",
 		"spatie/laravel-backup": "^3.8",
 		"league/flysystem-dropbox": "^1.0",
-		"dingo/api": "1.0.*@dev"
+		"dingo/blueprint": "0.2.x-dev",
+		"dingo/api": "dev-master#365fbbe"
 	},
 	"require-dev": {
         "barryvdh/laravel-debugbar": "dev-master",
@@ -59,5 +60,5 @@
 	"config": {
 		"preferred-install": "dist"
 	},
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
