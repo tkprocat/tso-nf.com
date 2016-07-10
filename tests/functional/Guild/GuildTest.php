@@ -37,14 +37,14 @@ class GuildTest extends TestCase
     public function canLoadGuildList()
     {
         $this->visit('guilds')
-            ->see("Tester&#039;s Guild");
+            ->see("Tester's Guild");
     }
 
     /** @test */
     public function canLoadSpecificGuildPage()
     {
         $this->visit('guilds/1')
-            ->see("Tester&#039;s Guild");
+            ->see("Tester's Guild");
     }
 
     /** @test */
@@ -180,9 +180,9 @@ class GuildTest extends TestCase
     public function canDisbandGuild()
     {
         //Test the button is there.
-        $this->visit('/guilds/1/edit')
-            ->see('Tester&#039;s Guild')
-            ->click('Disband guild');
+        $this->visit("/guilds/1/edit")
+            ->see("Tester's Guild")
+            ->click("Disband guild");
 
         //Test that we can actually disband the guild.
         $this->delete('guilds/1');
