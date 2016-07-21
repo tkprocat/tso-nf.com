@@ -257,5 +257,104 @@ class ItemSeeder extends Seeder
             'max_price' => '0.00003',
             'user_id'   => '2'
         ]);
+
+        $item->create([
+            'name'      => 'Copper Ore',
+            'category'  => 'Resource',
+            'min_price' => '0.35',
+            'avg_price' => '0.43',
+            'max_price' => '0.50',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Iron Ore',
+            'category'  => 'Resource',
+            'min_price' => '0.170',
+            'avg_price' => '0.185',
+            'max_price' => '0.190',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Pinewood Log',
+            'category'  => 'Resource',
+            'min_price' => '0.10',
+            'avg_price' => '0.13',
+            'max_price' => '0.15',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Hardwood Log',
+            'category'  => 'Resource',
+            'min_price' => '0.20',
+            'avg_price' => '0.30',
+            'max_price' => '0.40',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Meat',
+            'category'  => 'Resource',
+            'min_price' => '0.14',
+            'avg_price' => '0.15',
+            'max_price' => '0.16',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Coal Deposit Refill',
+            'category'  => 'Refill',
+            'min_price' => '0.125',
+            'avg_price' => '0.15',
+            'max_price' => '0.175',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Copper Deposit Refill',
+            'category'  => 'Refill',
+            'min_price' => '0.125',
+            'avg_price' => '0.15',
+            'max_price' => '0.180',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Gold Deposit Refill',
+            'category'  => 'Refill',
+            'min_price' => '0',
+            'avg_price' => '0',
+            'max_price' => '0',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Iron Deposit Refill',
+            'category'  => 'Refill',
+            'min_price' => '0',
+            'avg_price' => '0',
+            'max_price' => '0',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Meat Deposit Refill',
+            'category'  => 'Refill',
+            'min_price' => '1.4',
+            'avg_price' => '1.5',
+            'max_price' => '1.6',
+            'user_id'   => '2'
+        ]);
+
+        $item->create([
+            'name'      => 'Return to the Bandit Nest',
+            'category'  => 'Adventure',
+            'min_price' => '10000',
+            'avg_price' => '11000',
+            'max_price' => '12000',
+            'user_id'   => '2'
+        ]);
     }
 }

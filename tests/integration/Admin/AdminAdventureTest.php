@@ -26,7 +26,7 @@ class AdminAdventureTest extends TestCase
         $this->assertNotNull($newAdventure, 'Something went wrong with saving the adventure!');
 
         //Test that they got added correctly.
-        $this->assertCount(2, $this->adventureAdminRepo->all(), "Adventure haven't been added!");
+        $this->assertCount(3, $this->adventureAdminRepo->all(), "Adventure haven't been added!");
         $this->assertCount(32, $newAdventure->loot);
 
         //Check that we can load the create page.

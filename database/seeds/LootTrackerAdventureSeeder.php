@@ -6,13 +6,13 @@ use LootTracker\Repositories\Item\ItemInterface;
 
 class LootTrackerAdventureSeeder extends Seeder {
 
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
-	public function run()
-	{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
         $adventure = App::make(AdventureInterface::class);
         $itemRepo = App::make(ItemInterface::class);
         //Add Bandit Nest
@@ -48,28 +48,28 @@ class LootTrackerAdventureSeeder extends Seeder {
                 array('item_id' => $itemRepo->byName('Coal')->id, 'amount' => '1000')
             ),
             'slot6' => array(
-                array('item_id' => $itemRepo->byName('Pinewood Logs')->id, 'amount' => '1000')
+                array('item_id' => $itemRepo->byName('Pinewood Log')->id, 'amount' => '1000')
             ),
             'slot7' => array(
-                array('item_id' => $itemRepo->byName('Hardwood Logs')->id, 'amount' => '750')
+                array('item_id' => $itemRepo->byName('Hardwood Log')->id, 'amount' => '750')
             ),
             'slot8' => array(
-                array('item_id' => $itemRepo->byName('Horses')->id, 'amount' => '750')
+                array('item_id' => $itemRepo->byName('Horse')->id, 'amount' => '750')
             ),
             'slot9' => array(
-                array('item_id' => $itemRepo->byName('Settlers')->id, 'amount' => '350')
+                array('item_id' => $itemRepo->byName('Settler')->id, 'amount' => '350')
             ),
             'slot10' => array(
                 array('item_id' => $itemRepo->byName('Brew')->id, 'amount' => '750')
             ),
             'slot11' => array(
                 array('item_id' => $itemRepo->byName('Bread')->id, 'amount' => '708'),
-                array('item_id' => $itemRepo->byName('Gold Coins')->id, 'amount' => '400'),
+                array('item_id' => $itemRepo->byName('Gold Coin')->id, 'amount' => '400'),
                 array('item_id' => $itemRepo->byName('Meat')->id, 'amount' => '400')
             ),
             'slot12' => array(
                 array('item_id' => $itemRepo->byName('Bread')->id, 'amount' => '708'),
-                array('item_id' => $itemRepo->byName('Gold Coins')->id, 'amount' => '400'),
+                array('item_id' => $itemRepo->byName('Gold Coin')->id, 'amount' => '400'),
                 array('item_id' => $itemRepo->byName('Meat')->id, 'amount' => '400')
             ),
             'slot13' => array(
@@ -93,7 +93,7 @@ class LootTrackerAdventureSeeder extends Seeder {
 
         //Add The Black Knights
         $data = array(
-            'name' => 'Bandit Nest',
+            'name' => 'The Black Knights',
             'slot1' => array(
                 array('item_id' => $itemRepo->byName('Exotic Wood Log')->id, 'amount' => '900'),
                 array('item_id' => $itemRepo->byName('Exotic Wood Log')->id, 'amount' => '1250'),
@@ -114,20 +114,20 @@ class LootTrackerAdventureSeeder extends Seeder {
                 array('item_id' => $itemRepo->byName('Coal')->id, 'amount' => '750')
             ),
             'slot5' => array(
-                array('item_id' => $itemRepo->byName('Hardwood Logs')->id, 'amount' => '600')
+                array('item_id' => $itemRepo->byName('Hardwood Log')->id, 'amount' => '600')
             ),
             'slot6' => array(
-                array('item_id' => $itemRepo->byName('Horses')->id, 'amount' => '600')
+                array('item_id' => $itemRepo->byName('Horse')->id, 'amount' => '600')
             ),
             'slot7' => array(
-                array('item_id' => $itemRepo->byName('Settlers')->id, 'amount' => '150')
+                array('item_id' => $itemRepo->byName('Settler')->id, 'amount' => '150')
             ),
             'slot8' => array(
                 array('item_id' => $itemRepo->byName('Brew')->id, 'amount' => '600')
             ),
             'slot9' => array(
                 array('item_id' => $itemRepo->byName('Bread')->id, 'amount' => '165'),
-                array('item_id' => $itemRepo->byName('Gold Coins')->id, 'amount' => '600'),
+                array('item_id' => $itemRepo->byName('Gold Coin')->id, 'amount' => '600'),
                 array('item_id' => $itemRepo->byName('Meat')->id, 'amount' => '600')
             ),
             'slot10' => array(
@@ -151,6 +151,5 @@ class LootTrackerAdventureSeeder extends Seeder {
             ),
         );
         $adventure->create($data);
-	}
-
+    }
 }

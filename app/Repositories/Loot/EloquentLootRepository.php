@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use LootTracker\Repositories\Adventure\Adventure;
+use LootTracker\Repositories\Adventure\AdventureLoot;
+use LootTracker\Repositories\Item\Item;
 
 /**
  * Class EloquentLootRepository
@@ -36,29 +38,59 @@ class EloquentLootRepository implements LootInterface
             $adventure     = $adventureRepo->byName(urldecode($adventure_name));
             //Check if we have the adventure
             if ($user_id > 0) {
-                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_user_'.$user_id.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
-                    return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
-                        'user', 'adventure', 'user.guild')->where('adventure_id', $adventure->id)->
+                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_user_'.$user_id.'_page_'.$page, 5, function() use ($itemsPerPage, $user_id, $adventure) {
+                    return UserAdventure::with(
+                        'loot',
+                        'loot.loot',
+                        'loot.loot.item',
+                        'loot.loot.item.currentPrice',
+                        'user',
+                        'adventure',
+                        'user.guild'
+                    )->where('adventure_id', $adventure->id)->
                         where('user_id', $user_id)->
                         orderBy('created_at', 'desc')->paginate($itemsPerPage);
                 });
             } else {
-                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_page_'.$page, 5, function() use($itemsPerPage, $user_id, $adventure) {
-                    return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
-                        'user', 'adventure', 'user.guild')->where('adventure_id', $adventure->id)->
+                return Cache::tags('loot')->remember('all_loots_adventure_'.$adventure_name.'_page_'.$page, 5, function() use ($itemsPerPage, $user_id, $adventure) {
+                    return UserAdventure::with(
+                        'loot',
+                        'loot.loot',
+                        'loot.loot.item',
+                        'loot.loot.item.currentPrice',
+                        'user',
+                        'adventure',
+                        'user.guild'
+                    )->where('adventure_id', $adventure->id)->
                         orderBy('created_at', 'desc')->paginate($itemsPerPage);
                 });
             } //Return all if we can't find it.
         } elseif ($user_id > 0) {
-            return Cache::tags('loot')->remember('all_loots_userid_'.$user_id.'_page_'.$page, 5, function() use($itemsPerPage, $user_id) {
-                return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice', 'user',
-                    'adventure', 'user.guild')->whereUserId($user_id)->orderBy('created_at',
-                    'desc')->paginate($itemsPerPage);
+            return Cache::tags('loot')->remember('all_loots_userid_'.$user_id.'_page_'.$page, 5, function() use ($itemsPerPage, $user_id) {
+                return UserAdventure::with(
+                    'loot',
+                    'loot.loot',
+                    'loot.loot.item',
+                    'loot.loot.item.currentPrice',
+                    'user',
+                    'adventure',
+                    'user.guild'
+                )->whereUserId($user_id)->orderBy(
+                    'created_at',
+                    'desc'
+                )->paginate($itemsPerPage);
             });
         } else {
-            return Cache::tags('loot')->remember('all_loots_page_'.$page, 5, function() use($itemsPerPage){
-                return UserAdventure::with('loot', 'loot.loot', 'loot.loot.item', 'loot.loot.item.currentPrice',
-                    'user', 'adventure','user.guild')->orderBy('created_at', 'desc')->paginate($itemsPerPage);
+            return Cache::tags('loot')->remember('all_loots_page_'.$page, 5, function() use ($itemsPerPage) {
+                return UserAdventure::with(
+                    'loot',
+                    'loot.loot',
+                    'loot.loot.item',
+                    'loot.loot.item.currentPrice',
+                    'user',
+                    'adventure',
+                    'user.guild'
+                )->orderBy('created_at', 'desc')->paginate($itemsPerPage);
             });
         }
     }
@@ -87,7 +119,7 @@ class EloquentLootRepository implements LootInterface
         $userAdventure->save();
 
         for ($i = 1; $i <= 20; $i++) {
-            if (isset( $data['slot' . $i] ) && $data['slot' . $i] != 0) {
+            if (isset($data['slot' . $i]) && $data['slot' . $i] != 0) {
                 $userAdventureLoot                    = new UserAdventureLoot();
                 $userAdventureLoot->user_adventure_id = $userAdventure->id;
                 $userAdventureLoot->adventure_loot_id = $data['slot' . $i];
@@ -129,7 +161,7 @@ class EloquentLootRepository implements LootInterface
         UserAdventureLoot::where('user_adventure_id', $userAdventure->id)->delete();
 
         for ($i = 1; $i <= 20; $i++) {
-            if (isset( $data['slot' . $i] ) && $data['slot' . $i] != 0) {
+            if (isset($data['slot' . $i]) && $data['slot' . $i] != 0) {
                 $userAdventureLoot                    = new UserAdventureLoot();
                 $userAdventureLoot->user_adventure_id = $userAdventure->id;
                 $userAdventureLoot->adventure_loot_id = $data['slot' . $i];
@@ -203,7 +235,7 @@ class EloquentLootRepository implements LootInterface
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return UserAdventure
      */
     public function getAllUserAdventuresWithLoot()
     {
@@ -258,11 +290,29 @@ class EloquentLootRepository implements LootInterface
 
 
     /**
+     * @param $adventure_id
+     * @param $item_name
+     * @param $amount
+     *
+     * @return AdventureLoot
+     */
+    public function getLootByNameAndAmount($adventure_id, $slot, $item_name, $amount)
+    {
+        \Log::debug($item_name . ' ' . $amount);
+        $item = Item::where('name', $item_name)->first();
+        return AdventureLoot::where('item_id', $item->id)->
+            where('adventure_id', $adventure_id)->
+            where('slot', $slot)->
+            where('amount', $amount)->
+            first();
+    }
+
+    /**
      * @param $user_id
      * @param $from
      * @param $to
      *
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \Illuminate\Database\Eloquent\Builder|UserAdventure
      */
     public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to)
     {

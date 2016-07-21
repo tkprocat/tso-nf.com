@@ -25,6 +25,6 @@ class ItemTest extends TestCase
     public function canGetItemList()
     {
         $items = $this->itemRepo->all();
-        $this->assertCount(27, $items); // One item added by seeder
+        $this->assertCount(38, $items);
     }
 }

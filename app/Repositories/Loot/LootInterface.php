@@ -22,6 +22,8 @@ interface LootInterface
 
     public function getLootDropCountForAdventure($adventure_id);
 
+    public function getLootByNameAndAmount($adventure_id, $slot, $item_name, $amount);
+
     public function getAllUserAdventuresForUserWithLoot($user_id, $from, $to);
 
     public function create($data);
