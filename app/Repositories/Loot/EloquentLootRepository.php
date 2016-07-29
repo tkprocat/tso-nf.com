@@ -109,6 +109,8 @@ class EloquentLootRepository implements LootInterface
 
     /**
      * @param $data
+     *
+     * @return UserAdventure
      */
     public function create($data)
     {
@@ -129,6 +131,8 @@ class EloquentLootRepository implements LootInterface
 
         //Clear cache
         Cache::tags('loot')->flush();
+
+        return $userAdventure;
     }
 
 
@@ -147,6 +151,8 @@ class EloquentLootRepository implements LootInterface
 
     /**
      * @param $data
+     *
+     * @return UserAdventure
      */
     public function update($data)
     {
@@ -173,6 +179,8 @@ class EloquentLootRepository implements LootInterface
 
         //Clear cache
         Cache::tags('loot')->flush();
+
+        return $userAdventure;
     }
 
 
@@ -300,11 +308,18 @@ class EloquentLootRepository implements LootInterface
     {
         \Log::debug($item_name . ' ' . $amount);
         $item = Item::where('name', $item_name)->first();
-        return AdventureLoot::where('item_id', $item->id)->
+        $lootItem = AdventureLoot::where('item_id', $item->id)->
             where('adventure_id', $adventure_id)->
             where('slot', $slot)->
             where('amount', $amount)->
             first();
+
+        if ($lootItem !== null) {
+            return $lootItem;
+        }
+
+        throw new \Exception("Adventure ID: $adventure_id, slot: $slot, item name: $item_name, ".
+                             "ammount: $amount - Does not exists");
     }
 
     /**

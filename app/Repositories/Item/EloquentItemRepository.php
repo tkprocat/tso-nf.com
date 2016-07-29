@@ -2,7 +2,7 @@
 
 use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Log;
+use Illuminate\Support\Facades\Log;
 use SebastianBergmann\Environment\Console;
 
 /**
@@ -39,6 +39,7 @@ class EloquentItemRepository implements ItemInterface
      */
     public function byName($name)
     {
+        Log::debug("Item: ".$name);
         return Item::whereName($name)->firstOrFail();
     }
 
