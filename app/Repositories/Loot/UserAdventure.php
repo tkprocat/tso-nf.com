@@ -1,7 +1,6 @@
 <?php namespace LootTracker\Repositories\Loot;
 
 use Illuminate\Database\Eloquent\Model;
-use LootTracker\Repositories\Item\Item;
 
 /**
  * Class UserAdventure
@@ -48,7 +47,7 @@ class UserAdventure extends Model
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return UserAdventureLoot
      */
     public function loot()
     {
