@@ -85,7 +85,6 @@
             </thead>
             <?php $last_slot = 0; ?>
             @foreach ($adventure->loot as $loot)
-            @if ($loot->adventure_id == $adventure->id)
             @if ($last_slot != $loot->slot)
             @if ($last_slot > 0)
             </tbody>
@@ -100,7 +99,6 @@
                 <td>{{ (array_key_exists($loot->id, $drop_count_list) ? $drop_count_list[$loot->id] : '0') }}</td>
                 <td>{{ (array_key_exists($loot->id, $drop_count_list) ? number_format($drop_count_list[$loot->id] / $adventure->played->count() * 100) : '0')}}%</td>
             </tr>
-            @endif
             @endforeach
             </tbody>
             <tfoot>
