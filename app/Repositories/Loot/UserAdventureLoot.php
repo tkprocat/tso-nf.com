@@ -38,7 +38,7 @@ class UserAdventureLoot extends Model
      */
     public function userAdventure()
     {
-        return $this->belongsTo('LootTracker\Repositories\Loot\UserAdvenure');
+        return $this->belongsTo('LootTracker\Repositories\Loot\UserAdventure');
     }
 
 
@@ -52,7 +52,7 @@ class UserAdventureLoot extends Model
 
 
     /**
-     * @param $query
+     * @param \Illuminate\Database\Query\Builder $query
      *
      * @return mixed
      */
@@ -72,8 +72,8 @@ class UserAdventureLoot extends Model
 
 
     /**
-     * @param $query
-     * @param $slot
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param integer $slot
      *
      * @return mixed
      */
