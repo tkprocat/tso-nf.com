@@ -1,27 +1,28 @@
-<?php namespace LootTracker\Test\Functional;
+<?php
 
-use Illuminate\Support\Facades\App;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+namespace LootTracker\Test\Functional;
+
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use LootTracker\Repositories\Adventure\AdventureInterface;
 use LootTracker\Repositories\Loot\LootInterface;
 use LootTracker\Test\TestCase;
 
 class LootTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseTransactions;
 
-    /** @var \LootTracker\Repositories\Adventure\AdventureInterface $adventure */
-    protected $adventure;
+    /** @var \LootTracker\Repositories\Adventure\AdventureInterface $adventureRepo */
+    protected $adventureRepo;
 
-    /** @var \LootTracker\Repositories\Loot\LootInterface $loot */
-    protected $loot;
+    /** @var \LootTracker\Repositories\Loot\LootInterface $lootRepo */
+    protected $lootRepo;
 
     public function setUp()
     {
         parent::setUp();
         $this->login();
-        $this->adventure = app(AdventureInterface::class);
-        $this->loot = app(LootInterface::class);
+        $this->adventureRepo = app(AdventureInterface::class);
+        $this->lootRepo = app(LootInterface::class);
     }
 
     /** @test */
@@ -34,8 +35,7 @@ class LootTest extends TestCase
     /** @test */
     public function canGetLootIndexWithAdventureName()
     {
-        $adventure = $this->setupDataForTheBlackKnightsAdventure();
-        $this->visit('/loot/adventure/'.urlencode($adventure['name']));
+        $this->visit('/loot/adventure/The+Black+Knights');
     }
 
     /** @test */
@@ -50,7 +50,8 @@ class LootTest extends TestCase
     public function canGetAdventureLootsFromJsonAPI()
     {
         //Add an adventure so we have something to reply.
-        $adventure = $this->setupDataForTheBlackKnightsAdventure();
+
+        $adventure = $this->adventureRepo->byId(2);
 
         //Test with GET
         $this->visit('/loot/getJSONLoot?adventure='.$adventure->id)
@@ -67,7 +68,7 @@ class LootTest extends TestCase
     public function canLoadAddLootPage()
     {
         $this->visit('/loot/create')
-            ->See('Add loot');
+            ->see('Add loot');
     }
 
     /** @test */
@@ -81,21 +82,21 @@ class LootTest extends TestCase
         $adventure_id = 1;
         $data = array(
             'adventure_id' => $adventure_id,
-            'slot1' => $this->loot->getLootByNameAndAmount($adventure_id, 1, 'Exotic Wood Log', 800)->id,
-            'slot2' => $this->loot->getLootByNameAndAmount($adventure_id, 2, 'Exotic Wood Log', 400)->id,
-            'slot3' => $this->loot->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
-            'slot4' => $this->loot->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
-            'slot5' => $this->loot->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
-            'slot6' => $this->loot->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
-            'slot7' => $this->loot->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
-            'slot8' => $this->loot->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
-            'slot9' => $this->loot->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
-            'slot10' => $this->loot->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
-            'slot11' => $this->loot->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
-            'slot12' => $this->loot->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
-            'slot13' => $this->loot->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
-            'slot14' => $this->loot->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
-            'slot15' => $this->loot->getLootByNameAndAmount($adventure_id, 15, 'Return to the Bandit Nest', 1)->id
+            'slot1' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 1, 'Exotic Wood Log', 800)->id,
+            'slot2' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 2, 'Exotic Wood Log', 400)->id,
+            'slot3' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
+            'slot4' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
+            'slot5' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
+            'slot6' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
+            'slot7' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
+            'slot8' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
+            'slot9' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
+            'slot10' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
+            'slot11' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
+            'slot12' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
+            'slot13' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
+            'slot14' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
+            'slot15' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 15, 'Return to the Bandit Nest', 1)->id
         );
 
         $this->call('POST', '/loot', $data);
@@ -103,67 +104,67 @@ class LootTest extends TestCase
             'success' => 'Loot added successfully, <a href="/loot">click here to see your latest loot.</a>'
         ]);
 
-        $user_adventure = $this->loot->all()->last();
+        $user_adventure = $this->lootRepo->all()->last();
         $this->assertNotNull($user_adventure);
 
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 1, 'Exotic Wood Log', 800)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 1, 'Exotic Wood Log', 800)->id,
             $user_adventure->loot()->slot(1)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 2, 'Exotic Wood Log', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 2, 'Exotic Wood Log', 400)->id,
             $user_adventure->loot()->slot(2)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
             $user_adventure->loot()->slot(3)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
             $user_adventure->loot()->slot(4)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
             $user_adventure->loot()->slot(5)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
             $user_adventure->loot()->slot(6)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
             $user_adventure->loot()->slot(7)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
             $user_adventure->loot()->slot(8)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
             $user_adventure->loot()->slot(9)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
             $user_adventure->loot()->slot(10)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
             $user_adventure->loot()->slot(11)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
             $user_adventure->loot()->slot(12)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
             $user_adventure->loot()->slot(13)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
             $user_adventure->loot()->slot(14)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 15, 'Return to the Bandit Nest', 1)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 15, 'Return to the Bandit Nest', 1)->id,
             $user_adventure->loot()->slot(15)->first()->adventure_loot_id
         );
     }
@@ -172,96 +173,96 @@ class LootTest extends TestCase
     public function canLoadEditLootPage()
     {
         $this->visit('/loot/1/edit')
-            ->See('Update loot');
+            ->see('Update loot');
     }
 
      /** @test */
     public function canUpdateLoot()
     {
         /** @var \LootTracker\Repositories\Loot\LootInterface $this->loot */
-        $this->loot = app(LootInterface::class);
+        $this->lootRepo = app(LootInterface::class);
         $adventure_id = 1;
         $data = array(
             'adventure_id' => $adventure_id,
-            'slot1' => $this->loot->getLootByNameAndAmount($adventure_id, 1, 'Granite', 800)->id,
-            'slot2' => $this->loot->getLootByNameAndAmount($adventure_id, 2, 'Titanium Ore', 400)->id,
-            'slot3' => $this->loot->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
-            'slot4' => $this->loot->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
-            'slot5' => $this->loot->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
-            'slot6' => $this->loot->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
-            'slot7' => $this->loot->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
-            'slot8' => $this->loot->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
-            'slot9' => $this->loot->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
-            'slot10' => $this->loot->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
-            'slot11' => $this->loot->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
-            'slot12' => $this->loot->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
-            'slot13' => $this->loot->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
-            'slot14' => $this->loot->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
-            'slot15' => $this->loot->getLootByNameAndAmount($adventure_id, 15, 'Nothing', 1)->id
+            'slot1' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 1, 'Granite', 800)->id,
+            'slot2' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 2, 'Titanium Ore', 400)->id,
+            'slot3' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
+            'slot4' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
+            'slot5' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
+            'slot6' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
+            'slot7' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
+            'slot8' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
+            'slot9' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
+            'slot10' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
+            'slot11' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
+            'slot12' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
+            'slot13' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
+            'slot14' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
+            'slot15' => $this->lootRepo->getLootByNameAndAmount($adventure_id, 15, 'Nothing', 1)->id
         );
         $this->call('PUT', '/loot/1', $data);
         $this->assertRedirectedTo('/loot/', array('success' => 'Loot updated successfully.'));
 
-        $user_adventure = $this->loot->byId(1)->first();
+        $user_adventure = $this->lootRepo->byId(1)->first();
         $this->assertNotNull($user_adventure);
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 1, 'Granite', 800)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 1, 'Granite', 800)->id,
             $user_adventure->loot()->slot(1)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 2, 'Titanium Ore', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 2, 'Titanium Ore', 400)->id,
             $user_adventure->loot()->slot(2)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 3, 'Copper Ore', 1000)->id,
             $user_adventure->loot()->slot(3)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 4, 'Iron Ore', 750)->id,
             $user_adventure->loot()->slot(4)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 5, 'Coal', 1000)->id,
             $user_adventure->loot()->slot(5)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 6, 'Pinewood Log', 1000)->id,
             $user_adventure->loot()->slot(6)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 7, 'Hardwood Log', 750)->id,
             $user_adventure->loot()->slot(7)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 8, 'Horse', 750)->id,
             $user_adventure->loot()->slot(8)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 9, 'Settler', 350)->id,
             $user_adventure->loot()->slot(9)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 10, 'Brew', 750)->id,
             $user_adventure->loot()->slot(10)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 11, 'Gold Coin', 400)->id,
             $user_adventure->loot()->slot(11)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 12, 'Meat', 400)->id,
             $user_adventure->loot()->slot(12)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 13, 'Meat Deposit Refill', 400)->id,
             $user_adventure->loot()->slot(13)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 14, 'Nothing', 1)->id,
             $user_adventure->loot()->slot(14)->first()->adventure_loot_id
         );
         $this->assertEquals(
-            $this->loot->getLootByNameAndAmount($adventure_id, 15, 'Nothing', 1)->id,
+            $this->lootRepo->getLootByNameAndAmount($adventure_id, 15, 'Nothing', 1)->id,
             $user_adventure->loot()->slot(15)->first()->adventure_loot_id
         );
     }
@@ -300,13 +301,13 @@ class LootTest extends TestCase
             ->see('Delete');
 
         //Get loot count
-        $count = $this->loot->all()->count();
+        $count = $this->lootRepo->all()->count();
 
         //Check we can load the edit page.
         $this->call('DELETE', '/loot/1');
 
         //Get new count
-        $countNew = $this->loot->all()->count();
+        $countNew = $this->lootRepo->all()->count();
         $this->assertEquals($count - 1, $countNew);
     }
 

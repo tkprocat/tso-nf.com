@@ -32,10 +32,7 @@ class PersonalStatsTest extends TestCase
     public function checkPersonalStatsForUser()
     {
         //1 loot should be registered from seeding the database.
-        $this->assertCount(1, $this->lootRepo->findAllAdventuresForUser(2)->get());
-
-        //We need to add some more data...
-        $this->createTestData();
+        $this->assertCount(3, $this->lootRepo->findAllAdventuresForUser(2)->get());
 
         //Check we can load personal stats for the user admin.
         $this->call('GET', 'stats/personal/admin');
@@ -64,11 +61,10 @@ class PersonalStatsTest extends TestCase
         $this->assertEquals(1, $result['count'], 'Least played adventure count mismatch.');
 
         $adventures_played_this_week = $this->statsRepo->getAdventuresPlayedCountForUserThisWeek(2);
-        $this->assertEquals(3, $adventures_played_this_week, 'Mismatch in numbers of adventures played this week.');
+        $this->assertEquals(2, $adventures_played_this_week, 'Mismatch in numbers of adventures played this week.');
 
-        //This is a fairly week and lazy test...
         $adventures_played_last_week = $this->statsRepo->getAdventuresPlayedCountForUserLastWeek(2);
-        $this->assertEquals(0, $adventures_played_last_week, 'Mismatch in numbers of adventures played last week.');
+        $this->assertEquals(1, $adventures_played_last_week, 'Mismatch in numbers of adventures played last week.');
     }
 
     /** @test */
@@ -83,40 +79,6 @@ class PersonalStatsTest extends TestCase
     {
         $this->call('GET', '/stats/personal/adventuresplayed/user1/2013-01-01/2030-12-31');
         $this->assertResponseOk();
-    }
-
-    public function createTestData()
-    {
-        //Make a Bandit Nest
-        $data = array(
-            'adventure_id' => '1',
-            'user_id' => '2',
-            'slot1' => '1',
-            'slot2' => '7',
-            'slot3' => '9',
-            'slot4' => '13',
-            'slot5' => '17',
-            'slot6' => '21',
-            'slot8' => '27'
-        );
-        $this->lootRepo->create($data);
-
-        //Add Black Knights
-        $black_knights = $this->setupDataForTheBlackKnightsAdventure();
-
-        //Make a Black Knights
-        $data = array(
-            'adventure_id' => $black_knights->id,
-            'user_id' => '2',
-            'slot1' => '1',
-            'slot2' => '7',
-            'slot3' => '9',
-            'slot4' => '13',
-            'slot5' => '17',
-            'slot6' => '21',
-            'slot8' => '27'
-        );
-        $this->lootRepo->create($data);
     }
 
     public function tearDown()
