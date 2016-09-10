@@ -34,9 +34,12 @@ Route::group(['middleware' => ['auth'], 'permission' => ['see-loot']], function 
 
 //Blog
 Route::group(['middleware' => ['auth'], 'permission' => ['admin-blog']], function () {
-    Route::resource('blog/{post}/comment', 'BlogCommentController', ['except' => ['index', 'show']]);
     Route::resource('blog', 'BlogPostController', ['except' => ['index', 'show']]);
 });
+Route::group(['middleware' => ['auth'], 'permission' => ['post-blog-comment']], function () {
+    Route::resource('blog/{post}/comment', 'BlogCommentController', ['except' => ['index', 'show']]);
+});
+
 
 //Guilds
 Route::group(['middleware' => ['auth'], 'role' => ['user', 'admin'], 'permission' => ''], function () {
