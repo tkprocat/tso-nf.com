@@ -37,7 +37,8 @@ Route::group(['middleware' => ['auth'], 'permission' => ['admin-blog']], functio
     Route::resource('blog', 'BlogPostController', ['except' => ['index', 'show']]);
 });
 Route::group(['middleware' => ['auth'], 'permission' => ['post-blog-comment']], function () {
-    Route::resource('blog/{post}/comment', 'BlogCommentController', ['except' => ['index', 'show']]);
+    Route::resource('blog/{post}/comment', 'BlogCommentController', ['except' => ['index', 'show', 'delete']]);
+    Route::delete('blog/comment/{id}', 'BlogCommentController@destroy');
 });
 
 

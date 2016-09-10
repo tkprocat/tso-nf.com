@@ -14,7 +14,7 @@ Home
         {!! BBCode::parse($post->content) !!}
     </div>
     <div class="panel-footer">
-        Posted by {{ $post->username }} at {{ $post->created_at }}
+        Posted by {{ $post->user->username }} at {{ $post->created_at }}
         @if ($post->updated_at > $post->created_at )
         - Last updated at {{ $post->updated_at }}
         @endif

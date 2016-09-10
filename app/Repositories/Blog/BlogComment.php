@@ -20,4 +20,12 @@ class BlogComment extends \Eloquent
     {
         return $this->belongsTo('LootTracker\Repositories\Blog\BlogPost', 'post_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('LootTracker\Repositories\User\User');
+    }
 }

@@ -8,7 +8,8 @@
     <div class="panel-footer">
         <div class="row">
             <div class="col-md-6" style="vertical-align: middle">
-                Posted by {{ $comment->username }} at {{ $comment->created_at }}
+
+                Posted by {{ $comment->user->username }} at {{ $comment->created_at }}
                 @if ($comment->updated_at > $comment->created_at)
                 - Last updated at {{ $comment->updated_at }}
                 @endif
