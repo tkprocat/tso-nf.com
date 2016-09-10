@@ -23,7 +23,7 @@
         <td>{{ $admin->username }}</td>
         <td>Admin</td>
         @if (Entrust::hasRole('admin') || (Entrust::can('admin-guild')))
-        <td><a href="{{ URL::to('/guilds/'.$guild->id.'/demote/'.$admin->id) }}">Demote</a></td>
+        <td><a href="{{ URL::to('/guilds/'.$guild->id.'/demote/'.$admin->user_id) }}">Demote</a></td>
         @endif
     </tr>
     @endforeach
