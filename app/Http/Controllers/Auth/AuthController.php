@@ -128,15 +128,11 @@ class AuthController extends Controller
         $user->email = $request->input('email');
         $user->password = \Hash::make($request->input('password'));
         $user->activation_code = str_random(60);
+        $user->save();
 
-        if ($user->save()) {
-            $user->attachRole(Role::whereName('user')->firstOrFail());
-            $this->sendEmail($user);
-            return view('auth.activate')->with('email', $request->input('email'));
-        } else {
-            Session::flash('message', trans('notCreated'));
-            return redirect()->back()->withInput();
-        }
+        $user->attachRole(Role::whereName('user')->firstOrFail());
+        $this->sendEmail($user);
+        return view('auth.activate')->with('email', $request->input('email'));
     }
 
 
