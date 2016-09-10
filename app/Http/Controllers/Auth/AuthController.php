@@ -54,7 +54,7 @@ class AuthController extends Controller
      * Handle a login request to the application.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postLogin(Request $request)
     {
@@ -110,7 +110,7 @@ class AuthController extends Controller
      * Handle a registration request for the application.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
      */
     public function postRegister(Request $request)
     {
@@ -150,7 +150,7 @@ class AuthController extends Controller
             'code' => $user->activation_code,
         );
 
-        Mail::queue('emails.activate', $data, function ($message) use ($user) {
+        Mail::send('emails.activate', $data, function ($message) use ($user) {
             $message->subject(trans('auth.welcomeTo'));
             $message->to($user->email);
         });
@@ -158,7 +158,7 @@ class AuthController extends Controller
 
 
     /**
-     * @return $this
+     * @return \Illuminate\Contracts\View\View
      */
     public function getResend()
     {
